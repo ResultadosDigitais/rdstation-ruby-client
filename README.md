@@ -23,7 +23,7 @@ TODO: Write better usage instructions here
 ### Minimal
 ```ruby
 require 'rdstation-ruby-client'
-rdstation = RDStation::Client.new('7910dbb87920c9616cc26f11849356a9')
+rdstation = RDStation::Client.new('my_awesome_token')
 rdstation.create_lead({name: 'Lead from API', email: 'api@lead.com'})
 ```
 
