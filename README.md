@@ -18,7 +18,14 @@ Or install it yourself as:
 
 ## Usage
 
-TODO: Write usage instructions here
+TODO: Write better usage instructions here
+
+### Minimal
+```ruby
+require 'rdstation-ruby-client'
+rdstation = RDStation::Client.new('7910dbb87920c9616cc26f11849356a9')
+rdstation.create_lead({name: 'Lead from API', email: 'api@lead.com'})
+```
 
 ## Contributing
 
