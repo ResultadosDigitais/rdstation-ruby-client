@@ -34,3 +34,12 @@ rdstation.create_lead({name: 'Lead from API', email: 'api@lead.com'})
 3. Commit your changes (`git commit -am 'Add some feature'`)
 4. Push to the branch (`git push origin my-new-feature`)
 5. Create new Pull Request
+
+## Reference
+
+You can check out RDstation's integration (pt-BR) documentation here:
+
+- [Pure HTML](https://gist.github.com/pedrobachiega/3298970);
+- [Wordpress & Contact Form 7](https://gist.github.com/pedrobachiega/3277536);
+- [PHP](https://gist.github.com/pedrobachiega/3248293);
+- [HTML+Ajax with jQuery](https://gist.github.com/pedrobachiega/3248013);
