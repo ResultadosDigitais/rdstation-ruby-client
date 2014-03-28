@@ -6,7 +6,7 @@ TODO: Write a gem description
 
 Add this line to your application's Gemfile:
 
-    gem 'rdstation-ruby'
+    gem 'rdstation-ruby-client'
 
 And then execute:
 
@@ -14,18 +14,18 @@ And then execute:
 
 Or install it yourself as:
 
-    $ gem install rdstation-ruby
+    $ gem install rdstation-ruby-client
 
 ## Usage
 
-TODO: Write better usage instructions here
+### Creating a Lead
+    rdstation_client = RDStation::Client.new('rdstation_token', 'auth_token')
+    rdstation_client.create_lead({:email => 'joe@foo.bar', :nome => 'Joe Foo', :empresa => 'A random Company', :cargo => 'Developer'})
 
-### Minimal
-```ruby
-require 'rdstation-ruby-client'
-rdstation = RDStation::Client.new('my_awesome_token')
-rdstation.create_lead({name: 'Lead from API', email: 'api@lead.com'})
-```
+### Changing a Lead
+    rdstation_client = RDStation::Client.new('rdstation_token', 'auth_token')
+    rdstation_client.change_lead('joe@foo.bar', {:lifecycle_stage => 1, :opportunity => true})
+    
 
 ## Contributing
 
