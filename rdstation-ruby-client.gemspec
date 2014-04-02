@@ -10,7 +10,7 @@ Gem::Specification.new do |spec|
   spec.email         = ["paulo.casaretto@resultadosdigitais.com.br"]
   spec.description   = "Ruby API wrapper for RD Station"
   spec.summary       = "Ruby API wrapper for RD Station"
-  spec.homepage      = ""
+  spec.homepage      = "http://resultadosdigitais.com.br"
   spec.license       = "MIT"
 
   spec.files         = `git ls-files`.split($/)
