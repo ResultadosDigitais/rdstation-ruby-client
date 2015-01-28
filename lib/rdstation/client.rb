@@ -44,6 +44,10 @@ module RDStation
       lead_hash = auth_token_hash.merge({:lead => lead_hash})
       put_with_body("/leads/#{lead}", :body => lead_hash.to_json, :headers => {'Content-Type' => 'application/json'})
     end
+    
+    def change_lead_status(lead_hash)
+      put_with_body("/services/#{auth_token}/generic", :body => lead_hash.to_json, :headers => {'Content-Type' => 'application/json'})
+    end
 
   private
     def base_url
