@@ -46,7 +46,10 @@ module RDStation
     end
     
     def change_lead_status(lead_hash)
-      put_with_body("/services/#{@auth_token}/generic", {:body => lead_hash })
+      puts lead_hash
+      puts 'and'
+      puts "/services/#{@auth_token}/generic"
+      put_with_body("/services/#{@auth_token}/generic", :body => lead_hash )
     end
 
   private
