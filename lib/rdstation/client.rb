@@ -25,7 +25,8 @@ module RDStation
     #              :c_utmz
     #
     def create_lead(lead_hash)
-      lead_hash = rdstation_token_hash.merge(identifier_hash).merge(lead_hash)
+      lead_hash = rdstation_token_hash.merge(lead_hash)
+      lead_hash = lead_hash.merge(identifier_hash) unless lead_hash.has_key?(:identificador)
       post_with_body("/conversions", {:body => lead_hash})
     end
 
