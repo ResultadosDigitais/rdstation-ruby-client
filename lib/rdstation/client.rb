@@ -49,7 +49,7 @@ module RDStation
       puts lead_hash
       puts 'and'
       puts "/services/#{@auth_token}/generic"
-      put_with_body("/services/#{@auth_token}/generic", :body => lead_hash )
+      post_with_body("/services/#{@auth_token}/generic", :body => lead_hash )
     end
 
   private
