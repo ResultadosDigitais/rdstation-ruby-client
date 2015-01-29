@@ -1,0 +1,48 @@
+---
+http_interactions:
+- request:
+    method: post
+    uri: https://www.rdstation.com.br/api/1.2/services/6ec02ba6e8c2534762a537c1a59a3436/generic
+    body:
+      encoding: UTF-8
+      string: email=iginosms%40gmail.com&status=won&value=300
+    headers: {}
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Connection:
+      - keep-alive
+      Server:
+      - nginx
+      Date:
+      - Thu, 29 Jan 2015 18:30:30 GMT
+      Content-Type:
+      - application/json; charset=utf-8
+      Transfer-Encoding:
+      - chunked
+      Status:
+      - 200 OK
+      X-Ua-Compatible:
+      - IE=Edge,chrome=1
+      Etag:
+      - '"99914b932bd37a50b983c5e7c90ae93b"'
+      Cache-Control:
+      - max-age=0, private, must-revalidate
+      X-Request-Id:
+      - 850b1d42-4d2f-430d-8268-435b36d08c46
+      X-Runtime:
+      - '0.072933'
+      X-Rack-Cache:
+      - invalidate, pass
+      Vary:
+      - Accept-Encoding
+      Via:
+      - 1.1 vegur
+    body:
+      encoding: UTF-8
+      string: "{}"
+    http_version: 
+  recorded_at: Thu, 29 Jan 2015 18:30:31 GMT
+recorded_with: VCR 2.9.2
