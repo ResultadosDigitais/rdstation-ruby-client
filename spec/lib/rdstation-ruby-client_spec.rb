@@ -18,7 +18,7 @@ describe RDStation do
       expect(amount).to be_a_kind_of(Numeric)
     end
     it 'work?' do
-      expect(@response.code).to eql(404)
+      expect(@response.code).to eql(200)
     end
 
   end
