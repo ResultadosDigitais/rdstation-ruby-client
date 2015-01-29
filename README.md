@@ -20,12 +20,16 @@ Or install it yourself as:
 
 ### Creating a Lead
     rdstation_client = RDStation::Client.new('rdstation_token', 'auth_token')
-    rdstation_client.create_lead({:email => 'joe@foo.bar', :nome => 'Joe Foo', :empresa => 'A random Company', :cargo => 'Developer'})
+    rdstation_client.create_lead({:email => 'joe@foo.bar', :nome => 'Joe Foo', :empresa => 'A random Company', :cargo => 'Developer', identificador: 'nome_da_conversao'})
 
 ### Changing a Lead
     rdstation_client = RDStation::Client.new('rdstation_token', 'auth_token')
     rdstation_client.change_lead('joe@foo.bar', {:lifecycle_stage => 1, :opportunity => true})
-    
+
+### Change Lead Status
+    rdstation_client = RDStation::Client.new('rdstation_token', 'auth_token')
+    rdstation_client.change_lead_status(email: 'joe@foo.bar', status: 'won', value: 999)
+
 
 ## Contributing
 
