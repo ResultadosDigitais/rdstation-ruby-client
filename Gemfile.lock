@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    rdstation-ruby-client (0.0.1)
+    rdstation-ruby-client (0.0.2)
       httparty (~> 0.12.0)
 
 GEM
@@ -15,7 +15,7 @@ GEM
     httparty (0.12.0)
       json (~> 1.8)
       multi_xml (>= 0.5.2)
-    json (1.8.1)
+    json (1.8.2)
     minitest (4.7.5)
     multi_xml (0.5.5)
     rake (10.1.0)
