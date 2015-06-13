@@ -25,5 +25,5 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency 'webmock'
   spec.add_development_dependency 'turn'
 
-  spec.add_dependency "httparty", "~> 0.12.0"
+  spec.add_dependency "httparty", ">= 0.12.0"
 end
