@@ -2,7 +2,7 @@ PATH
   remote: .
   specs:
     rdstation-ruby-client (0.0.2)
-      httparty (>= 0.12.0)
+      httparty (~> 0.12)
 
 GEM
   remote: https://rubygems.org/
