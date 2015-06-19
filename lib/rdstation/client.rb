@@ -1,6 +1,6 @@
 module RDStation
   #
-  # Mais informações em https://www.rdstation.com.br/docs/api
+  # Mais informações em http://ajuda.rdstation.com.br/hc/pt-br/articles/204526429-Guia-de-integra%C3%A7%C3%B5es-com-o-RD-Station
   #
   class Client
     include HTTParty
@@ -12,23 +12,30 @@ module RDStation
     end
 
     #
-    # A hash de lead pode conter os parametros
-    # (requerido)  :identificador
-    # (requerido)  :email
-    #              :nome
-    #              :empresa
-    #              :cargo
-    #              :telefone
-    #              :celular
-    #              :website
-    #              :twitter
-    #              :c_utmz
+    # A hash do Lead pode conter os seguintes parâmetros:
+    # (obrigatório) :email
+    #               :identificador
+    #               :nome
+    #               :empresa
+    #               :cargo
+    #               :telefone
+    #               :celular
+    #               :website
+    #               :twitter
+    #               :c_utmz
+    #               :created_at
+    #               :tags
+    #
+    # Caso algum parâmetro não seja identificado como campo padrão ou como
+    # campo personalizado, este parâmetro desconhecido será gravado nos
+    # "Detalhes do Lead".
     #
     def create_lead(lead_hash)
       lead_hash = rdstation_token_hash.merge(lead_hash)
       lead_hash = lead_hash.merge(identifier_hash) unless lead_hash.has_key?(:identificador)
       post_with_body("/conversions", {:body => lead_hash})
     end
+    alias_method :update_lead_info, :create_lead
 
     #
     # param lead:
