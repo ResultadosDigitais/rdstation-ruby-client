@@ -1,3 +1,4 @@
+# encoding: utf-8
 module RDStation
   #
   # Mais informações em http://ajuda.rdstation.com.br/hc/pt-br/articles/204526429-Guia-de-integra%C3%A7%C3%B5es-com-o-RD-Station
