@@ -1,6 +1,6 @@
-# Rdstation::Ruby
+# RDStation Ruby Client
 
-TODO: Write a gem description
+RDstation ruby wrapper to interact with RDStation API.
 
 ## Installation
 
@@ -19,16 +19,33 @@ Or install it yourself as:
 ## Usage
 
 ### Creating a Lead
-    rdstation_client = RDStation::Client.new('rdstation_token', 'auth_token')
-    rdstation_client.create_lead({:email => 'joe@foo.bar', :nome => 'Joe Foo', :empresa => 'A random Company', :cargo => 'Developer', identificador: 'nome_da_conversao'})
+
+```ruby
+lead_info = {
+  email: 'joe@foo.bar',
+  name: 'Joe foo',
+  empresa: 'A random Company',
+  cargo: 'Developer',
+  identificador: 'nome_da_conversao'
+}
+
+rdstation_client = RDStation::Client.new('rdstation_token', 'auth_token')
+rdstation_client.create_lead(lead_info)
+```
 
 ### Changing a Lead
-    rdstation_client = RDStation::Client.new('rdstation_token', 'auth_token')
-    rdstation_client.change_lead('joe@foo.bar', {:lifecycle_stage => 1, :opportunity => true})
+
+```ruby
+rdstation_client = RDStation::Client.new('rdstation_token', 'auth_token')
+rdstation_client.change_lead('joe@foo.bar', lifecycle_stage: 1, opportunity: true})
+```
 
 ### Change Lead Status
-    rdstation_client = RDStation::Client.new('rdstation_token', 'auth_token')
-    rdstation_client.change_lead_status(email: 'joe@foo.bar', status: 'won', value: 999)
+
+```ruby
+rdstation_client = RDStation::Client.new('rdstation_token', 'auth_token')
+rdstation_client.change_lead_status(email: 'joe@foo.bar', status: 'won', value: 999)
+```
 
 
 ## Contributing
@@ -38,6 +55,9 @@ Or install it yourself as:
 3. Commit your changes (`git commit -am 'Add some feature'`)
 4. Push to the branch (`git push origin my-new-feature`)
 5. Create new Pull Request
+
+## Maintainer
+[Nando Sousa](mailto:fernando.sousa@resultadosdigitais.com.br)
 
 ## Reference
 
