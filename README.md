@@ -47,6 +47,74 @@ rdstation_client = RDStation::Client.new('rdstation_token', 'auth_token')
 rdstation_client.change_lead_status(email: 'joe@foo.bar', status: 'won', value: 999)
 ```
 
+### Contacts
+
+#### Getting a Contact by UUID
+
+Returns data about a specific Contact
+
+```ruby
+rdstation_contacts = RDStation::Contacts.new('auth_token')
+rdstation_contacts.get_contact('uuid')
+```
+
+More info: https://developers.rdstation.com/pt-BR/reference/contacts#methodGetDetailsuuid
+
+#### Getting a Contact by Email
+
+Returns data about a specific Contact
+
+```ruby
+rdstation_contacts = RDStation::Contacts.new('auth_token')
+rdstation_contacts.get_contact_by_email('email')
+```
+
+More info: https://developers.rdstation.com/pt-BR/reference/contacts#methodGetDetailsemail
+
+#### Update a Contact by UUID
+
+Updates the properties of a Contact. 
+
+```ruby
+contact_info = {
+  name: "Joe Foo"
+}
+
+rdstation_contacts = RDStation::Contacts.new('auth_token')
+rdstation_contacts.update_contact('uuid', contact_info)
+```
+Contact Default Parameters
+ - email
+ - name
+ - job_title
+ - linkedin
+ - facebook
+ - twitter
+ - personal_phone
+ - mobile_phone
+ - website
+ - tags
+
+More info: https://developers.rdstation.com/pt-BR/reference/contacts#methodPatchDetails
+
+
+#### Upsert a Contact by identifier and value
+
+With an UPSERT like behavior, this method is capable of both updating the properties of a Contact or creating a new Contact. Whatever is used as an identifier cannot appear in the request payload as a field. This will result in a [BAD_REQUEST error](https://developers.rdstation.com/pt-BR/error-states#conflicting). 
+
+```ruby
+contact_info = {
+  name: "Joe Foo"
+}
+
+identifier = "email"
+identifier_value = "joe@foo.bar"
+
+rdstation_contacts = RDStation::Contacts.new('auth_token')
+rdstation_contacts.upsert_contact(identifier, identifier_value, contact_info)
+```
+
+More info: https://developers.rdstation.com/pt-BR/reference/contacts#methodPatchUpsertDetails
 
 ## Contributing
 
