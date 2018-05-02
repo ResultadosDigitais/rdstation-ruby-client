@@ -12,7 +12,7 @@ module RDStation
       "https://api.rd.services/auth/dialog?client_id=#{@client_id}&redirect_url=#{redirect_url}"
     end
 
-    def login(code)
+    def authenticate(code)
       post_to_auth_endpoint({ :code => code })
     end
 
