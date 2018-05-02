@@ -1,6 +1,6 @@
 # encoding: utf-8
 module RDStation
-  # Mais informações em: https://developers.rdstation.com/pt-BR/reference/contacts
+  # More info: https://developers.rdstation.com/pt-BR/reference/contacts
   class Contacts
     include HTTParty
 
@@ -10,7 +10,7 @@ module RDStation
 
     #
     # params uuid:
-    #   O UUID único associado para cada contato do RD Station
+    #   The unique uuid associated to each RD Station Contact.
     #
     def get_contact(uuid)
       self.class.get(base_url(uuid), :headers => required_headers)
@@ -20,7 +20,7 @@ module RDStation
       self.class.get(base_url("email:#{email}"), :headers => required_headers)
     end
 
-    # A hash do Contato pode conter os seguintes parâmetros
+    # The Contact hash may contain the following parameters:
     # :email
     # :name
     # :job_title
@@ -37,11 +37,11 @@ module RDStation
 
     #
     # param identifier:
-    #   Qual campo será usado para identificar o Contato
+    #   Field that will be used to identify the contact.
     # param identifier_value:
-    #   Valor para o identificador dado
+    #   Value to the identifier given.
     # param contact_hash:
-    #   Dados do contato
+    #   Contact data
     #
     def upsert_contact(identifier, identifier_value, contact_hash)
       path = "#{identifier}:#{identifier_value}"
