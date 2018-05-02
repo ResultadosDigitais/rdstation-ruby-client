@@ -9,7 +9,7 @@ module RDStation
     end
 
     #
-    # params uuid:
+    # param uuid:
     #   The unique uuid associated to each RD Station Contact.
     #
     def get_contact(uuid)
