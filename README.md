@@ -47,6 +47,31 @@ rdstation_client = RDStation::Client.new('rdstation_token', 'auth_token')
 rdstation_client.change_lead_status(email: 'joe@foo.bar', status: 'won', value: 999)
 ```
 
+### Authentication
+
+#### Getting authentication URL 
+
+```ruby
+rdstation_authentication = RDStation::Authentication.new('client_id', 'client_secret')
+
+redirect_url = 'https://yourapp.org/auth/callback'
+rdstation_authentication.auth_url(redirect_url)
+```
+
+#### Getting access_token 
+
+```ruby
+rdstation_authentication = RDStation::Authentication.new('client_id', 'client_secret')
+rdstation_authentication.authenticate(params[:code])
+```
+
+#### Updating access_token 
+
+```ruby
+rdstation_authentication = RDStation::Authentication.new('client_id', 'client_secret')
+rdstation_authentication.update_access_token('refresh_token')
+```
+
 ### Contacts
 
 #### Getting a Contact by UUID
