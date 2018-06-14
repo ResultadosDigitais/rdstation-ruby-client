@@ -60,9 +60,11 @@ rdstation_authentication.auth_url(redirect_url)
 
 #### Getting access_token 
 
+You will need the code param that is returned from RD Station to your application after the user confirms the access at the authorization dialog.
+
 ```ruby
 rdstation_authentication = RDStation::Authentication.new('client_id', 'client_secret')
-rdstation_authentication.authenticate(params[:code])
+rdstation_authentication.authenticate(code_returned_from_rdstation)
 ```
 
 #### Updating access_token 
