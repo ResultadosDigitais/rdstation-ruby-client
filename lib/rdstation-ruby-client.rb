@@ -1,4 +1,6 @@
-require "httparty"
-require "rdstation/client"
-require "rdstation/contacts"
-require "rdstation/authentication"
+require 'httparty'
+require 'rdstation/client'
+require 'rdstation/contacts'
+require 'rdstation/authentication'
+require 'rdstation/exceptions/invalid_credentials.rb'
+require 'rdstation/exceptions/expired_code_grant.rb'
