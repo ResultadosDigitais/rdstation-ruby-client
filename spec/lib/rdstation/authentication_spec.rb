@@ -17,7 +17,10 @@ RSpec.describe RDStation::Authentication do
           }.to_json
         )
         .to_return(
-          headers: { 'Content-Type' => 'application/json' },
+          status: 401,
+          headers: {
+            'Content-Type' => 'application/json'
+          },
           body: {
             error_type: 'ACCESS_DENIED',
             error_message: 'Wrong credentials provided.'
@@ -36,7 +39,10 @@ RSpec.describe RDStation::Authentication do
           }.to_json
         )
         .to_return(
-          headers: { 'Content-Type' => 'application/json' },
+          status: 200,
+          headers: {
+            'Content-Type' => 'application/json'
+          },
           body: {
             'access_token' => '123456',
             'expires_in' => 86_400,
@@ -47,7 +53,7 @@ RSpec.describe RDStation::Authentication do
         stub_request(:post, 'https://api.rd.services/auth/token')
           .with(
             headers: {
-              'Accept-Encoding' => 'identity'
+              'Accept-Encoding' => 'identity',
             },
             body: {
               client_id: 'client_id',
@@ -56,8 +62,9 @@ RSpec.describe RDStation::Authentication do
             }.to_json
           )
           .to_return(
+            status: 401,
             headers: {
-              'Content-Type' => 'application/json',
+              'Content-Type' => 'application/json'
             },
             body: {
               error_type: 'EXPIRED_CODE_GRANT',

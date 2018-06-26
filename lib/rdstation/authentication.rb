@@ -24,7 +24,7 @@ module RDStation
     def authenticate(code)
       request = post_to_auth_endpoint(code: code)
       return JSON.parse(request.body) unless request['error_type']
-      raise RDStation::ERROR[request['error_type']]
+      raise RDStation::Errors.by_type(request)
     end
 
     #
