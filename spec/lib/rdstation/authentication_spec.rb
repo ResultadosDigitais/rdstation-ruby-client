@@ -85,7 +85,7 @@ RSpec.describe RDStation::Authentication do
       it 'returns an auth error' do
         expect do
           authentication.authenticate('1234')
-        end.to raise_error(RDStation::Exceptions::InvalidCredentials)
+        end.to raise_error(RDStation::Error::InvalidCredentials)
       end
     end
 
@@ -93,7 +93,7 @@ RSpec.describe RDStation::Authentication do
       it 'returns an expired code error' do
         expect do
           authentication.authenticate('12345')
-        end.to raise_error(RDStation::Exceptions::ExpiredCodeGrant)
+        end.to raise_error(RDStation::Error::ExpiredCodeGrant)
       end
     end
   end

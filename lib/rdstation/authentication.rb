@@ -24,7 +24,7 @@ module RDStation
     def authenticate(code)
       request = post_to_auth_endpoint(code: code)
       return JSON.parse(request.body) unless request['error_type']
-      authentication_error(request)
+      raise RDStation::ERROR[request['error_type']]
     end
 
     #
@@ -36,12 +36,6 @@ module RDStation
     end
 
     private
-
-    def authentication_error(request)
-      error_type = request['error_type']
-      raise Exceptions::InvalidCredentials if error_type == 'ACCESS_DENIED'
-      raise Exceptions::ExpiredCodeGrant if error_type == 'EXPIRED_CODE_GRANT'
-    end
 
     def auth_token_url
       "https://api.rd.services/auth/token"
