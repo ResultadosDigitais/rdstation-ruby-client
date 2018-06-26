@@ -1,89 +1,25 @@
 require 'spec_helper'
 
 RSpec.describe RDStation::Authentication do
-  let(:authentication) { described_class.new('client_id', 'client_secret') }
+  let(:authentication) do
+    described_class.new(
+      APIRequests::Authentication::CLIENT_ID,
+      APIRequests::Authentication::CLIENT_SECRET
+    )
+  end
 
   describe '#authenticate' do
     before do
-      stub_request(:post, 'https://api.rd.services/auth/token')
-        .with(
-          headers: {
-            'Accept-Encoding' => 'identity'
-          },
-          body: {
-            client_id: 'client_id',
-            client_secret: 'client_secret',
-            code: '1234'
-          }.to_json
-        )
-        .to_return(
-          status: 401,
-          headers: {
-            'Content-Type' => 'application/json'
-          },
-          body: {
-            error_type: 'ACCESS_DENIED',
-            error_message: 'Wrong credentials provided.'
-          }.to_json
-        )
-
-      stub_request(:post, 'https://api.rd.services/auth/token')
-        .with(
-          headers: {
-            'Accept-Encoding' => 'identity'
-          },
-          body: {
-            client_id: 'client_id',
-            client_secret: 'client_secret',
-            code: '123'
-          }.to_json
-        )
-        .to_return(
-          status: 200,
-          headers: {
-            'Content-Type' => 'application/json'
-          },
-          body: {
-            'access_token' => '123456',
-            'expires_in' => 86_400,
-            'refresh_token' => 'refreshtoken'
-          }.to_json
-        )
-
-        stub_request(:post, 'https://api.rd.services/auth/token')
-          .with(
-            headers: {
-              'Accept-Encoding' => 'identity',
-            },
-            body: {
-              client_id: 'client_id',
-              client_secret: 'client_secret',
-              code: '12345'
-            }.to_json
-          )
-          .to_return(
-            status: 401,
-            headers: {
-              'Content-Type' => 'application/json'
-            },
-            body: {
-              error_type: 'EXPIRED_CODE_GRANT',
-              error_message: 'The authorization code grant has expired.'
-            }.to_json
-          )
+      APIRequests::Authentication.stub
     end
 
     context 'when the code is valid' do
       let(:credentials) do
-        {
-          'access_token' => '123456',
-          'expires_in' => 86_400,
-          'refresh_token' => 'refreshtoken'
-        }
+        JSON.parse(APIRequests::Authentication::TOKEN_RESPONSE[:body])
       end
 
       it 'returns the credentials' do
-        credentials_request = authentication.authenticate('123')
+        credentials_request = authentication.authenticate('valid_code')
         expect(credentials_request).to eq(credentials)
       end
     end
@@ -91,7 +27,7 @@ RSpec.describe RDStation::Authentication do
     context 'when the code is invalid' do
       it 'returns an auth error' do
         expect do
-          authentication.authenticate('1234')
+          authentication.authenticate('invalid_code')
         end.to raise_error(RDStation::Error::InvalidCredentials)
       end
     end
@@ -99,7 +35,7 @@ RSpec.describe RDStation::Authentication do
     context 'when the code has expired' do
       it 'returns an expired code error' do
         expect do
-          authentication.authenticate('12345')
+          authentication.authenticate('expired_code')
         end.to raise_error(RDStation::Error::ExpiredCodeGrant)
       end
     end

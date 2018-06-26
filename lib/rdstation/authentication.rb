@@ -17,10 +17,19 @@ module RDStation
       "https://api.rd.services/auth/dialog?client_id=#{@client_id}&redirect_url=#{redirect_url}"
     end
 
+    # Public: Get the credentials from RD Station API
     #
-    # param code
-    #   parameter sent by RDStation after user confirms authorization
+    # code  - The code String sent by RDStation after the user confirms authorization.
     #
+    # Examples
+    #
+    #   authenticate("123")
+    #   # => { 'access_token' => '54321', 'expires_in' => 86_400, 'refresh_token' => 'refresh' }
+    #
+    # Returns the credentials Hash.
+    # Raises RDStation::Error::ExpiredCodeGrant if the code has expired
+    # Raises RDStation::Error::InvalidCredentials if the client_id, client_secret
+    # or code is invalid.
     def authenticate(code)
       request = post_to_auth_endpoint(code: code)
       return JSON.parse(request.body) unless request['error_type']
