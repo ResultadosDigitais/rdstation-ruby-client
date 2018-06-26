@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    rdstation-ruby-client (0.0.5)
+    rdstation-ruby-client (0.1.2)
       httparty (~> 0.12)
 
 GEM
@@ -12,12 +12,10 @@ GEM
     crack (0.4.2)
       safe_yaml (~> 1.0.0)
     diff-lcs (1.2.5)
-    httparty (0.13.5)
-      json (~> 1.8)
+    httparty (0.16.2)
       multi_xml (>= 0.5.2)
-    json (1.8.3)
     minitest (4.7.5)
-    multi_xml (0.5.5)
+    multi_xml (0.6.0)
     rake (10.1.0)
     rspec (3.1.0)
       rspec-core (~> 3.1.0)
@@ -35,7 +33,6 @@ GEM
     turn (0.9.7)
       ansi
       minitest (~> 4)
-    vcr (2.9.3)
     webmock (1.20.4)
       addressable (>= 2.3.6)
       crack (>= 0.3.2)
@@ -49,8 +46,7 @@ DEPENDENCIES
   rdstation-ruby-client!
   rspec
   turn
-  vcr
   webmock
 
 BUNDLED WITH
-   1.13.2
+   1.16.1
