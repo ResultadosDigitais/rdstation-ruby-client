@@ -13,11 +13,15 @@ module RDStation
     #   The unique uuid associated to each RD Station Contact.
     #
     def get_contact(uuid)
-      self.class.get(base_url(uuid), :headers => required_headers)
+      response = self.class.get(base_url(uuid), headers: required_headers)
+      return JSON.parse(response.body) unless response['error_type']
+      RDStation::Errors.new(response).raise_errors
     end
 
     def get_contact_by_email(email)
-      self.class.get(base_url("email:#{email}"), :headers => required_headers)
+      response = self.class.get(base_url("email:#{email}"), headers: required_headers)
+      return JSON.parse(response.body) unless response['error_type']
+      RDStation::Errors.new(response).raise_errors
     end
 
     # The Contact hash may contain the following parameters:

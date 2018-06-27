@@ -31,9 +31,9 @@ module RDStation
     # Raises RDStation::Error::InvalidCredentials if the client_id, client_secret
     # or code is invalid.
     def authenticate(code)
-      request = post_to_auth_endpoint(code: code)
-      return JSON.parse(request.body) unless request['error_type']
-      raise RDStation::Errors.by_type(request)
+      response = post_to_auth_endpoint(code: code)
+      return JSON.parse(response.body) unless response['error_type']
+      RDStation::Errors.new(response).raise_errors
     end
 
     #

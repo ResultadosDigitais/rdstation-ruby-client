@@ -1,15 +1,34 @@
 module RDStation
-  module Errors
-    ERROR_TYPES = {
-      'ACCESS_DENIED' => RDStation::Error::InvalidCredentials,
-      'EXPIRED_CODE_GRANT' => RDStation::Error::ExpiredCodeGrant
-    }.freeze
+  class Errors
+    ERROR_TYPES = [
+      RDStation::ErrorHandler::ExpiredAccessToken,
+      RDStation::ErrorHandler::ExpiredCodeGrant,
+      RDStation::ErrorHandler::InvalidCredentials,
+      RDStation::ErrorHandler::ResourceNotFound,
+      RDStation::ErrorHandler::Unauthorized
+    ].freeze
 
-    def self.by_type(request)
-      error_type = request['error_type']
-      error_message = request['error_message']
-      error_class = ERROR_TYPES[error_type]
-      error_class.new(error_message, request)
+    def initialize(response)
+      @response = response
+      register
+    end
+
+    def register
+      errors.each do |error|
+        error_handler.register_handler(error)
+      end
+    end
+
+    def raise_errors
+      error_handler.handlers.each(&:raise_error)
+    end
+
+    def errors
+      ERROR_TYPES.map { |error| error.new(@response) }
+    end
+
+    def error_handler
+      @error_handler ||= RDStation::ErrorHandler.new
     end
   end
 end
