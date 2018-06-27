@@ -36,7 +36,9 @@ module RDStation
     # :website
     # :tags
     def update_contact(uuid, contact_hash)
-      self.class.patch(base_url(uuid), :body => contact_hash.to_json, :headers => required_headers)
+      response = self.class.patch(base_url(uuid), :body => contact_hash.to_json, :headers => required_headers)
+      return JSON.parse(response.body) unless response['error_type']
+      RDStation::Errors.new(response).raise_errors
     end
 
     #
@@ -49,7 +51,9 @@ module RDStation
     #
     def upsert_contact(identifier, identifier_value, contact_hash)
       path = "#{identifier}:#{identifier_value}"
-      self.class.patch(base_url(path), :body => contact_hash.to_json, :headers => required_headers)
+      response = self.class.patch(base_url(path), body: contact_hash.to_json, headers: required_headers)
+      return JSON.parse(response.body) unless response['error_type']
+      RDStation::Errors.new(response).raise_errors
     end
 
     private
