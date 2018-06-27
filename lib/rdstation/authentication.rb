@@ -32,7 +32,8 @@ module RDStation
     # or code is invalid.
     def authenticate(code)
       response = post_to_auth_endpoint(code: code)
-      return JSON.parse(response.body) unless response['error_type']
+      parsed_body = JSON.parse(response.body)
+      return parsed_body unless parsed_body['errors']
       RDStation::Errors.new(response).raise_errors
     end
 
@@ -51,12 +52,13 @@ module RDStation
     end
 
     def post_to_auth_endpoint(params)
-      default_body = { :client_id => @client_id, :client_secret => @client_secret }
+      default_body = { client_id: @client_id, client_secret: @client_secret }
+      body = default_body.merge(params)
 
       self.class.post(
         auth_token_url,
-        headers: { 'Accept-Encoding' => 'identity' },
-        body: default_body.merge(params).to_json
+        body: body.to_json,
+        headers: { 'Content-Type' => 'application/json' }
       )
     end
   end
