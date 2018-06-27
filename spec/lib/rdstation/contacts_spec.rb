@@ -44,8 +44,12 @@ RSpec.describe RDStation::Contacts do
     {
       status: 404,
       body: {
-        error_type: 'RESOURCE_NOT_FOUND',
-        error_message: 'Lead not found.'
+        errors: [
+          {
+            error_type: 'RESOURCE_NOT_FOUND',
+            error_message: 'Lead not found.'
+          }
+        ]
       }.to_json
     }
   end
@@ -54,8 +58,12 @@ RSpec.describe RDStation::Contacts do
     {
       status: 401,
       body: {
-        error_type: 'UNAUTHORIZED',
-        error_message: 'Invalid token.'
+        errors: [
+          {
+            error_type: 'UNAUTHORIZED',
+            error_message: 'Invalid token.'
+          }
+        ]
       }.to_json
     }
   end
@@ -65,8 +73,12 @@ RSpec.describe RDStation::Contacts do
       status: 401,
       headers: { 'WWW-Authenticate' => 'Bearer realm="https://api.rd.services/", error="expired_token", error_description="The access token expired"' },
       body: {
-        error_type: 'UNAUTHORIZED',
-        error_message: 'Invalid token.'
+        errors: [
+          {
+            error_type: 'UNAUTHORIZED',
+            error_message: 'Invalid token.'
+          }
+        ]
       }.to_json
     }
   end
@@ -225,17 +237,10 @@ RSpec.describe RDStation::Contacts do
       end
 
       context 'when the contact does not exist' do
-        let(:not_found) do
-          {
-            error_type: 'RESOURCE_NOT_FOUND',
-            error_message: 'Lead not found.'
-          }
-        end
-
         before do
           stub_request(:patch, endpoint_with_invalid_uuid)
             .with(headers: headers)
-            .to_return(status: 404, body: not_found.to_json)
+            .to_return(not_found_response)
         end
 
         it 'raises a not found error' do
@@ -255,17 +260,10 @@ RSpec.describe RDStation::Contacts do
         }
       end
 
-      let(:invalid_token_response) do
-        {
-          error_type: 'UNAUTHORIZED',
-          error_message: 'Invalid token.'
-        }
-      end
-
       before do
         stub_request(:patch, endpoint_with_valid_uuid)
           .with(headers: headers)
-          .to_return(status: 401, body: invalid_token_response.to_json)
+          .to_return(invalid_token_response)
       end
 
       it 'raises an invalid token error' do
@@ -298,9 +296,6 @@ RSpec.describe RDStation::Contacts do
     end
   end
 
-
-
-
   describe '#upsert_contact' do
     context 'with a valid auth_token' do
       let(:valid_auth_token) { 'valid_auth_token' }
@@ -330,17 +325,10 @@ RSpec.describe RDStation::Contacts do
       end
 
       context 'when the contact does not exist' do
-        let(:not_found) do
-          {
-            error_type: 'RESOURCE_NOT_FOUND',
-            error_message: 'Lead not found.'
-          }
-        end
-
         before do
           stub_request(:patch, endpoint_with_invalid_email)
             .with(headers: headers)
-            .to_return(status: 404, body: not_found.to_json)
+            .to_return(not_found_response)
         end
 
         it 'raises a not found error' do
@@ -360,17 +348,10 @@ RSpec.describe RDStation::Contacts do
         }
       end
 
-      let(:invalid_token_response) do
-        {
-          error_type: 'UNAUTHORIZED',
-          error_message: 'Invalid token.'
-        }
-      end
-
       before do
         stub_request(:patch, endpoint_with_valid_email)
           .with(headers: headers)
-          .to_return(status: 401, body: invalid_token_response.to_json)
+          .to_return(invalid_token_response)
       end
 
       it 'raises an invalid token error' do

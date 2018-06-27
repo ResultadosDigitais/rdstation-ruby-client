@@ -13,7 +13,7 @@ module RDStation
 
       def raise_error
         return unless resource_not_found?
-        raise EXCEPTION_CLASS.new(errors['error_message'], api_response)
+        raise EXCEPTION_CLASS.new(error['error_message'], api_response)
       end
 
       private

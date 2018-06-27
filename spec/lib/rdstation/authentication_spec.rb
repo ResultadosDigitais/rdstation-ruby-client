@@ -2,7 +2,7 @@ require 'spec_helper'
 
 RSpec.describe RDStation::Authentication do
   let(:token_endpoint) { 'https://api.rd.services/auth/token' }
-  let(:request_headers) { { 'Accept-Encoding' => 'identity' } }
+  let(:request_headers) { { 'Content-Type' => 'application/json' } }
 
   let(:token_request_with_valid_code) do
     {
@@ -49,8 +49,12 @@ RSpec.describe RDStation::Authentication do
       status: 401,
       headers: { 'Content-Type' => 'application/json' },
       body: {
-        error_type: 'ACCESS_DENIED',
-        error_message: 'Wrong credentials provided.'
+        errors: [
+          {
+            error_type: 'ACCESS_DENIED',
+            error_message: 'Wrong credentials provided.'
+          }
+        ]
       }.to_json
     }
   end
@@ -60,8 +64,12 @@ RSpec.describe RDStation::Authentication do
       status: 401,
       headers: { 'Content-Type' => 'application/json' },
       body: {
-        error_type: 'EXPIRED_CODE_GRANT',
-        error_message: 'The authorization code grant has expired.'
+        errors: [
+          {
+            error_type: 'EXPIRED_CODE_GRANT',
+            error_message: 'The authorization code grant has expired.'
+          }
+        ]
       }.to_json
     }
   end
