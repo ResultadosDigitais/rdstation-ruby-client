@@ -12,6 +12,14 @@ RSpec.describe RDStation::Authentication do
     }
   end
 
+  let(:token_request_with_valid_refresh_token) do
+    {
+      client_id: 'client_id',
+      client_secret: 'client_secret',
+      code: 'valid_code'
+    }
+  end
+
   let(:token_request_with_invalid_code) do
     {
       client_id: 'client_id',
@@ -25,6 +33,22 @@ RSpec.describe RDStation::Authentication do
       client_id: 'client_id',
       client_secret: 'client_secret',
       code: 'expired_code'
+    }
+  end
+
+  let(:token_request_with_valid_refresh_token) do
+    {
+      client_id: 'client_id',
+      client_secret: 'client_secret',
+      refresh_token: 'valid_refresh_token'
+    }
+  end
+
+  let(:token_request_with_invalid_refresh_token) do
+    {
+      client_id: 'client_id',
+      client_secret: 'client_secret',
+      refresh_token: 'invalid_refresh_token'
     }
   end
 
@@ -124,6 +148,41 @@ RSpec.describe RDStation::Authentication do
         expect do
           authentication.authenticate('expired_code')
         end.to raise_error(RDStation::Error::ExpiredCodeGrant)
+      end
+    end
+  end
+
+  describe '#update_access_token' do
+    context 'when the refresh token is valid' do
+      before do
+        stub_request(:post, token_endpoint)
+          .with(
+            headers: request_headers,
+            body: token_request_with_valid_refresh_token.to_json
+          )
+          .to_return(credentials_response)
+      end
+
+      it 'returns the credentials' do
+        credentials_request = authentication.update_access_token('valid_refresh_token')
+        expect(credentials_request).to eq(credentials)
+      end
+    end
+
+    context 'when the refresh token is invalid' do
+      before do
+        stub_request(:post, token_endpoint)
+          .with(
+            headers: request_headers,
+            body: token_request_with_invalid_refresh_token.to_json
+          )
+          .to_return(invalid_code_response)
+      end
+
+      it 'returns an auth error' do
+        expect do
+          authentication.update_access_token('invalid_refresh_token')
+        end.to raise_error(RDStation::Error::InvalidCredentials)
       end
     end
   end
