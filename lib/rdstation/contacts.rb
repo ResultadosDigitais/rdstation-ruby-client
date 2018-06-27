@@ -14,13 +14,15 @@ module RDStation
     #
     def get_contact(uuid)
       response = self.class.get(base_url(uuid), headers: required_headers)
-      return JSON.parse(response.body) unless response['error_type']
+      response_body = JSON.parse(response.body)
+      return response_body unless response_body['errors']
       RDStation::Errors.new(response).raise_errors
     end
 
     def get_contact_by_email(email)
       response = self.class.get(base_url("email:#{email}"), headers: required_headers)
-      return JSON.parse(response.body) unless response['error_type']
+      response_body = JSON.parse(response.body)
+      return response_body unless response_body['errors']
       RDStation::Errors.new(response).raise_errors
     end
 
@@ -37,7 +39,8 @@ module RDStation
     # :tags
     def update_contact(uuid, contact_hash)
       response = self.class.patch(base_url(uuid), :body => contact_hash.to_json, :headers => required_headers)
-      return JSON.parse(response.body) unless response['error_type']
+      response_body = JSON.parse(response.body)
+      return response_body unless response_body['errors']
       RDStation::Errors.new(response).raise_errors
     end
 
@@ -52,7 +55,8 @@ module RDStation
     def upsert_contact(identifier, identifier_value, contact_hash)
       path = "#{identifier}:#{identifier_value}"
       response = self.class.patch(base_url(path), body: contact_hash.to_json, headers: required_headers)
-      return JSON.parse(response.body) unless response['error_type']
+      response_body = JSON.parse(response.body)
+      return response_body unless response_body['errors']
       RDStation::Errors.new(response).raise_errors
     end
 
