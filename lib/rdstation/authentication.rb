@@ -3,6 +3,9 @@ module RDStation
   class Authentication
     include HTTParty
 
+    AUTH_TOKEN_URL = 'https://api.rd.services/auth/token'.freeze
+    DEFAULT_HEADERS = { 'Content-Type' => 'application/json' }.freeze
+
     def initialize(client_id, client_secret)
       @client_id = client_id
       @client_secret = client_secret
@@ -50,18 +53,14 @@ module RDStation
 
     private
 
-    def auth_token_url
-      "https://api.rd.services/auth/token"
-    end
-
     def post_to_auth_endpoint(params)
       default_body = { client_id: @client_id, client_secret: @client_secret }
       body = default_body.merge(params)
 
       self.class.post(
-        auth_token_url,
+        AUTH_TOKEN_URL,
         body: body.to_json,
-        headers: { 'Content-Type' => 'application/json' }
+        headers: DEFAULT_HEADERS
       )
     end
   end
