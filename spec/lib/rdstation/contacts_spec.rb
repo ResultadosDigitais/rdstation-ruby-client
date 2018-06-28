@@ -83,7 +83,7 @@ RSpec.describe RDStation::Contacts do
     }
   end
 
-  describe '#get_contact' do
+  describe '#by_uuid' do
     context 'with a valid auth token' do
       context 'when the contact exists' do
         let(:contact) do
@@ -97,7 +97,7 @@ RSpec.describe RDStation::Contacts do
         end
 
         it 'returns the contact' do
-          response = contact_with_valid_token.get_contact('valid_uuid')
+          response = contact_with_valid_token.by_uuid('valid_uuid')
           expect(response).to eq(contact)
         end
       end
@@ -111,7 +111,7 @@ RSpec.describe RDStation::Contacts do
 
         it 'raises a not found error' do
           expect do
-            contact_with_valid_token.get_contact(invalid_uuid)
+            contact_with_valid_token.by_uuid(invalid_uuid)
           end.to raise_error(RDStation::Error::ResourceNotFound)
         end
       end
@@ -126,7 +126,7 @@ RSpec.describe RDStation::Contacts do
 
       it 'raises an invalid token error' do
         expect do
-          contact_with_invalid_token.get_contact(valid_uuid)
+          contact_with_invalid_token.by_uuid(valid_uuid)
         end.to raise_error(RDStation::Error::Unauthorized)
       end
     end
@@ -140,13 +140,13 @@ RSpec.describe RDStation::Contacts do
 
       it 'raises a expired token error' do
         expect do
-          contact_with_expired_token.get_contact(valid_uuid)
+          contact_with_expired_token.by_uuid(valid_uuid)
         end.to raise_error(RDStation::Error::ExpiredAccessToken)
       end
     end
   end
 
-  describe '#get_contact_by_email' do
+  describe '#by_email' do
     context 'with a valid auth token' do
       context 'when the contact exists' do
         let(:contact) do
@@ -160,7 +160,7 @@ RSpec.describe RDStation::Contacts do
         end
 
         it 'returns the contact' do
-          response = contact_with_valid_token.get_contact_by_email(valid_email)
+          response = contact_with_valid_token.by_email(valid_email)
           expect(response).to eq(contact)
         end
       end
@@ -174,7 +174,7 @@ RSpec.describe RDStation::Contacts do
 
         it 'raises a not found error' do
           expect do
-            contact_with_valid_token.get_contact_by_email(invalid_email)
+            contact_with_valid_token.by_email(invalid_email)
           end.to raise_error(RDStation::Error::ResourceNotFound)
         end
       end
@@ -189,7 +189,7 @@ RSpec.describe RDStation::Contacts do
 
       it 'raises an invalid token error' do
         expect do
-          contact_with_invalid_token.get_contact_by_email(valid_email)
+          contact_with_invalid_token.by_email(valid_email)
         end.to raise_error(RDStation::Error::Unauthorized)
       end
     end
@@ -203,13 +203,13 @@ RSpec.describe RDStation::Contacts do
 
       it 'raises a expired token error' do
         expect do
-          contact_with_expired_token.get_contact_by_email(valid_email)
+          contact_with_expired_token.by_email(valid_email)
         end.to raise_error(RDStation::Error::ExpiredAccessToken)
       end
     end
   end
 
-  describe '#update_contact' do
+  describe '#update' do
     context 'with a valid auth_token' do
       let(:valid_auth_token) { 'valid_auth_token' }
       let(:headers) do
@@ -231,7 +231,7 @@ RSpec.describe RDStation::Contacts do
         end
 
         it 'returns the updated contact' do
-          updated_contact = contact_with_valid_token.update_contact('valid_uuid', contact)
+          updated_contact = contact_with_valid_token.update('valid_uuid', contact)
           expect(updated_contact).to eq(contact)
         end
       end
@@ -245,7 +245,7 @@ RSpec.describe RDStation::Contacts do
 
         it 'raises a not found error' do
           expect do
-            contact_with_valid_token.update_contact(invalid_uuid, {})
+            contact_with_valid_token.update(invalid_uuid, {})
           end.to raise_error(RDStation::Error::ResourceNotFound)
         end
       end
@@ -268,7 +268,7 @@ RSpec.describe RDStation::Contacts do
 
       it 'raises an invalid token error' do
         expect do
-          contact_with_invalid_token.update_contact('valid_uuid', {})
+          contact_with_invalid_token.update('valid_uuid', {})
         end.to raise_error(RDStation::Error::Unauthorized)
       end
     end
@@ -290,13 +290,13 @@ RSpec.describe RDStation::Contacts do
 
       it 'raises a expired token error' do
         expect do
-          contact_with_expired_token.update_contact('valid_uuid', {})
+          contact_with_expired_token.update('valid_uuid', {})
         end.to raise_error(RDStation::Error::ExpiredAccessToken)
       end
     end
   end
 
-  describe '#upsert_contact' do
+  describe '#upsert' do
     context 'with a valid auth_token' do
       let(:valid_auth_token) { 'valid_auth_token' }
 
@@ -319,7 +319,7 @@ RSpec.describe RDStation::Contacts do
         end
 
         it 'returns the updated contact' do
-          updated_contact = contact_with_valid_token.upsert_contact('email', 'valid@email.com', contact)
+          updated_contact = contact_with_valid_token.upsert('email', 'valid@email.com', contact)
           expect(updated_contact).to eq(contact)
         end
       end
@@ -333,7 +333,7 @@ RSpec.describe RDStation::Contacts do
 
         it 'raises a not found error' do
           expect do
-            contact_with_valid_token.upsert_contact('email', invalid_email, {})
+            contact_with_valid_token.upsert('email', invalid_email, {})
           end.to raise_error(RDStation::Error::ResourceNotFound)
         end
       end
@@ -356,7 +356,7 @@ RSpec.describe RDStation::Contacts do
 
       it 'raises an invalid token error' do
         expect do
-          contact_with_invalid_token.upsert_contact('email', valid_email, {})
+          contact_with_invalid_token.upsert('email', valid_email, {})
         end.to raise_error(RDStation::Error::Unauthorized)
       end
     end
@@ -378,7 +378,7 @@ RSpec.describe RDStation::Contacts do
 
       it 'raises a expired token error' do
         expect do
-          contact_with_expired_token.upsert_contact('email', valid_email, {})
+          contact_with_expired_token.upsert('email', valid_email, {})
         end.to raise_error(RDStation::Error::ExpiredAccessToken)
       end
     end

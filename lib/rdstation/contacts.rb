@@ -12,14 +12,14 @@ module RDStation
     # param uuid:
     #   The unique uuid associated to each RD Station Contact.
     #
-    def get_contact(uuid)
+    def by_uuid(uuid)
       response = self.class.get(base_url(uuid), headers: required_headers)
       response_body = JSON.parse(response.body)
       return response_body unless response_body['errors']
       RDStation::ErrorHandler.new(response).raise_errors
     end
 
-    def get_contact_by_email(email)
+    def by_email(email)
       response = self.class.get(base_url("email:#{email}"), headers: required_headers)
       response_body = JSON.parse(response.body)
       return response_body unless response_body['errors']
@@ -37,7 +37,7 @@ module RDStation
     # :mobile_phone
     # :website
     # :tags
-    def update_contact(uuid, contact_hash)
+    def update(uuid, contact_hash)
       response = self.class.patch(base_url(uuid), :body => contact_hash.to_json, :headers => required_headers)
       response_body = JSON.parse(response.body)
       return response_body unless response_body['errors']
@@ -52,7 +52,7 @@ module RDStation
     # param contact_hash:
     #   Contact data
     #
-    def upsert_contact(identifier, identifier_value, contact_hash)
+    def upsert(identifier, identifier_value, contact_hash)
       path = "#{identifier}:#{identifier_value}"
       response = self.class.patch(base_url(path), body: contact_hash.to_json, headers: required_headers)
       response_body = JSON.parse(response.body)
@@ -62,12 +62,12 @@ module RDStation
 
     private
 
-      def base_url(path = "")
-        "https://api.rd.services/platform/contacts/#{path}"
-      end
+    def base_url(path = "")
+      "https://api.rd.services/platform/contacts/#{path}"
+    end
 
-      def required_headers
-        { "Authorization" => "Bearer #{@auth_token}", "Content-Type" => "application/json" }
-      end
+    def required_headers
+      { "Authorization" => "Bearer #{@auth_token}", "Content-Type" => "application/json" }
+    end
   end
 end
