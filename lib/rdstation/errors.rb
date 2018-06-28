@@ -1,34 +1,31 @@
+require_relative 'error_handler/expired_access_token'
+require_relative 'error_handler/expired_code_grant'
+require_relative 'error_handler/invalid_credentials'
+require_relative 'error_handler/resource_not_found'
+require_relative 'error_handler/unauthorized'
+
 module RDStation
   class Errors
     ERROR_TYPES = [
-      RDStation::ErrorHandler::ExpiredAccessToken,
-      RDStation::ErrorHandler::ExpiredCodeGrant,
-      RDStation::ErrorHandler::InvalidCredentials,
-      RDStation::ErrorHandler::ResourceNotFound,
-      RDStation::ErrorHandler::Unauthorized
+      ErrorHandler::ExpiredAccessToken,
+      ErrorHandler::ExpiredCodeGrant,
+      ErrorHandler::InvalidCredentials,
+      ErrorHandler::ResourceNotFound,
+      ErrorHandler::Unauthorized
     ].freeze
 
     def initialize(response)
       @response = response
-      register
-    end
-
-    def register
-      errors.each do |error|
-        error_handler.register_handler(error)
-      end
     end
 
     def raise_errors
-      error_handler.handlers.each(&:raise_error)
+      errors.each(&:raise_error)
     end
+
+    private
 
     def errors
       ERROR_TYPES.map { |error| error.new(@response) }
-    end
-
-    def error_handler
-      @error_handler ||= RDStation::ErrorHandler.new
     end
   end
 end
