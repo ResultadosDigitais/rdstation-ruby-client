@@ -34,7 +34,7 @@ module RDStation
       response = post_to_auth_endpoint(code: code)
       parsed_body = JSON.parse(response.body)
       return parsed_body unless parsed_body['errors']
-      RDStation::Errors.new(response).raise_errors
+      RDStation::ErrorHandler.new(response).raise_errors
     end
 
     #
@@ -45,7 +45,7 @@ module RDStation
       response = post_to_auth_endpoint(refresh_token: refresh_token)
       parsed_body = JSON.parse(response.body)
       return parsed_body unless parsed_body['errors']
-      RDStation::Errors.new(response).raise_errors
+      RDStation::ErrorHandler.new(response).raise_errors
     end
 
     private

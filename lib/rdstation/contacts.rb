@@ -16,14 +16,14 @@ module RDStation
       response = self.class.get(base_url(uuid), headers: required_headers)
       response_body = JSON.parse(response.body)
       return response_body unless response_body['errors']
-      RDStation::Errors.new(response).raise_errors
+      RDStation::ErrorHandler.new(response).raise_errors
     end
 
     def get_contact_by_email(email)
       response = self.class.get(base_url("email:#{email}"), headers: required_headers)
       response_body = JSON.parse(response.body)
       return response_body unless response_body['errors']
-      RDStation::Errors.new(response).raise_errors
+      RDStation::ErrorHandler.new(response).raise_errors
     end
 
     # The Contact hash may contain the following parameters:
@@ -41,7 +41,7 @@ module RDStation
       response = self.class.patch(base_url(uuid), :body => contact_hash.to_json, :headers => required_headers)
       response_body = JSON.parse(response.body)
       return response_body unless response_body['errors']
-      RDStation::Errors.new(response).raise_errors
+      RDStation::ErrorHandler.new(response).raise_errors
     end
 
     #
@@ -57,7 +57,7 @@ module RDStation
       response = self.class.patch(base_url(path), body: contact_hash.to_json, headers: required_headers)
       response_body = JSON.parse(response.body)
       return response_body unless response_body['errors']
-      RDStation::Errors.new(response).raise_errors
+      RDStation::ErrorHandler.new(response).raise_errors
     end
 
     private

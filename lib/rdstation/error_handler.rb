@@ -5,7 +5,7 @@ require_relative 'error_handler/resource_not_found'
 require_relative 'error_handler/unauthorized'
 
 module RDStation
-  class Errors
+  class ErrorHandler
     ERROR_TYPES = [
       ErrorHandler::ExpiredAccessToken,
       ErrorHandler::ExpiredCodeGrant,
