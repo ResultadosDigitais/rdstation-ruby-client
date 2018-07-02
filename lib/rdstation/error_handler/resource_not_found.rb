@@ -1,14 +1,14 @@
 module RDStation
   class ErrorHandler
     class ResourceNotFound
-      attr_reader :api_response, :errors
+      attr_reader :api_response, :error
 
       ERROR_CODE = 'RESOURCE_NOT_FOUND'.freeze
       EXCEPTION_CLASS = RDStation::Error::ResourceNotFound
 
       def initialize(api_response)
         @api_response = api_response
-        @errors = JSON.parse(api_response.body)['errors']
+        @error = JSON.parse(api_response.body)['errors']
       end
 
       def raise_error
@@ -17,10 +17,6 @@ module RDStation
       end
 
       private
-
-      def error
-        @errors.first
-      end
 
       def resource_not_found?
         error['error_type'] == ERROR_CODE
