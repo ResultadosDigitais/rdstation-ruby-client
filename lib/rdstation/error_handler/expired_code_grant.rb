@@ -1,14 +1,14 @@
 module RDStation
   class ErrorHandler
     class ExpiredCodeGrant
-      attr_reader :api_response, :response_headers, :errors
+      attr_reader :api_response, :response_headers, :error
 
       ERROR_CODE = 'EXPIRED_CODE_GRANT'.freeze
       EXCEPTION_CLASS = RDStation::Error::ExpiredCodeGrant
 
       def initialize(api_response)
         @api_response = api_response
-        @errors = JSON.parse(api_response.body)['errors']
+        @error = JSON.parse(api_response.body)['errors']
         @response_headers = api_response.headers
       end
 
@@ -18,10 +18,6 @@ module RDStation
       end
 
       private
-
-      def error
-        @errors.first
-      end
 
       def expired_code?
         error['error_type'] == ERROR_CODE
