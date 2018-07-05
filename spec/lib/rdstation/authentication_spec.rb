@@ -73,12 +73,10 @@ RSpec.describe RDStation::Authentication do
       status: 401,
       headers: { 'Content-Type' => 'application/json' },
       body: {
-        errors: [
-          {
-            error_type: 'ACCESS_DENIED',
-            error_message: 'Wrong credentials provided.'
-          }
-        ]
+        errors: {
+          error_type: 'ACCESS_DENIED',
+          error_message: 'Wrong credentials provided.'
+        }
       }.to_json
     }
   end
@@ -88,12 +86,10 @@ RSpec.describe RDStation::Authentication do
       status: 401,
       headers: { 'Content-Type' => 'application/json' },
       body: {
-        errors: [
-          {
-            error_type: 'EXPIRED_CODE_GRANT',
-            error_message: 'The authorization code grant has expired.'
-          }
-        ]
+        errors: {
+          error_type: 'EXPIRED_CODE_GRANT',
+          error_message: 'The authorization code grant has expired.'
+        }
       }.to_json
     }
   end

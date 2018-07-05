@@ -44,12 +44,10 @@ RSpec.describe RDStation::Contacts do
     {
       status: 404,
       body: {
-        errors: [
-          {
-            error_type: 'RESOURCE_NOT_FOUND',
-            error_message: 'Lead not found.'
-          }
-        ]
+        errors: {
+          error_type: 'RESOURCE_NOT_FOUND',
+          error_message: 'Lead not found.'
+        }
       }.to_json
     }
   end
@@ -58,12 +56,22 @@ RSpec.describe RDStation::Contacts do
     {
       status: 401,
       body: {
-        errors: [
-          {
-            error_type: 'UNAUTHORIZED',
-            error_message: 'Invalid token.'
-          }
-        ]
+        errors: {
+          error_type: 'UNAUTHORIZED',
+          error_message: 'Invalid token.'
+        }
+      }.to_json
+    }
+  end
+
+  let(:conflicting_field_response) do
+    {
+      status: 400,
+      body: {
+        errors: {
+          error_type: 'CONFLICTING_FIELD',
+          error_message: 'The payload contains an attribute that was used to identify the resource.'
+        }
       }.to_json
     }
   end
@@ -73,12 +81,10 @@ RSpec.describe RDStation::Contacts do
       status: 401,
       headers: { 'WWW-Authenticate' => 'Bearer realm="https://api.rd.services/", error="expired_token", error_description="The access token expired"' },
       body: {
-        errors: [
-          {
-            error_type: 'UNAUTHORIZED',
-            error_message: 'Invalid token.'
-          }
-        ]
+        errors: {
+          error_type: 'UNAUTHORIZED',
+          error_message: 'Invalid token.'
+        }
       }.to_json
     }
   end
@@ -335,6 +341,22 @@ RSpec.describe RDStation::Contacts do
           expect do
             contact_with_valid_token.upsert('email', invalid_email, {})
           end.to raise_error(RDStation::Error::ResourceNotFound)
+        end
+      end
+
+      context 'when the payload has a conflicting field' do
+        let(:conflicting_payload) { { 'email' => valid_email } }
+
+        before do
+          stub_request(:patch, endpoint_with_valid_email)
+            .with(headers: headers)
+            .to_return(conflicting_field_response)
+        end
+
+        it 'raises a conflicting field error' do
+          expect do
+            contact_with_valid_token.upsert('email', valid_email, conflicting_payload)
+          end.to raise_error(RDStation::Error::ConflictingField)
         end
       end
     end
