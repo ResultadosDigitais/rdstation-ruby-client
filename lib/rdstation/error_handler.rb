@@ -22,6 +22,9 @@ module RDStation
 
     def raise_errors
       errors.each(&:raise_error)
+      # Raise only the exception message when the error is not recognized
+      unrecognized_error = @response['errors']
+      raise unrecognized_error['error_message']
     end
 
     private
