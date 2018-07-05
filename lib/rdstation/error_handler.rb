@@ -1,3 +1,4 @@
+require_relative 'error_handler/conflicting_field'
 require_relative 'error_handler/expired_access_token'
 require_relative 'error_handler/expired_code_grant'
 require_relative 'error_handler/invalid_credentials'
@@ -7,6 +8,7 @@ require_relative 'error_handler/unauthorized'
 module RDStation
   class ErrorHandler
     ERROR_TYPES = [
+      ErrorHandler::ConflictingField,
       ErrorHandler::ExpiredAccessToken,
       ErrorHandler::ExpiredCodeGrant,
       ErrorHandler::InvalidCredentials,
@@ -20,6 +22,9 @@ module RDStation
 
     def raise_errors
       errors.each(&:raise_error)
+      # Raise only the exception message when the error is not recognized
+      unrecognized_error = @response['errors']
+      raise unrecognized_error['error_message']
     end
 
     private

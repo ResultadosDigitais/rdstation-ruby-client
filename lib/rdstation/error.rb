@@ -10,6 +10,7 @@ module RDStation
       super(message)
     end
 
+    class ConflictingField < Error; end
     class ExpiredAccessToken < Error; end
     class ExpiredCodeGrant < Error; end
     class InvalidCredentials < Error; end
