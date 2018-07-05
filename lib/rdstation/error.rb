@@ -11,6 +11,7 @@ module RDStation
     end
 
     class ConflictingField < Error; end
+    class Default < Error; end
     class ExpiredAccessToken < Error; end
     class ExpiredCodeGrant < Error; end
     class InvalidCredentials < Error; end

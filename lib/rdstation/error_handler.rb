@@ -1,4 +1,5 @@
 require_relative 'error_handler/conflicting_field'
+require_relative 'error_handler/default'
 require_relative 'error_handler/expired_access_token'
 require_relative 'error_handler/expired_code_grant'
 require_relative 'error_handler/invalid_credentials'
@@ -13,7 +14,8 @@ module RDStation
       ErrorHandler::ExpiredCodeGrant,
       ErrorHandler::InvalidCredentials,
       ErrorHandler::ResourceNotFound,
-      ErrorHandler::Unauthorized
+      ErrorHandler::Unauthorized,
+      ErrorHandler::Default
     ].freeze
 
     def initialize(response)

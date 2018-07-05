@@ -76,6 +76,18 @@ RSpec.describe RDStation::Contacts do
     }
   end
 
+  let(:unrecognized_error) do
+    {
+      status: 400,
+      body: {
+        errors: {
+          error_type: 'unrecognized error',
+          error_message: 'Unexpected error.'
+        }
+      }.to_json
+    }
+  end
+
   let(:expired_token_response) do
     {
       status: 401,
@@ -359,6 +371,20 @@ RSpec.describe RDStation::Contacts do
           end.to raise_error(RDStation::Error::ConflictingField)
         end
       end
+
+      context 'when an unrecognized error occurs' do
+        before do
+          stub_request(:patch, endpoint_with_valid_email)
+            .with(headers: headers)
+            .to_return(unrecognized_error)
+        end
+
+        it 'raises an default error' do
+          expect do
+            contact_with_valid_token.upsert('email', valid_email, {})
+          end.to raise_error(RDStation::Error::Default)
+        end
+      end
     end
 
     context 'with an invalid auth token' do
@@ -398,7 +424,7 @@ RSpec.describe RDStation::Contacts do
           .to_return(expired_token_response)
       end
 
-      it 'raises a expired token error' do
+      it 'raises an expired token error' do
         expect do
           contact_with_expired_token.upsert('email', valid_email, {})
         end.to raise_error(RDStation::Error::ExpiredAccessToken)
