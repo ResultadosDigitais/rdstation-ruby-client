@@ -12,14 +12,6 @@ RSpec.describe RDStation::Authentication do
     }
   end
 
-  let(:token_request_with_valid_refresh_token) do
-    {
-      client_id: 'client_id',
-      client_secret: 'client_secret',
-      code: 'valid_code'
-    }
-  end
-
   let(:token_request_with_invalid_code) do
     {
       client_id: 'client_id',
