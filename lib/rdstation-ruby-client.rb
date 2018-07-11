@@ -1,4 +1,11 @@
-require "httparty"
-require "rdstation/client"
-require "rdstation/contacts"
-require "rdstation/authentication"
+require 'httparty'
+
+# API requests
+require 'rdstation/authentication'
+require 'rdstation/client'
+require 'rdstation/contacts'
+require 'rdstation/fields'
+
+# Error handling
+require 'rdstation/error'
+require 'rdstation/error_handler'
