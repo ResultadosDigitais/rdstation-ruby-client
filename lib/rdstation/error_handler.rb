@@ -23,16 +23,29 @@ module RDStation
     end
 
     def raise_errors
-      errors.each(&:raise_error)
+      error_types.each(&:raise_error)
       # Raise only the exception message when the error is not recognized
-      unrecognized_error = @response['errors']
-      raise unrecognized_error['error_message']
+      raise array_of_errors.first['error_message']
     end
 
     private
 
-    def errors
-      ERROR_TYPES.map { |error| error.new(@response) }
+    attr_reader :response
+
+    def array_of_errors
+      error_formatter.to_array
+    end
+
+    def error_types
+      ERROR_TYPES.map { |error_type| error_type.new(array_of_errors) }
+    end
+
+    def response_errors
+      response['errors']
+    end
+
+    def error_formatter
+      @error_formatter = RDStation::Error::Formatter.new(response_errors)
     end
   end
 end
