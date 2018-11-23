@@ -8,5 +8,4 @@ require 'rdstation/fields'
 
 # Error handling
 require 'rdstation/error'
-require 'rdstation/error/formatter'
 require 'rdstation/error_handler'

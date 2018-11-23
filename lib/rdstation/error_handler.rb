@@ -1,3 +1,4 @@
+require_relative 'error/formatter'
 require_relative 'error_handler/conflicting_field'
 require_relative 'error_handler/default'
 require_relative 'error_handler/expired_access_token'
