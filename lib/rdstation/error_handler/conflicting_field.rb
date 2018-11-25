@@ -4,7 +4,6 @@ module RDStation
       attr_reader :errors
 
       ERROR_CODE = 'CONFLICTING_FIELD'.freeze
-      EXCEPTION_CLASS = RDStation::Error::ConflictingField
 
       def initialize(errors)
         @errors = errors
@@ -12,7 +11,7 @@ module RDStation
 
       def raise_error
         return if conflicting_field_errors.empty?
-        raise EXCEPTION_CLASS.new(error['error_message'], api_response)
+        raise RDStation::Error::ConflictingField, conflicting_field_errors.first
       end
 
       private
