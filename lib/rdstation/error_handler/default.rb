@@ -8,7 +8,7 @@ module RDStation
       end
 
       def raise_error
-        raise RDStation::Error::Default, errors
+        raise RDStation::Error::Default, errors.first
       end
     end
   end
