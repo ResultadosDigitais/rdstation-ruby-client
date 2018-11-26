@@ -5,7 +5,7 @@ RSpec.describe RDStation::ErrorHandler::InvalidCredentials do
 
     subject(:invalid_credentials_error) { described_class.new(errors) }
 
-    context 'when there is an expired code grant error' do
+    context 'when there are invalid credentials errors' do
       let(:errors) do
         [
           {
@@ -22,7 +22,7 @@ RSpec.describe RDStation::ErrorHandler::InvalidCredentials do
       end
     end
 
-    context 'when none of the errors are expired code grant errors' do
+    context 'when none of the errors are invalid credentials errors' do
       let(:errors) do
         [
           {

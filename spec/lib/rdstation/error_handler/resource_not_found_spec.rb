@@ -5,7 +5,7 @@ RSpec.describe RDStation::ErrorHandler::ResourceNotFound do
 
     subject(:resource_not_found_error) { described_class.new(errors) }
 
-    context 'when there is an expired code grant error' do
+    context 'when there is a resource not found error' do
       let(:errors) do
         [
           {
@@ -22,7 +22,7 @@ RSpec.describe RDStation::ErrorHandler::ResourceNotFound do
       end
     end
 
-    context 'when none of the errors are expired code grant errors' do
+    context 'when none of the errors are resource not found errors' do
       let(:errors) do
         [
           {
