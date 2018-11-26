@@ -32,7 +32,9 @@ module RDStation
     attr_reader :response
 
     def array_of_errors
-      error_formatter.to_array
+      error_formatter.to_array.map do |error|
+        error.merge(additional_error_attributes)
+      end
     end
 
     def error_types
@@ -45,12 +47,6 @@ module RDStation
 
     def error_formatter
       @error_formatter = RDStation::Error::Formatter.new(response_errors)
-    end
-
-    def errors
-      error_formatter.to_array.map do |error|
-        error.merge(additional_error_attributes)
-      end
     end
 
     def additional_error_attributes

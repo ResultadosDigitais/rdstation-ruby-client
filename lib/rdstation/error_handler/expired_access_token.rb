@@ -20,11 +20,11 @@ module RDStation
         errors.select do |error|
           error_header = error['headers']
           next unless error_header
-          find_expired_token_error(error_header)
+          expired_token_error?(error_header)
         end
       end
 
-      def find_expired_token_error(error_header)
+      def expired_token_error?(error_header)
         auth_header = error_header['x-amzn-remapped-www-authenticate'] || error_header['www-authenticate']
         return unless auth_header
         auth_header.include?(EXPIRED_TOKEN_ERROR)
