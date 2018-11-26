@@ -1,12 +1,12 @@
 module RDStation
 
   class Error < StandardError
-    attr_reader :http_status, :headers, :body
+    attr_reader :details
 
-    def initialize(message, api_response_error)
-      @http_status = api_response_error.code
-      @headers = api_response_error.headers
-      @body = JSON.parse(api_response_error.body)
+    def initialize(details)
+      @details = details
+      message = details['error_message']
+      raise ArgumentError, 'The details hash must contain an error message' unless message
       super(message)
     end
 
