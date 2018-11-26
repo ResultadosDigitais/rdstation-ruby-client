@@ -25,8 +25,6 @@ module RDStation
 
     def raise_errors
       error_types.each(&:raise_error)
-      # Raise only the exception message when the error is not recognized
-      raise array_of_errors.first['error_message']
     end
 
     private
@@ -42,11 +40,24 @@ module RDStation
     end
 
     def response_errors
-      response['errors']
+      JSON.parse(response.body)['errors']
     end
 
     def error_formatter
       @error_formatter = RDStation::Error::Formatter.new(response_errors)
+    end
+
+    def errors
+      error_formatter.to_array.map do |error|
+        error.merge(additional_error_attributes)
+      end
+    end
+
+    def additional_error_attributes
+      {
+        'headers' => response.headers,
+        'body' => JSON.parse(response.body)
+      }
     end
   end
 end
