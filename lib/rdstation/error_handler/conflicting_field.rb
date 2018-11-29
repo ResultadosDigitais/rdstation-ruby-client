@@ -1,25 +1,23 @@
 module RDStation
   class ErrorHandler
     class ConflictingField
-      attr_reader :api_response, :response_body, :error
+      attr_reader :errors
 
       ERROR_CODE = 'CONFLICTING_FIELD'.freeze
-      EXCEPTION_CLASS = RDStation::Error::ConflictingField
 
-      def initialize(api_response)
-        @api_response = api_response
-        @error = JSON.parse(api_response.body)['errors']
+      def initialize(errors)
+        @errors = errors
       end
 
       def raise_error
-        return unless conflicting_field?
-        raise EXCEPTION_CLASS.new(error['error_message'], api_response)
+        return if conflicting_field_errors.empty?
+        raise RDStation::Error::ConflictingField, conflicting_field_errors.first
       end
 
       private
 
-      def conflicting_field?
-        error['error_type'] == ERROR_CODE
+      def conflicting_field_errors
+        errors.select { |error| error['error_type'] == ERROR_CODE }
       end
     end
   end

@@ -1,25 +1,23 @@
 module RDStation
   class ErrorHandler
     class Unauthorized
-      attr_reader :api_response, :response_body, :error
+      attr_reader :errors
 
       ERROR_CODE = 'UNAUTHORIZED'.freeze
-      EXCEPTION_CLASS = RDStation::Error::Unauthorized
 
-      def initialize(api_response)
-        @api_response = api_response
-        @error = JSON.parse(api_response.body)['errors']
+      def initialize(errors)
+        @errors = errors
       end
 
       def raise_error
-        return unless unauthorized?
-        raise EXCEPTION_CLASS.new(error['error_message'], api_response)
+        return if unauthorized_errors.empty?
+        raise RDStation::Error::Unauthorized, unauthorized_errors.first
       end
 
       private
 
-      def unauthorized?
-        error['error_type'] == ERROR_CODE
+      def unauthorized_errors
+        errors.select { |error| error['error_type'] == ERROR_CODE }
       end
     end
   end

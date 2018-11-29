@@ -1,29 +1,33 @@
 module RDStation
   class ErrorHandler
     class ExpiredAccessToken
-      attr_reader :api_response, :response_headers, :error
+      attr_reader :errors
 
-      EXCEPTION_CLASS = RDStation::Error::ExpiredAccessToken
+      EXPIRED_TOKEN_ERROR = 'error="expired_token"'.freeze
 
-      def initialize(api_response)
-        @api_response = api_response
-        @error = JSON.parse(api_response.body)['errors']
-        @response_headers = api_response.headers
+      def initialize(errors)
+        @errors = errors
       end
 
       def raise_error
-        return unless expired_token?
-        raise EXCEPTION_CLASS.new(error['error_message'], api_response)
+        return if expired_token_errors.empty?
+        raise RDStation::Error::ExpiredAccessToken, expired_token_errors.first
       end
 
       private
 
-      def expired_token?
-        auth_header = response_headers['x-amzn-remapped-www-authenticate'] ||
-                      response_headers['www-authenticate']
+      def expired_token_errors
+        errors.select do |error|
+          error_header = error['headers']
+          next unless error_header
+          expired_token_error?(error_header)
+        end
+      end
 
+      def expired_token_error?(error_header)
+        auth_header = error_header['x-amzn-remapped-www-authenticate'] || error_header['www-authenticate']
         return unless auth_header
-        auth_header.include?('error="expired_token"')
+        auth_header.include?(EXPIRED_TOKEN_ERROR)
       end
     end
   end
