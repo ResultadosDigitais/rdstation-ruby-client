@@ -52,7 +52,8 @@ module RDStation
     def additional_error_attributes
       {
         'headers' => response.headers,
-        'body' => JSON.parse(response.body)
+        'body' => JSON.parse(response.body),
+        'http_status' => response.code
       }
     end
   end
