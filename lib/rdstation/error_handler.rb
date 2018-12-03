@@ -42,7 +42,7 @@ module RDStation
     end
 
     def response_errors
-      JSON.parse(response.body)['errors']
+      JSON.parse(response.body)
     end
 
     def error_formatter
