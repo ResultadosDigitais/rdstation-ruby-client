@@ -22,11 +22,15 @@ module RDStation
       # }
       response = self.class.post(EVENTS_ENDPOINT, headers: required_headers)
       response_body = JSON.parse(response.body)
-      return response_body unless response_body['errors']
+      return response_body unless errors?(response_body)
       RDStation::ErrorHandler.new(response).raise_errors
     end
 
     private
+
+    def errors?(response_body)
+      response_body.is_a?(Array) || response_body['errors']
+    end
 
     def required_headers
       {

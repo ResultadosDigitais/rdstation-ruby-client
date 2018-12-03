@@ -23,6 +23,7 @@ module RDStation
     class ExpiredAccessToken < Error; end
     class ExpiredCodeGrant < Error; end
     class InvalidCredentials < Error; end
+    class InvalidEventType < Error; end
     class ResourceNotFound < Error; end
     class Unauthorized < Error; end
   end

@@ -4,6 +4,7 @@ require_relative 'error_handler/default'
 require_relative 'error_handler/expired_access_token'
 require_relative 'error_handler/expired_code_grant'
 require_relative 'error_handler/invalid_credentials'
+require_relative 'error_handler/invalid_event_type'
 require_relative 'error_handler/resource_not_found'
 require_relative 'error_handler/unauthorized'
 
@@ -14,6 +15,7 @@ module RDStation
       ErrorHandler::ExpiredAccessToken,
       ErrorHandler::ExpiredCodeGrant,
       ErrorHandler::InvalidCredentials,
+      ErrorHandler::InvalidEventType,
       ErrorHandler::ResourceNotFound,
       ErrorHandler::Unauthorized,
       ErrorHandler::Default

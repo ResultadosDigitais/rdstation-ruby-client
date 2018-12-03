@@ -11,6 +11,38 @@ RSpec.describe RDStation::Events do
 
   let(:events_endpoint) { 'https://api.rd.services/platform/events' }
 
+  let(:valid_event_types) do
+    %w[
+      OPPORTUNITY_LOST
+      EMAIL_DELIVERED
+      DOUBLE_OPT_IN_EMAIL_CONFIRMED
+      OPPORTUNITY
+      CART_ABANDONED_ITEM
+      FUNNEL_STAGE_CHANGED
+      MEDIA_PLAYBACK_STOPPED
+      CONVERSION
+      MEDIA_PLAYBACK_STARTED
+      SALE
+      WORKFLOW_STARTED
+      EMAIL_SPAM_REPORTED
+      ORDER_PLACED
+      EMAIL_SOFT_BOUNCED
+      CART_ABANDONED
+      EMAIL_OPENED
+      EMAIL_DROPPED
+      EMAIL_HARD_BOUNCED
+      WORKFLOW_FINISHED
+      WORKFLOW_CANCELED
+      EMAIL_CLICKED
+      ORDER_PLACED_ITEM
+      CHAT_STARTED
+      CHAT_FINISHED
+      EMAIL_UNSUBSCRIBED
+      PAGE_VISITED
+      CALL_FINISHED
+    ]
+  end
+
   let(:valid_headers) do
     {
       'Authorization' => "Bearer #{valid_auth_token}",
@@ -113,7 +145,31 @@ RSpec.describe RDStation::Events do
     end
 
     context 'when the event type is incorrect' do
-      # [{"error_type":"INVALID_OPTION","error_message":"Must be one of the valid options.","validation_rules":{"valid_options":["OPPORTUNITY_LOST","EMAIL_DELIVERED","DOUBLE_OPT_IN_EMAIL_CONFIRMED","OPPORTUNITY","CART_ABANDONED_ITEM","FUNNEL_STAGE_CHANGED","MEDIA_PLAYBACK_STOPPED","CONVERSION","MEDIA_PLAYBACK_STARTED","SALE","WORKFLOW_STARTED","EMAIL_SPAM_REPORTED","ORDER_PLACED","EMAIL_SOFT_BOUNCED","CART_ABANDONED","EMAIL_OPENED","EMAIL_DROPPED","EMAIL_HARD_BOUNCED","WORKFLOW_FINISHED","WORKFLOW_CANCELED","EMAIL_CLICKED","ORDER_PLACED_ITEM","CHAT_STARTED","CHAT_FINISHED","EMAIL_UNSUBSCRIBED","PAGE_VISITED","CALL_FINISHED"]},"path":"$.event_type"}]
+      let(:invalid_event_type_response) do
+        {
+          status: 400,
+          body: [
+            {
+              'error_type' => 'INVALID_OPTION',
+              'error_message' => 'Must be one of the valid options.',
+              'validation_rules' => { 'valid_options' => valid_event_types },
+              'path' => '$.event_type'
+            }
+          ].to_json
+        }
+      end
+
+      before do
+        stub_request(:post, events_endpoint)
+          .with(headers: valid_headers)
+          .to_return(invalid_event_type_response)
+      end
+
+      it 'raises an invalid event type error' do
+        expect do
+          event_with_valid_token.create(event)
+        end.to raise_error(RDStation::Error::InvalidEventType)
+      end
     end
   end
 end
