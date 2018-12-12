@@ -35,9 +35,7 @@ module RDStation
     # or code is invalid.
     def authenticate(code)
       response = post_to_auth_endpoint(code: code)
-      parsed_body = JSON.parse(response.body)
-      return parsed_body unless parsed_body['errors']
-      RDStation::ErrorHandler.new(response).raise_errors
+      ApiResponse.build(response)
     end
 
     #
@@ -46,9 +44,7 @@ module RDStation
     #
     def update_access_token(refresh_token)
       response = post_to_auth_endpoint(refresh_token: refresh_token)
-      parsed_body = JSON.parse(response.body)
-      return parsed_body unless parsed_body['errors']
-      RDStation::ErrorHandler.new(response).raise_errors
+      ApiResponse.build(response)
     end
 
     private

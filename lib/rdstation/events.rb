@@ -1,6 +1,4 @@
-# encoding: utf-8
 module RDStation
-  # More info: https://developers.rdstation.com/pt-BR/reference/contacts
   class Events
     include HTTParty
 
