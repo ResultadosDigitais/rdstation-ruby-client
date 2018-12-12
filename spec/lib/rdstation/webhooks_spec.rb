@@ -11,6 +11,14 @@ RSpec.describe RDStation::Webhooks do
     }
   end
 
+  let(:error_handler) do
+    instance_double(RDStation::ErrorHandler, raise_errors: 'mock raised errors')
+  end
+
+  before do
+    allow(RDStation::ErrorHandler).to receive(:new).and_return(error_handler)
+  end
+
   describe '#all' do
     context 'when the request is successful' do
       let(:webhooks) do
@@ -47,6 +55,19 @@ RSpec.describe RDStation::Webhooks do
         expect(response).to eq(webhooks)
       end
     end
+
+    context 'when the response contains errors' do
+      before do
+        stub_request(:get, webhooks_endpoint)
+          .with(headers: headers)
+          .to_return(status: 400, body: { 'errors' => ['all errors'] }.to_json)
+      end
+
+      it 'calls raise_errors on error handler' do
+        webhooks_client.all
+        expect(error_handler).to have_received(:raise_errors)
+      end
+    end
   end
 
   describe '#by_uuid' do
@@ -76,20 +97,33 @@ RSpec.describe RDStation::Webhooks do
         expect(response).to eq(webhook)
       end
     end
+
+    context 'when the response contains errors' do
+      before do
+        stub_request(:get, webhooks_endpoint_by_uuid)
+          .with(headers: headers)
+          .to_return(status: 400, body: { 'errors' => ['all errors'] }.to_json)
+      end
+
+      it 'calls raise_errors on error handler' do
+        webhooks_client.by_uuid(uuid)
+        expect(error_handler).to have_received(:raise_errors)
+      end
+    end
   end
 
   describe '#create' do
-    context 'when the request is successful' do
-      let(:payload) do
-        {
-          'entity_type' =>  'CONTACT',
-          'event_type' =>  'WEBHOOK.CONVERTED',
-          'url' =>  'http://my-url.com',
-          'http_method' => 'POST',
-          'include_relations' => %w[COMPANY CONTACT_FUNNEL]
-        }
-      end
+    let(:payload) do
+      {
+        'entity_type' =>  'CONTACT',
+        'event_type' =>  'WEBHOOK.CONVERTED',
+        'url' =>  'http://my-url.com',
+        'http_method' => 'POST',
+        'include_relations' => %w[COMPANY CONTACT_FUNNEL]
+      }
+    end
 
+    context 'when the request is successful' do
       let(:webhook) do
         {
           'uuid' => '5408c5a3-4711-4f2e-8d0b-13407a3e30f3',
@@ -112,23 +146,35 @@ RSpec.describe RDStation::Webhooks do
         expect(response).to eq(webhook)
       end
     end
+
+    context 'when the response contains errors' do
+      before do
+        stub_request(:post, webhooks_endpoint)
+          .with(headers: headers)
+          .to_return(status: 400, body: { 'errors' => ['all errors'] }.to_json)
+      end
+
+      it 'calls raise_errors on error handler' do
+        webhooks_client.create(payload)
+        expect(error_handler).to have_received(:raise_errors)
+      end
+    end
   end
 
   describe '#update' do
     let(:uuid) { '5408c5a3-4711-4f2e-8d0b-13407a3e30f3' }
     let(:webhooks_endpoint_by_uuid) { webhooks_endpoint + uuid }
+    let(:new_payload) do
+      {
+        'entity_type' =>  'CONTACT',
+        'event_type' =>  'WEBHOOK.MARKED_OPPORTUNITY',
+        'url' =>  'http://my-new-url.com',
+        'http_method' => 'POST',
+        'include_relations' => %w[CONTACT_FUNNEL]
+      }
+    end
 
     context 'when the request is successful' do
-      let(:new_payload) do
-        {
-          'entity_type' =>  'CONTACT',
-          'event_type' =>  'WEBHOOK.MARKED_OPPORTUNITY',
-          'url' =>  'http://my-new-url.com',
-          'http_method' => 'POST',
-          'include_relations' => %w[CONTACT_FUNNEL]
-        }
-      end
-
       let(:updated_webhook) do
         {
           'uuid' => uuid,
@@ -151,6 +197,19 @@ RSpec.describe RDStation::Webhooks do
         expect(response).to eq(updated_webhook)
       end
     end
+
+    context 'when the response contains errors' do
+      before do
+        stub_request(:put, webhooks_endpoint_by_uuid)
+          .with(headers: headers)
+          .to_return(status: 400, body: { 'errors' => ['all errors'] }.to_json)
+      end
+
+      it 'calls raise_errors on error handler' do
+        webhooks_client.update(uuid, new_payload)
+        expect(error_handler).to have_received(:raise_errors)
+      end
+    end
   end
 
   describe '#delete' do
@@ -165,6 +224,19 @@ RSpec.describe RDStation::Webhooks do
       it 'returns the webhook' do
         response = webhooks_client.delete(uuid)
         expect(response).to eq(message: 'Webhook deleted successfuly!')
+      end
+    end
+
+    context 'when the response contains errors' do
+      before do
+        stub_request(:delete, webhooks_endpoint_by_uuid)
+          .with(headers: headers)
+          .to_return(status: 400, body: { 'errors' => ['all errors'] }.to_json)
+      end
+
+      it 'calls raise_errors on error handler' do
+        webhooks_client.delete(uuid)
+        expect(error_handler).to have_received(:raise_errors)
       end
     end
   end
