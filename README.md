@@ -1,3 +1,5 @@
+[![CircleCI](https://circleci.com/gh/ResultadosDigitais/rdstation-ruby-client.svg?style=svg)](https://circleci.com/gh/ResultadosDigitais/rdstation-ruby-client)
+
 # RDStation Ruby Client
 
 RDstation ruby wrapper to interact with RDStation API.

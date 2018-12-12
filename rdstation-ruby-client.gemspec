@@ -23,6 +23,7 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency 'rspec'
   spec.add_development_dependency 'webmock', '~> 2.1'
   spec.add_development_dependency 'turn'
+  spec.add_development_dependency 'rspec_junit_formatter'
 
   spec.add_dependency "httparty", "~> 0.12"
 end
