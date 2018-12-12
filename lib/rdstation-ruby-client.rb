@@ -6,6 +6,7 @@ require 'rdstation/client'
 require 'rdstation/contacts'
 require 'rdstation/events'
 require 'rdstation/fields'
+require 'rdstation/webhooks'
 
 # Error handling
 require 'rdstation/error'
