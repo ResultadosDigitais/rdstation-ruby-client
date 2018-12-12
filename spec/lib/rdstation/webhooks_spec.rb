@@ -97,7 +97,7 @@ RSpec.describe RDStation::Webhooks do
           'entity_type' => 'CONTACT',
           'url' => 'http =>//my-url.com',
           'http_method' => 'POST',
-          'include_relations' => []
+          'include_relations' => %w[COMPANY CONTACT_FUNNEL]
         }
       end
 
@@ -110,6 +110,45 @@ RSpec.describe RDStation::Webhooks do
       it 'returns the webhook' do
         response = webhooks_client.create(payload)
         expect(response).to eq(webhook)
+      end
+    end
+  end
+
+  describe '#update' do
+    let(:uuid) { '5408c5a3-4711-4f2e-8d0b-13407a3e30f3' }
+    let(:webhooks_endpoint_by_uuid) { webhooks_endpoint + uuid }
+
+    context 'when the request is successful' do
+      let(:new_payload) do
+        {
+          'entity_type' =>  'CONTACT',
+          'event_type' =>  'WEBHOOK.MARKED_OPPORTUNITY',
+          'url' =>  'http://my-new-url.com',
+          'http_method' => 'POST',
+          'include_relations' => %w[CONTACT_FUNNEL]
+        }
+      end
+
+      let(:updated_webhook) do
+        {
+          'uuid' => uuid,
+          'event_type' => 'WEBHOOK.MARKED_OPPORTUNITY',
+          'entity_type' => 'CONTACT',
+          'url' => 'http://my-new-url.com',
+          'http_method' => 'POST',
+          'include_relations' => %w[CONTACT_FUNNEL]
+        }
+      end
+
+      before do
+        stub_request(:put, webhooks_endpoint_by_uuid)
+          .with(headers: headers, body: new_payload.to_json)
+          .to_return(status: 200, body: updated_webhook.to_json)
+      end
+
+      it 'returns the webhook' do
+        response = webhooks_client.update(uuid, new_payload)
+        expect(response).to eq(updated_webhook)
       end
     end
   end
