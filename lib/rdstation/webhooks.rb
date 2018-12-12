@@ -8,30 +8,22 @@ module RDStation
 
     def all
       response = self.class.get(base_url, headers: required_headers)
-      response_body = JSON.parse(response.body)
-      return response_body unless response_body['errors']
-      RDStation::ErrorHandler.new(response).raise_errors
+      ApiResponse.build(response)
     end
 
     def by_uuid(uuid)
       response = self.class.get(base_url(uuid), headers: required_headers)
-      response_body = JSON.parse(response.body)
-      return response_body unless response_body['errors']
-      RDStation::ErrorHandler.new(response).raise_errors
+      ApiResponse.build(response)
     end
 
     def create(payload)
       response = self.class.post(base_url, headers: required_headers, body: payload.to_json)
-      response_body = JSON.parse(response.body)
-      return response_body unless response_body['errors']
-      RDStation::ErrorHandler.new(response).raise_errors
+      ApiResponse.build(response)
     end
 
     def update(uuid, payload)
       response = self.class.put(base_url(uuid), headers: required_headers, body: payload.to_json)
-      response_body = JSON.parse(response.body)
-      return response_body unless response_body['errors']
-      RDStation::ErrorHandler.new(response).raise_errors
+      ApiResponse.build(response)
     end
 
     def delete(uuid)

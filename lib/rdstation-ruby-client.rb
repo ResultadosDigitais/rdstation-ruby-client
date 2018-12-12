@@ -1,5 +1,8 @@
 require 'httparty'
 
+# API Response handler
+require 'rdstation/api_response'
+
 # API requests
 require 'rdstation/authentication'
 require 'rdstation/client'

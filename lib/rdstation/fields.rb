@@ -12,9 +12,7 @@ module RDStation
 
     def all
       response = self.class.get(BASE_URL, headers: required_headers)
-      response_body = JSON.parse(response.body)
-      return response_body unless response_body['errors']
-      RDStation::ErrorHandler.new(response).raise_errors
+      ApiResponse.build(response)
     end
 
     private
