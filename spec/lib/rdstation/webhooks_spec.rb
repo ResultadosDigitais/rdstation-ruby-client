@@ -88,7 +88,7 @@ RSpec.describe RDStation::Webhooks do
           .to_return(status: 200, body: webhooks.to_json)
       end
 
-      it 'returns the webhook' do
+      it 'returns all webhooks' do
         response = webhook_with_valid_token.all
         expect(response).to eq(webhooks)
       end
@@ -118,6 +118,63 @@ RSpec.describe RDStation::Webhooks do
       it 'raises a expired token error' do
         expect do
           webhook_with_expired_token.all
+        end.to raise_error(RDStation::Error::ExpiredAccessToken)
+      end
+    end
+  end
+
+  describe '#by_uuid' do
+    let(:uuid) { '5408c5a3-4711-4f2e-8d0b-13407a3e30f3' }
+    let(:webhooks_endpoint_by_uuid) { webhooks_endpoint + uuid }
+
+    context 'with a valid auth token' do
+      let(:webhook) do
+        {
+          'uuid' => uuid,
+          'event_type' => 'WEBHOOK.CONVERTED',
+          'entity_type' => 'CONTACT',
+          'url' => 'http =>//my-url.com',
+          'http_method' => 'POST',
+          'include_relations' => []
+        }
+      end
+
+      before do
+        stub_request(:get, webhooks_endpoint_by_uuid)
+          .with(headers: valid_headers)
+          .to_return(status: 200, body: webhook.to_json)
+      end
+
+      it 'returns the webhook' do
+        response = webhook_with_valid_token.by_uuid(uuid)
+        expect(response).to eq(webhook)
+      end
+    end
+
+    context 'with an invalid auth token' do
+      before do
+        stub_request(:get, webhooks_endpoint_by_uuid)
+          .with(headers: invalid_token_headers)
+          .to_return(invalid_token_response)
+      end
+
+      it 'raises an invalid token error' do
+        expect do
+          webhook_with_invalid_token.by_uuid(uuid)
+        end.to raise_error(RDStation::Error::Unauthorized)
+      end
+    end
+
+    context 'with an expired auth token' do
+      before do
+        stub_request(:get, webhooks_endpoint_by_uuid)
+          .with(headers: expired_token_headers)
+          .to_return(expired_token_response)
+      end
+
+      it 'raises a expired token error' do
+        expect do
+          webhook_with_expired_token.by_uuid(uuid)
         end.to raise_error(RDStation::Error::ExpiredAccessToken)
       end
     end

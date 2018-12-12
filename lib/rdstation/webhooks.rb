@@ -13,6 +13,13 @@ module RDStation
       RDStation::ErrorHandler.new(response).raise_errors
     end
 
+    def by_uuid(uuid)
+      response = self.class.get(base_url(uuid), headers: required_headers)
+      response_body = JSON.parse(response.body)
+      return response_body unless response_body['errors']
+      RDStation::ErrorHandler.new(response).raise_errors
+    end
+
     private
 
     def base_url(path = '')
