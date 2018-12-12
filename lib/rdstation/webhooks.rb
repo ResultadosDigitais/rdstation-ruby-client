@@ -20,6 +20,13 @@ module RDStation
       RDStation::ErrorHandler.new(response).raise_errors
     end
 
+    def create(payload)
+      response = self.class.post(base_url, headers: required_headers, body: payload.to_json)
+      response_body = JSON.parse(response.body)
+      return response_body unless response_body['errors']
+      RDStation::ErrorHandler.new(response).raise_errors
+    end
+
     private
 
     def base_url(path = '')
