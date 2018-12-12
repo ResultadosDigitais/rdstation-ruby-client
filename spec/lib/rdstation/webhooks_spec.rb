@@ -152,4 +152,20 @@ RSpec.describe RDStation::Webhooks do
       end
     end
   end
+
+  describe '#delete' do
+    let(:uuid) { '5408c5a3-4711-4f2e-8d0b-13407a3e30f3' }
+    let(:webhooks_endpoint_by_uuid) { webhooks_endpoint + uuid }
+
+    context 'when the request is successful' do
+      before do
+        stub_request(:delete, webhooks_endpoint_by_uuid).with(headers: headers).to_return(status: 204)
+      end
+
+      it 'returns the webhook' do
+        response = webhooks_client.delete(uuid)
+        expect(response).to eq(message: 'Webhook deleted successfuly!')
+      end
+    end
+  end
 end

@@ -34,7 +34,17 @@ module RDStation
       RDStation::ErrorHandler.new(response).raise_errors
     end
 
+    def delete(uuid)
+      response = self.class.delete(base_url(uuid), headers: required_headers)
+      return webhook_deleted_message unless response.body
+      RDStation::ErrorHandler.new(response).raise_errors
+    end
+
     private
+
+    def webhook_deleted_message
+      { message: 'Webhook deleted successfuly!' }
+    end
 
     def base_url(path = '')
       "https://api.rd.services/integrations/webhooks/#{path}"
