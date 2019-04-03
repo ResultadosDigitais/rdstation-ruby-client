@@ -6,7 +6,7 @@ RSpec.describe RDStation::Webhooks do
 
   let(:headers) do
     {
-      'Authorization' => 'Bearer auth_token',
+      'Authorization' => 'Bearer access_token',
       'Content-Type' => 'application/json'
     }
   end
