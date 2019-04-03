@@ -1,6 +1,4 @@
 module RDStation
-  class InvalidConfiguration < StandardError; end
-  
   class Error < StandardError
     attr_reader :details, :http_status, :headers, :body
 

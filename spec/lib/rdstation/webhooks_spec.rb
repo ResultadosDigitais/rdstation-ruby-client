@@ -1,7 +1,10 @@
 require 'spec_helper'
 
 RSpec.describe RDStation::Webhooks do
-  let(:webhooks_client) { described_class.new(access_token: 'access_token') }
+  let(:webhooks_client) do
+    described_class.new(authorization_header: RDStation::AuthorizationHeader.new(access_token: 'access_token'))
+  end
+  
   let(:webhooks_endpoint) { 'https://api.rd.services/integrations/webhooks/' }
 
   let(:headers) do

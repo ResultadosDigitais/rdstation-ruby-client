@@ -2,7 +2,9 @@ require 'spec_helper'
 
 RSpec.describe RDStation::Fields do
   let(:valid_access_token) { 'valid_access_token' }
-  let(:rdstation_fields_with_valid_token) { described_class.new(access_token: valid_access_token) }
+  let(:rdstation_fields_with_valid_token) do
+    described_class.new(authorization_header: RDStation::AuthorizationHeader.new(access_token: valid_access_token))
+  end
 
   let(:valid_headers) do
     {

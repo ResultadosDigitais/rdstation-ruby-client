@@ -1,49 +1,30 @@
 require 'spec_helper'
 
 RSpec.describe RDStation::Client do
+  context "when access_token is given" do
+    let(:access_token) { 'access_token' }
+    let(:client) { described_class.new(access_token: access_token) }
 
-  describe "access_token" do
-    context "when access_token is given" do
-      let(:token) { "asidhkajshkkjgc" }
-
-      before do
-        RDStation::Client.configure do |config|
-          config[:access_token] = token
-        end
-      end
-
-      after do
-        RDStation::Client.configure do |config|
-          config.delete(:access_token)
-        end
-      end
-
-      it "instantiates it's services using this token" do
-        expect(RDStation::Contacts).to receive(:new).with({ access_token: token })
-        expect(RDStation::Events).to receive(:new).with({ access_token: token })
-        expect(RDStation::Fields).to receive(:new).with({ access_token: token })
-        expect(RDStation::Webhooks).to receive(:new).with({ access_token: token })
-        described_class.contacts
-        described_class.events
-        described_class.fields
-        described_class.webhooks
-      end
-
-      it "returns the correct services" do
-        expect(described_class.contacts).to be_a(RDStation::Contacts)
-        expect(described_class.events).to be_a(RDStation::Events)
-        expect(described_class.fields).to be_a(RDStation::Fields)
-        expect(described_class.webhooks).to be_a(RDStation::Webhooks)
-      end
+    it "returns the correct endpoint" do
+      expect(client.contacts).to be_a(RDStation::Contacts)
+      expect(client.events).to be_a(RDStation::Events)
+      expect(client.fields).to be_a(RDStation::Fields)
+      expect(client.webhooks).to be_a(RDStation::Webhooks)
     end
-
-    context "when access_token is not given" do
-      it "raises an error" do
-        expect { described_class.contacts }.to raise_error(RDStation::InvalidConfiguration)
-        expect { described_class.events }.to raise_error(RDStation::InvalidConfiguration)
-        expect { described_class.fields }.to raise_error(RDStation::InvalidConfiguration)
-        expect { described_class.webhooks }.to raise_error(RDStation::InvalidConfiguration)
-      end
+    
+    it "creates an authorization_header and initilizes the enpoints with this header" do
+      mock_authorization_header = double(RDStation::AuthorizationHeader)
+      expect(RDStation::AuthorizationHeader).to receive(:new)
+        .with({ access_token: access_token})
+        .and_return(mock_authorization_header)
+      expect(RDStation::Contacts).to receive(:new).with({ authorization_header: mock_authorization_header })
+      expect(RDStation::Events).to receive(:new).with({ authorization_header: mock_authorization_header })
+      expect(RDStation::Fields).to receive(:new).with({ authorization_header: mock_authorization_header })
+      expect(RDStation::Webhooks).to receive(:new).with({ authorization_header: mock_authorization_header })
+      client.contacts
+      client.events
+      client.fields
+      client.webhooks
     end
   end
 end
