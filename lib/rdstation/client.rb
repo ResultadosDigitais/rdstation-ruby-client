@@ -7,7 +7,7 @@ module RDStation
     include HTTParty
 
     def initialize(rdstation_token, auth_token, identifier="integração")
-      warn "DEPRECATION WARNING: initialize is deprecated."
+      warn "DEPRECATION WARNING: initialize is deprecated and will be removed in version 2.0.0!"
       @identificador = identifier
       @rdstation_token = rdstation_token
       @auth_token = auth_token
@@ -33,7 +33,7 @@ module RDStation
     # "Detalhes do Lead".
     #
     def create_lead(lead_hash)
-      warn "DEPRECATION WARNING: create_lead is deprecated."
+      warn "DEPRECATION WARNING: create_lead is deprecated and will be removed in version 2.0.0!"
       lead_hash = rdstation_token_hash.merge(lead_hash)
       lead_hash = lead_hash.merge(identifier_hash) unless lead_hash.has_key?(:identificador)
       post_with_body("/conversions", {:body => lead_hash})
@@ -52,13 +52,13 @@ module RDStation
     #       true ou false
     #
     def change_lead(lead, lead_hash)
-      warn "DEPRECATION WARNING: change_lead is deprecated."
+      warn "DEPRECATION WARNING: change_lead is deprecated and will be removed in version 2.0.0!"
       lead_hash = auth_token_hash.merge({:lead => lead_hash})
       put_with_body("/leads/#{lead}", :body => lead_hash.to_json, :headers => {'Content-Type' => 'application/json'})
     end
 
     def change_lead_status(lead_hash)
-      warn "DEPRECATION WARNING: change_lead_status is deprecated."
+      warn "DEPRECATION WARNING: change_lead_status is deprecated and will be removed in version 2.0.0!"
       post_with_body("/services/#{@auth_token}/generic", :body => lead_hash )
     end
 
