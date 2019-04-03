@@ -7,7 +7,7 @@ module RDStation
     include HTTParty
 
     def initialize(rdstation_token, auth_token, identifier="integração")
-      warn "DEPRECATION WARNING: inicialize is deprecated."
+      warn "DEPRECATION WARNING: initialize is deprecated."
       @identificador = identifier
       @rdstation_token = rdstation_token
       @auth_token = auth_token
