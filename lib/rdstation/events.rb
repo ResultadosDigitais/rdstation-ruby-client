@@ -4,8 +4,8 @@ module RDStation
 
     EVENTS_ENDPOINT = 'https://api.rd.services/platform/events'.freeze
 
-    def initialize(auth_token)
-      @auth_token = auth_token
+    def initialize(access_token:)
+      @access_token = access_token
     end
 
     def create(payload)
@@ -23,7 +23,7 @@ module RDStation
 
     def required_headers
       {
-        'Authorization' => "Bearer #{@auth_token}",
+        'Authorization' => "Bearer #{@access_token}",
         'Content-Type'  => 'application/json'
       }
     end

@@ -4,8 +4,8 @@ module RDStation
   class Contacts
     include HTTParty
 
-    def initialize(auth_token)
-      @auth_token = auth_token
+    def initialize(access_token:)
+      @access_token = access_token
     end
 
     #
@@ -59,7 +59,7 @@ module RDStation
     end
 
     def required_headers
-      { "Authorization" => "Bearer #{@auth_token}", "Content-Type" => "application/json" }
+      { "Authorization" => "Bearer #{@access_token}", "Content-Type" => "application/json" }
     end
   end
 end

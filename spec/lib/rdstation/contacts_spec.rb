@@ -15,9 +15,9 @@ RSpec.describe RDStation::Contacts do
   let(:invalid_auth_token) { 'invalid_auth_token' }
   let(:expired_auth_token) { 'expired_auth_token' }
 
-  let(:contact_with_valid_token) { described_class.new(valid_auth_token) }
-  let(:contact_with_expired_token) { described_class.new(expired_auth_token) }
-  let(:contact_with_invalid_token) { described_class.new(invalid_auth_token) }
+  let(:contact_with_valid_token) { described_class.new(access_token: valid_auth_token) }
+  let(:contact_with_expired_token) { described_class.new(access_token: expired_auth_token) }
+  let(:contact_with_invalid_token) { described_class.new(access_token: invalid_auth_token) }
 
   let(:valid_headers) do
     {

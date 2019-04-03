@@ -5,9 +5,9 @@ RSpec.describe RDStation::Events do
   let(:invalid_auth_token) { 'invalid_auth_token' }
   let(:expired_auth_token) { 'expired_auth_token' }
 
-  let(:event_with_valid_token) { described_class.new(valid_auth_token) }
-  let(:event_with_expired_token) { described_class.new(expired_auth_token) }
-  let(:event_with_invalid_token) { described_class.new(invalid_auth_token) }
+  let(:event_with_valid_token) { described_class.new(access_token: valid_auth_token) }
+  let(:event_with_expired_token) { described_class.new(access_token: expired_auth_token) }
+  let(:event_with_invalid_token) { described_class.new(access_token: invalid_auth_token) }
 
   let(:events_endpoint) { 'https://api.rd.services/platform/events' }
 
