@@ -5,6 +5,7 @@ RSpec.describe RDStation::Client do
   describe "access_token" do
     context "when access_token is given" do
       let(:token) { "asidhkajshkkjgc" }
+
       before do
         RDStation::Client.configure do |config|
           config[:access_token] = token
