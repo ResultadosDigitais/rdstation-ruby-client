@@ -5,20 +5,15 @@ module RDStation
     include HTTParty
 
     BASE_URL = 'https://api.rd.services/platform/contacts/fields'.freeze
-
-    def initialize(auth_token)
-      @auth_token = auth_token
+    
+    def initialize(authorization_header:)
+      @authorization_header = authorization_header
     end
 
     def all
-      response = self.class.get(BASE_URL, headers: required_headers)
+      response = self.class.get(BASE_URL, headers: @authorization_header.to_h)
       ApiResponse.build(response)
     end
 
-    private
-
-    def required_headers
-      { "Authorization" => "Bearer #{@auth_token}", "Content-Type" => "application/json" }
-    end
   end
 end

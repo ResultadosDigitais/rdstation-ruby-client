@@ -5,6 +5,7 @@ require 'rdstation/api_response'
 
 # API requests
 require 'rdstation/authentication'
+require 'rdstation/authorization_header'
 require 'rdstation/client'
 require 'rdstation/contacts'
 require 'rdstation/events'

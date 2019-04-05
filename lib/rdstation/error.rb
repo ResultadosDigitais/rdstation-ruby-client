@@ -1,5 +1,4 @@
 module RDStation
-
   class Error < StandardError
     attr_reader :details, :http_status, :headers, :body
 

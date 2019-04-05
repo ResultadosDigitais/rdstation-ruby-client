@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    rdstation-ruby-client (1.2.0)
+    rdstation-ruby-client (2.0.0)
       httparty (~> 0.12)
 
 GEM
@@ -56,4 +56,4 @@ DEPENDENCIES
   webmock (~> 2.1)
 
 BUNDLED WITH
-   1.16.1
+   1.17.1
