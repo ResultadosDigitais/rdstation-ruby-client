@@ -1,6 +1,6 @@
 ---
 name: RDSM Ruby Client Issue Template
-about: Describe this issue template's purpose here.
+about: Template for new Issues for the RD Station Ruby Client Project
 title: ''
 labels: ''
 assignees: ''
