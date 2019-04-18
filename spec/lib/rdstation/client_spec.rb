@@ -27,4 +27,10 @@ RSpec.describe RDStation::Client do
       client.webhooks
     end
   end
+
+  context "when access_token isn't given" do
+    it "raises a ArgumentError exception" do
+      expect{ described_class.new(access_token: nil) }.to raise_error(ArgumentError)
+    end
+  end
 end
