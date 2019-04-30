@@ -4,6 +4,25 @@
 
 RDstation ruby wrapper to interact with RDStation API.
 
+Upgrading? Check the [migration guide](#Migration-guide) before bumping to a new major version.
+
+## Table of Contents
+
+1. [Installation](#Installation)
+2. [Usage](#Usage)
+   1. [Authentication](#Authentication)
+   2. [Contacts](#Contacts)
+   3. [Events](#Events)
+   4. [Fields](#Fields)
+   5. [Webhooks](#Webhooks)
+   6. [Errors](#Errors)
+3. [Changelog](#Changelog)
+4. [Migration guide](#Migration-guide)
+   1. [Upgrading from 1.2.x to 2.0.0](#Upgrading-from-1.2.x-to-2.0.0)
+5. [Contributing](#Contributing)
+6. [Maintainers](#Maintainers)
+7. [Reference](#Reference)
+
 ## Installation
 
 Add this line to your application's Gemfile:
@@ -178,9 +197,9 @@ In cause of Unahtorized (401), the following speficic errors may be raised (thos
 
 All API methods that were called directly on `RDStation::Client` (ex: `RDStation::Client.new('rdstation_token', 'auth_token').create_lead(lead_info)`) are now deprecated. Those call RDSM's 1.3 API and will be removed in the next release.
 
-## Upgrading guide
+## Migration guide
 
-### Upgrading to version 2.0.0
+### Upgrading from 1.2.x to 2.0.0
 
 TBD
 
