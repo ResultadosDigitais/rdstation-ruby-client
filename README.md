@@ -129,11 +129,87 @@ contact_info = {
 identifier = "email"
 identifier_value = "joe@foo.bar"
 
-contact = RDStation::Contacts.new('auth_token')
-contact.upsert(identifier, identifier_value, contact_info)
+client = RDStation::Client.new(access_token: 'access_token')
+client.contacts.upsert(identifier, identifier_value, contact_info)
 ```
 
 More info: https://developers.rdstation.com/pt-BR/reference/contacts#methodPatchUpsertDetails
+
+### Events
+
+#### Sending a new event
+
+The events endpoint are responsible for receiving different event types in which RD Station Contacts take part in.
+
+It is possible to send default events to RD Station such as conversion events, opportunity marking events and won and lost events. Also, RD Station supports the possibility of receiving different event types, for instance, chat events, ecommerce ones and others.
+
+Check the [developers portal](https://developers.rdstation.com/en/reference/events) to learn about the required payload structure and which events are available.
+
+This creates a new event on RDSM:
+
+```ruby
+payload = {} # hash representing the payload
+client = RDStation::Client.new(access_token: 'access_token')
+client.events.create(payload)
+```
+
+### Fields
+
+Endpoints to [manage the Fields](https://developers.rdstation.com/en/reference/fields) information in your RD Station account. 
+
+#### List all fields
+
+```ruby
+client = RDStation::Client.new(access_token: 'access_token')
+client.fields.all
+```
+
+### Webhooks
+
+Webhooks provide the ability to receive real-time data updates about your contact activity.
+
+Choose to receive data based on certain actions, re-cast or marked as an opportunity, and have all applicable data sent to a URL of your choice. You can then use your own custom application to read, save, and do actions with that data. This is a powerful option that allows you to keep all your data in sync and opens the possibility for all types of integration.
+
+#### List all webhooks
+
+```ruby
+client = RDStation::Client.new(access_token: 'access_token')
+client.webhooks.all
+```
+
+#### Getting a webhook by UUID
+
+```ruby
+client = RDStation::Client.new(access_token: 'access_token')
+client.webhooks.by_uuid('WEBHOOK_UUID')
+```
+
+#### Creating a webhook
+
+```ruby
+payload = {} # payload representing a webhook
+client = RDStation::Client.new(access_token: 'access_token')
+client.webhooks.create(payload)
+```
+
+The required strucutre of the payload is [described here](https://developers.rdstation.com/en/reference/webhooks#methodPostDetails).
+
+#### Updating a webhook
+
+```ruby
+payload = {} # payload representing a webhook
+client = RDStation::Client.new(access_token: 'access_token')
+client.webhooks.create('WEBHOOK_UUID', payload)
+```
+
+The required strucutre of the payload is [described here](https://developers.rdstation.com/en/reference/webhooks#methodPutDetails).
+
+#### Deleting a webhook
+
+```ruby
+client = RDStation::Client.new(access_token: 'access_token')
+client.webhooks.delete('WEBHOOK_UUID')
+```
 
 ## Changelog
 
@@ -147,7 +223,7 @@ All API methods that were called directly on `RDStation::Client` (ex: `RDStation
 
 ##### RDStation::Client
 
-Now `RDStation::Client` is facade to all available APIs. It needs to be instantiated with an access_token and has accessors to those APIs. Usage examples:
+Now `RDStation::Client` is facade to all available endpoints in the 2.0 API. It needs to be instantiated with an access_token and has accessors to those endpoints. Usage examples:
 
 ```ruby
   client = RDStation::Client.new((access_token: 'my_token')
