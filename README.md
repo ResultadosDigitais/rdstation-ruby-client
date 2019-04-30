@@ -41,6 +41,8 @@ Or install it yourself as:
 
 ### Authentication
 
+For more details, check the [developers portal](https://developers.rdstation.com/en/authentication).
+
 #### Getting authentication URL
 
 ```ruby
