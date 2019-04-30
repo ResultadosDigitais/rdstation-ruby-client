@@ -24,7 +24,7 @@ RSpec.describe RDStation::Contacts do
   let(:contact_with_invalid_token) do
     described_class.new(authorization_header: RDStation::AuthorizationHeader.new(access_token: invalid_access_token))
   end
-  
+
 
   let(:valid_headers) do
     {
@@ -137,7 +137,7 @@ RSpec.describe RDStation::Contacts do
         it 'raises a not found error' do
           expect do
             contact_with_valid_token.by_uuid(invalid_uuid)
-          end.to raise_error(RDStation::Error::ResourceNotFound)
+          end.to raise_error(RDStation::Error::NotFound)
         end
       end
     end
@@ -200,7 +200,7 @@ RSpec.describe RDStation::Contacts do
         it 'raises a not found error' do
           expect do
             contact_with_valid_token.by_email(invalid_email)
-          end.to raise_error(RDStation::Error::ResourceNotFound)
+          end.to raise_error(RDStation::Error::NotFound)
         end
       end
     end
@@ -271,7 +271,7 @@ RSpec.describe RDStation::Contacts do
         it 'raises a not found error' do
           expect do
             contact_with_valid_token.update(invalid_uuid, {})
-          end.to raise_error(RDStation::Error::ResourceNotFound)
+          end.to raise_error(RDStation::Error::NotFound)
         end
       end
     end
@@ -359,7 +359,7 @@ RSpec.describe RDStation::Contacts do
         it 'raises a not found error' do
           expect do
             contact_with_valid_token.upsert('email', invalid_email, {})
-          end.to raise_error(RDStation::Error::ResourceNotFound)
+          end.to raise_error(RDStation::Error::NotFound)
         end
       end
 
@@ -376,20 +376,6 @@ RSpec.describe RDStation::Contacts do
           expect do
             contact_with_valid_token.upsert('email', valid_email, conflicting_payload)
           end.to raise_error(RDStation::Error::ConflictingField)
-        end
-      end
-
-      context 'when an unrecognized error occurs' do
-        before do
-          stub_request(:patch, endpoint_with_valid_email)
-            .with(headers: headers)
-            .to_return(unrecognized_error)
-        end
-
-        it 'raises an default error' do
-          expect do
-            contact_with_valid_token.upsert('email', valid_email, {})
-          end.to raise_error(RDStation::Error::Default)
         end
       end
     end

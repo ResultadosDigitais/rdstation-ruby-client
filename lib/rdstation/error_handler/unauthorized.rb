@@ -1,23 +1,31 @@
+require_relative 'expired_access_token'
+require_relative 'expired_code_grant'
+require_relative 'invalid_credentials'
+
 module RDStation
   class ErrorHandler
     class Unauthorized
-      attr_reader :errors
+      UNAUTHORIZED_ERRORS = [
+        ErrorHandler::ExpiredAccessToken,
+        ErrorHandler::ExpiredCodeGrant,
+        ErrorHandler::InvalidCredentials,
+      ].freeze
 
-      ERROR_CODE = 'UNAUTHORIZED'.freeze
-
-      def initialize(errors)
-        @errors = errors
+      def initialize(array_of_errors)
+        @array_of_errors = array_of_errors
       end
 
       def raise_error
-        return if unauthorized_errors.empty?
-        raise RDStation::Error::Unauthorized, unauthorized_errors.first
+        error_classes.each(&:raise_error)
+        raise RDStation::Error::Unauthorized, @array_of_errors.first
       end
 
       private
 
-      def unauthorized_errors
-        errors.select { |error| error['error_type'] == ERROR_CODE }
+      def error_classes
+        UNAUTHORIZED_ERRORS.map do |error|
+          error.new(@array_of_errors)
+        end
       end
     end
   end

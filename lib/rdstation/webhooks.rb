@@ -1,7 +1,7 @@
 module RDStation
   class Webhooks
     include HTTParty
-    
+
     def initialize(authorization_header:)
       @authorization_header = authorization_header
     end
@@ -29,7 +29,7 @@ module RDStation
     def delete(uuid)
       response = self.class.delete(base_url(uuid), headers: @authorization_header.to_h)
       return webhook_deleted_message unless response.body
-      RDStation::ErrorHandler.new(response).raise_errors
+      RDStation::ErrorHandler.new(response).raise_error
     end
 
     private
