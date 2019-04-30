@@ -140,6 +140,34 @@ Now `RDStation::Client` is facade to all available APIs. It needs to be instanti
 
 `RDStation::Contacts`, `RDStation::Events`, `RDStation::Fields` and `RDStation::Webhooks` are not suposed to be instantiated directly anymore. Use `RDStation::Client` to get them instead.
 
+##### Error handling
+
+Now especic errors are raised for each HTTP status. Those are the following:
+
+- `RDStation::Error::BadRequest` (400)
+- `RDStation::Error::Unauthorized` (401)
+- `RDStation::Error::Forbidden` (403)
+- `RDStation::Error::NotFound` (404)
+- `RDStation::Error::MethodNotAllowed` (405)
+- `RDStation::Error::NotAcceptable` (406)
+- `RDStation::Error::Conflict` (409)
+- `RDStation::Error::UnsupportedMediaType` (415)
+- `RDStation::Error::UnprocessableEntity` (422)
+- `RDStation::Error::InternalServerError` (500)
+- `RDStation::Error::NotImplemented` (501)
+- `RDStation::Error::BadGateway` (502)
+- `RDStation::Error::ServiceUnavailable` (503)
+- `RDStation::Error::ServerError` (which is returned for 5xx errors different than 500, 501, 502 or 503)
+
+In case of a Bad Request (400), the following speficic errors may be raised (those are subclasses of `RDStation::Error::BadRequest`):
+- `RDStation::Error::ConflictingField`
+- `RDStation::Error::InvalidEventType`
+
+In cause of Unahtorized (401), the following speficic errors may be raised (those are subclasses of `RDStation::Error::Unauthorized`):
+- `RDStation::Error::ExpiredAccessToken`
+- `RDStation::Error::ExpiredCodeGrant`
+- `RDStation::Error::InvalidCredentials`
+
 #### Dependencies
 
 `rdstation-ruby-client` now requires ruby `>= 2.0.0`.
