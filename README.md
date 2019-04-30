@@ -323,7 +323,6 @@ So, here is a step-by-step guide on how to upgrade your app:
 
 ## Maintainers
 
-- [Nando Sousa](mailto:fernando.sousa@resultadosdigitais.com.br)
 - [Filipe Nascimento](mailto:filipe.nascimento@resultadosdigitais.com.br)
 - [João Hornburg](mailto:joao@rdstation.com)
 
