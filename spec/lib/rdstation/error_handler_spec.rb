@@ -18,31 +18,7 @@ RSpec.describe RDStation::ErrorHandler do
       end
 
       it 'raises the corresponding error class' do
-        expect { error_handler.raise_errors }.to raise_error(RDStation::Error::ConflictingField, 'Error Message')
-      end
-    end
-
-    context 'when the error type is not recognized' do
-      let(:error_response) do
-        OpenStruct.new(
-          code: 400,
-          headers: { 'Content-Type' => 'application/json' },
-          body: {
-            'errors' => {
-              'error_type' => 'UNRECOGNIZED_ERROR_TYPE',
-              'error_message' => 'Error Message'
-            }
-          }.to_json
-        )
-      end
-
-      it 'raises the Default error' do
-        expect { error_handler.raise_errors }.to raise_error(RDStation::Error::Default, 'Error Message') do |error|
-          expect(error.details).to be
-          expect(error.headers).to be
-          expect(error.body).to be
-          expect(error.http_status).to be
-        end
+        expect { error_handler.raise_error }.to raise_error(RDStation::Error::ConflictingField, 'Error Message')
       end
     end
   end

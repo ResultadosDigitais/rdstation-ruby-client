@@ -17,13 +17,28 @@ module RDStation
       super(message)
     end
 
+    class BadRequest < Error; end
+    class Unauthorized < Error; end
+    class Forbidden < Error; end
+    class NotFound < Error; end
+    class MethodNotAllowed < Error; end
+    class NotAcceptable < Error; end
+    class Conflict < Error; end
+    class UnsupportedMediaType < Error; end
+    class UnprocessableEntity < Error; end
+    class InternalServerError < Error; end
+    class NotImplemented < Error; end
+    class BadGateway < Error; end
+    class ServiceUnavailable < Error; end
+    class ServerError < Error; end
+
+    # 400 - Bad Request
     class ConflictingField < Error; end
-    class Default < Error; end
+    class InvalidEventType < Error; end
+
+    # 401 - Unauthorized
     class ExpiredAccessToken < Error; end
     class ExpiredCodeGrant < Error; end
     class InvalidCredentials < Error; end
-    class InvalidEventType < Error; end
-    class ResourceNotFound < Error; end
-    class Unauthorized < Error; end
   end
 end
