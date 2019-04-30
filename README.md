@@ -232,88 +232,30 @@ Each endpoint may raise errors accoording to the HTTP response code from RDStati
 - `RDStation::Error::ServiceUnavailable` (503)
 - `RDStation::Error::ServerError` (which is returned for 5xx errors different than 500, 501, 502 or 503)
 
-In case of a Bad Request (400), the following speficic errors may be raised (those are subclasses of `RDStation::Error::BadRequest`):
+In case of a Bad Request (400), the following specific errors may be raised (those are subclasses of `RDStation::Error::BadRequest`):
 - `RDStation::Error::ConflictingField`
 - `RDStation::Error::InvalidEventType`
 
-In cause of Unauthorized (401), the following speficic errors may be raised (those are subclasses of `RDStation::Error::Unauthorized`):
+In cause of Unauthorized (401), the following specific errors may be raised (those are subclasses of `RDStation::Error::Unauthorized`):
 - `RDStation::Error::ExpiredAccessToken`
 - `RDStation::Error::ExpiredCodeGrant`
 - `RDStation::Error::InvalidCredentials`
 
 ## Changelog
 
-### 2.0.0
-
-#### Removals
-
-All API methods that were called directly on `RDStation::Client` (ex: `RDStation::Client.new('rdstation_token', 'auth_token').create_lead(lead_info)`) have been removed. See the [upgrading guide](#Upgrading-to-version-2.0.0) for a comprehensive guide on how to upgrade from version 1.2.x.
-
-#### Notable changes
-
-##### RDStation::Client
-
-Now `RDStation::Client` is facade to all available endpoints in the 2.0 API. It needs to be instantiated with an access_token and has accessors to those endpoints. Usage examples:
-
-```ruby
-  client = RDStation::Client.new((access_token: 'my_token')
-  client.contacts.by_uuid('CONTACT_UUID')
-  client.webhooks.all
-  client.events.create(my_json_payload)
-  client.fields.all
-```
-
-`RDStation::Contacts`, `RDStation::Events`, `RDStation::Fields` and `RDStation::Webhooks` are not suposed to be instantiated directly anymore. Use `RDStation::Client` to get them instead.
-
-##### Error handling
-
-Now especic errors are raised for each HTTP status:
-
-- `RDStation::Error::BadRequest` (400)
-- `RDStation::Error::Unauthorized` (401)
-- `RDStation::Error::Forbidden` (403)
-- `RDStation::Error::NotFound` (404)
-- `RDStation::Error::MethodNotAllowed` (405)
-- `RDStation::Error::NotAcceptable` (406)
-- `RDStation::Error::Conflict` (409)
-- `RDStation::Error::UnsupportedMediaType` (415)
-- `RDStation::Error::UnprocessableEntity` (422)
-- `RDStation::Error::InternalServerError` (500)
-- `RDStation::Error::NotImplemented` (501)
-- `RDStation::Error::BadGateway` (502)
-- `RDStation::Error::ServiceUnavailable` (503)
-- `RDStation::Error::ServerError` (which is returned for 5xx errors different than 500, 501, 502 or 503)
-
-In case of a Bad Request (400), the following speficic errors may be raised (those are subclasses of `RDStation::Error::BadRequest`):
-- `RDStation::Error::ConflictingField`
-- `RDStation::Error::InvalidEventType`
-
-In cause of Unahtorized (401), the following speficic errors may be raised (those are subclasses of `RDStation::Error::Unauthorized`):
-- `RDStation::Error::ExpiredAccessToken`
-- `RDStation::Error::ExpiredCodeGrant`
-- `RDStation::Error::InvalidCredentials`
-
-#### Dependencies
-
-`rdstation-ruby-client` now requires `ruby >= 2.0.0`.
-
-### 1.2.1 
-
-#### Deprecations
-
-All API methods that were called directly on `RDStation::Client` (ex: `RDStation::Client.new('rdstation_token', 'auth_token').create_lead(lead_info)`) are now deprecated. Those methos call RDSM's 1.3 API and will be removed in the next release.
+See [CHANGELOG.md](CHANGELOG.md)
 
 ## Migration guide
 
 ### Upgrading from 1.2.x to 2.0.0
 
-v2.0.0 main change is that it drops support for RDSM's old 1.x API. If you're not familiar with the 2.0 API yet, [check it out](https://developers.rdstation.com) first. Also take a look at [the release notes](#2.0.0), as they explain the changes in greater detail.
+v2.0.0 main change is that it drops support for RDSM's old 1.x API. If you're not familiar with the 2.0 API yet, [check it out](https://developers.rdstation.com) first. Also take a look at [the release notes](CHANGELOG.md#2.0.0), as they explain the changes in greater detail.
 
 So, here is a step-by-step guide on how to upgrade your app:
 - Ensure you're using `ruby >= 2.0.0`.
 - Remove every direct instantiation of `RDStation::Contacts`, `RDStation::Events`, `RDStation::Fields` and `RDStation::Webhooks` and use `RDStation::Client` to get them instead.
 - Replace any call of `RDStation::Client#create_lead`, `RDStation::Client#change_lead` or `RDStation::Client#change_lead_status` with the equivalent method in the [Contacts API](#Contacts).
-- Review your error handling, as [more options](#Error-handling) are available now.
+- Review your error handling, as [more options](CHANGELOG.md#Error-handling) are available now.
 
 ## Contributing
 
