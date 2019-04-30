@@ -126,7 +126,9 @@ All API methods that were called directly on `RDStation::Client` (ex: `RDStation
 
 #### Notable changes
 
-Now `RDStation::Client` is facade to all API's available. It needs to be instantiated with an access_token and has accessors to the APIs. Usage examples:
+##### RDStation::Client
+
+Now `RDStation::Client` is facade to all available APIs. It needs to be instantiated with an access_token and has accessors to those APIs. Usage examples:
 
 ```ruby
   client = RDStation::Client.new((access_token: 'my_token')
