@@ -20,35 +20,6 @@ Or install it yourself as:
 
 ## Usage
 
-### Creating a Lead
-
-```ruby
-lead_info = {
-  email: 'joe@foo.bar',
-  name: 'Joe foo',
-  empresa: 'A random Company',
-  cargo: 'Developer',
-  identificador: 'nome_da_conversao'
-}
-
-rdstation_client = RDStation::Client.new('rdstation_token', 'auth_token')
-rdstation_client.create_lead(lead_info)
-```
-
-### Changing a Lead
-
-```ruby
-rdstation_client = RDStation::Client.new('rdstation_token', 'auth_token')
-rdstation_client.change_lead('joe@foo.bar', lifecycle_stage: 1, opportunity: true})
-```
-
-### Change Lead Status
-
-```ruby
-rdstation_client = RDStation::Client.new('rdstation_token', 'auth_token')
-rdstation_client.change_lead_status(email: 'joe@foo.bar', status: 'won', value: 999)
-```
-
 ### Authentication
 
 #### Getting authentication URL
