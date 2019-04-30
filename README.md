@@ -4,6 +4,25 @@
 
 RDstation ruby wrapper to interact with RDStation API.
 
+Upgrading? Check the [migration guide](#Migration-guide) before bumping to a new major version.
+
+## Table of Contents
+
+1. [Installation](#Installation)
+2. [Usage](#Usage)
+   1. [Authentication](#Authentication)
+   2. [Contacts](#Contacts)
+   3. [Events](#Events)
+   4. [Fields](#Fields)
+   5. [Webhooks](#Webhooks)
+   6. [Errors](#Errors)
+3. [Changelog](#Changelog)
+4. [Migration guide](#Migration-guide)
+   1. [Upgrading from 1.2.x to 2.0.0](#Upgrading-from-1.2.x-to-2.0.0)
+5. [Contributing](#Contributing)
+6. [Maintainers](#Maintainers)
+7. [Reference](#Reference)
+
 ## Installation
 
 Add this line to your application's Gemfile:
@@ -20,36 +39,9 @@ Or install it yourself as:
 
 ## Usage
 
-### Creating a Lead
-
-```ruby
-lead_info = {
-  email: 'joe@foo.bar',
-  name: 'Joe foo',
-  empresa: 'A random Company',
-  cargo: 'Developer',
-  identificador: 'nome_da_conversao'
-}
-
-rdstation_client = RDStation::Client.new('rdstation_token', 'auth_token')
-rdstation_client.create_lead(lead_info)
-```
-
-### Changing a Lead
-
-```ruby
-rdstation_client = RDStation::Client.new('rdstation_token', 'auth_token')
-rdstation_client.change_lead('joe@foo.bar', lifecycle_stage: 1, opportunity: true})
-```
-
-### Change Lead Status
-
-```ruby
-rdstation_client = RDStation::Client.new('rdstation_token', 'auth_token')
-rdstation_client.change_lead_status(email: 'joe@foo.bar', status: 'won', value: 999)
-```
-
 ### Authentication
+
+For more details, check the [developers portal](https://developers.rdstation.com/en/authentication).
 
 #### Getting authentication URL
 
@@ -83,8 +75,8 @@ rdstation_authentication.update_access_token('refresh_token')
 Returns data about a specific Contact
 
 ```ruby
-contact = RDStation::Contacts.new('auth_token')
-contact.by_uuid('uuid')
+client = RDStation::Client.new(access_token: 'access_token')
+client.contacts.by_uuid('uuid')
 ```
 
 More info: https://developers.rdstation.com/pt-BR/reference/contacts#methodGetDetailsuuid
@@ -94,8 +86,8 @@ More info: https://developers.rdstation.com/pt-BR/reference/contacts#methodGetDe
 Returns data about a specific Contact
 
 ```ruby
-contact = RDStation::Contacts.new('auth_token')
-contact.by_email('email')
+client = RDStation::Client.new(access_token: 'access_token')
+client.contacts.by_email('email')
 ```
 
 More info: https://developers.rdstation.com/pt-BR/reference/contacts#methodGetDetailsemail
@@ -109,8 +101,8 @@ contact_info = {
   name: "Joe Foo"
 }
 
-contact = RDStation::Contacts.new('auth_token')
-contact.update('uuid', contact_info)
+client = RDStation::Client.new(access_token: 'access_token')
+client.contacts.update('uuid', contact_info)
 ```
 Contact Default Parameters
  - email
@@ -139,11 +131,131 @@ contact_info = {
 identifier = "email"
 identifier_value = "joe@foo.bar"
 
-contact = RDStation::Contacts.new('auth_token')
-contact.upsert(identifier, identifier_value, contact_info)
+client = RDStation::Client.new(access_token: 'access_token')
+client.contacts.upsert(identifier, identifier_value, contact_info)
 ```
 
 More info: https://developers.rdstation.com/pt-BR/reference/contacts#methodPatchUpsertDetails
+
+### Events
+
+#### Sending a new event
+
+The events endpoint are responsible for receiving different event types in which RD Station Contacts take part in.
+
+It is possible to send default events to RD Station such as conversion events, lifecycle events and won and lost events. Also, RD Station supports the possibility of receiving different event types, for instance, chat events, ecommerce ones and others.
+
+Check the [developers portal](https://developers.rdstation.com/en/reference/events) to learn about the required payload structure and which events are available.
+
+This creates a new event on RDSM:
+
+```ruby
+payload = {} # hash representing the payload
+client = RDStation::Client.new(access_token: 'access_token')
+client.events.create(payload)
+```
+
+### Fields
+
+Endpoints to [manage Contact Fields](https://developers.rdstation.com/en/reference/fields) information in your RD Station account.
+
+#### List all fields
+
+```ruby
+client = RDStation::Client.new(access_token: 'access_token')
+client.fields.all
+```
+
+### Webhooks
+
+Webhooks provide the ability to receive real-time data updates about your contact activity.
+
+Choose to receive data based on certain actions, re-cast or marked as an opportunity, and have all applicable data sent to a URL of your choice. You can then use your own custom application to read, save, and do actions with that data. This is a powerful option that allows you to keep all your data in sync and opens the possibility for all types of integration.
+
+#### List all webhooks
+
+```ruby
+client = RDStation::Client.new(access_token: 'access_token')
+client.webhooks.all
+```
+
+#### Getting a webhook by UUID
+
+```ruby
+client = RDStation::Client.new(access_token: 'access_token')
+client.webhooks.by_uuid('WEBHOOK_UUID')
+```
+
+#### Creating a webhook
+
+```ruby
+payload = {} # payload representing a webhook
+client = RDStation::Client.new(access_token: 'access_token')
+client.webhooks.create(payload)
+```
+
+The required strucutre of the payload is [described here](https://developers.rdstation.com/en/reference/webhooks#methodPostDetails).
+
+#### Updating a webhook
+
+```ruby
+payload = {} # payload representing a webhook
+client = RDStation::Client.new(access_token: 'access_token')
+client.webhooks.create('WEBHOOK_UUID', payload)
+```
+
+The required strucutre of the payload is [described here](https://developers.rdstation.com/en/reference/webhooks#methodPutDetails).
+
+#### Deleting a webhook
+
+```ruby
+client = RDStation::Client.new(access_token: 'access_token')
+client.webhooks.delete('WEBHOOK_UUID')
+```
+
+### Errors
+
+Each endpoint may raise errors accoording to the HTTP response code from RDStation:
+
+- `RDStation::Error::BadRequest` (400)
+- `RDStation::Error::Unauthorized` (401)
+- `RDStation::Error::Forbidden` (403)
+- `RDStation::Error::NotFound` (404)
+- `RDStation::Error::MethodNotAllowed` (405)
+- `RDStation::Error::NotAcceptable` (406)
+- `RDStation::Error::Conflict` (409)
+- `RDStation::Error::UnsupportedMediaType` (415)
+- `RDStation::Error::UnprocessableEntity` (422)
+- `RDStation::Error::InternalServerError` (500)
+- `RDStation::Error::NotImplemented` (501)
+- `RDStation::Error::BadGateway` (502)
+- `RDStation::Error::ServiceUnavailable` (503)
+- `RDStation::Error::ServerError` (which is returned for 5xx errors different than 500, 501, 502 or 503)
+
+In case of a Bad Request (400), the following specific errors may be raised (those are subclasses of `RDStation::Error::BadRequest`):
+- `RDStation::Error::ConflictingField`
+- `RDStation::Error::InvalidEventType`
+
+In cause of Unauthorized (401), the following specific errors may be raised (those are subclasses of `RDStation::Error::Unauthorized`):
+- `RDStation::Error::ExpiredAccessToken`
+- `RDStation::Error::ExpiredCodeGrant`
+- `RDStation::Error::InvalidCredentials`
+
+## Changelog
+
+See [CHANGELOG.md](CHANGELOG.md)
+
+## Migration guide
+
+### Upgrading from 1.2.x to 2.0.0
+
+v2.0.0 main change is that it drops support for RDSM's old 1.x API. If you're not familiar with the 2.0 API yet, [check it out](https://developers.rdstation.com) first. Also take a look at [the release notes](CHANGELOG.md#2.0.0), as they explain the changes in greater detail.
+
+So, here is a step-by-step guide on how to upgrade your app:
+- Ensure you're using `ruby >= 2.0.0`.
+- Remove every direct instantiation of `RDStation::Contacts`, `RDStation::Events`, `RDStation::Fields` and `RDStation::Webhooks` and use `RDStation::Client` to get them instead.
+- Replace any call of `RDStation::Client#create_lead`, `RDStation::Client#change_lead` or `RDStation::Client#change_lead_status` with the equivalent method in the [Contacts API](#Contacts).
+- Review your error handling, as [more options](CHANGELOG.md#Error-handling) are available now.
 
 ## Contributing
 
@@ -153,14 +265,11 @@ More info: https://developers.rdstation.com/pt-BR/reference/contacts#methodPatch
 4. Push to the branch (`git push origin my-new-feature`)
 5. Create new Pull Request
 
-## Maintainer
-[Nando Sousa](mailto:fernando.sousa@resultadosdigitais.com.br)
+## Maintainers
+
+- [Filipe Nascimento](mailto:filipe.nascimento@resultadosdigitais.com.br)
+- [João Hornburg](mailto:joao@rdstation.com)
 
 ## Reference
 
-You can check out RDstation's integration (pt-BR) documentation here:
-
-- [Pure HTML](https://gist.github.com/pedrobachiega/3298970);
-- [Wordpress & Contact Form 7](https://gist.github.com/pedrobachiega/3277536);
-- [PHP](https://gist.github.com/pedrobachiega/3248293);
-- [HTML+Ajax with jQuery](https://gist.github.com/pedrobachiega/3248013);
+You can check out RDstation's integration documentation at our [developers portal](https://developers.rdstation.com).
