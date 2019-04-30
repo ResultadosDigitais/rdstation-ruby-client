@@ -154,9 +154,10 @@ More info: https://developers.rdstation.com/pt-BR/reference/contacts#methodPatch
 5. Create new Pull Request
 
 ## Maintainers
-[Nando Sousa](mailto:fernando.sousa@resultadosdigitais.com.br)
-[Filipe Nascimento](mailto:filipe.nascimento@resultadosdigitais.com.br)
-[João Hornburg](mailto:joao@rdstation.com)
+
+- [Nando Sousa](mailto:fernando.sousa@resultadosdigitais.com.br)
+- [Filipe Nascimento](mailto:filipe.nascimento@resultadosdigitais.com.br)
+- [João Hornburg](mailto:joao@rdstation.com)
 
 ## Reference
 
