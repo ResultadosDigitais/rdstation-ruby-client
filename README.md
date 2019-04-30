@@ -143,7 +143,7 @@ More info: https://developers.rdstation.com/pt-BR/reference/contacts#methodPatch
 
 The events endpoint are responsible for receiving different event types in which RD Station Contacts take part in.
 
-It is possible to send default events to RD Station such as conversion events, opportunity marking events and won and lost events. Also, RD Station supports the possibility of receiving different event types, for instance, chat events, ecommerce ones and others.
+It is possible to send default events to RD Station such as conversion events, lifecycle events and won and lost events. Also, RD Station supports the possibility of receiving different event types, for instance, chat events, ecommerce ones and others.
 
 Check the [developers portal](https://developers.rdstation.com/en/reference/events) to learn about the required payload structure and which events are available.
 
@@ -157,7 +157,7 @@ client.events.create(payload)
 
 ### Fields
 
-Endpoints to [manage the Fields](https://developers.rdstation.com/en/reference/fields) information in your RD Station account. 
+Endpoints to [manage Contact Fields](https://developers.rdstation.com/en/reference/fields) information in your RD Station account.
 
 #### List all fields
 
