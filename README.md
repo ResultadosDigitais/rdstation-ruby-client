@@ -189,19 +189,25 @@ In cause of Unahtorized (401), the following speficic errors may be raised (thos
 
 #### Dependencies
 
-`rdstation-ruby-client` now requires ruby `>= 2.0.0`.
+`rdstation-ruby-client` now requires `ruby >= 2.0.0`.
 
 ### 1.2.1 
 
 #### Deprecations
 
-All API methods that were called directly on `RDStation::Client` (ex: `RDStation::Client.new('rdstation_token', 'auth_token').create_lead(lead_info)`) are now deprecated. Those call RDSM's 1.3 API and will be removed in the next release.
+All API methods that were called directly on `RDStation::Client` (ex: `RDStation::Client.new('rdstation_token', 'auth_token').create_lead(lead_info)`) are now deprecated. Those methos call RDSM's 1.3 API and will be removed in the next release.
 
 ## Migration guide
 
 ### Upgrading from 1.2.x to 2.0.0
 
-TBD
+v2.0.0 main change is that it drops support for RDSM's old 1.x API. If you're not familiar with the 2.0 API yet, [check it out](https://developers.rdstation.com) first. Also take a look at [the release notes](#2.0.0), as they explain the changes in greater detail.
+
+So, here is a step-by-step guide on how to upgrade your app:
+- Ensure you're using `ruby >= 2.0.0`.
+- Remove every direct instantiation of `RDStation::Contacts`, `RDStation::Events`, `RDStation::Fields` and `RDStation::Webhooks` and use `RDStation::Client` to get them instead.
+- Replace any call of `RDStation::Client#create_lead`, `RDStation::Client#change_lead` or `RDStation::Client#change_lead_status` with the equivalent method in the [Contacts API](#Contacts).
+- Review your error handling, as [more options](#Error-handling) are available now.
 
 ## Contributing
 
