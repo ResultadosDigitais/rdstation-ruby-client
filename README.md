@@ -145,6 +145,45 @@ contact.upsert(identifier, identifier_value, contact_info)
 
 More info: https://developers.rdstation.com/pt-BR/reference/contacts#methodPatchUpsertDetails
 
+## Changelog
+
+### 2.0.0
+
+#### Removals
+
+All API methods that were called directly on `RDStation::Client` (ex: `RDStation::Client.new('rdstation_token', 'auth_token').create_lead(lead_info)`) have been removed. See the [upgrading guide](#Upgrading-to-version-2.0.0) for a comprehensive guide on how to upgrade from version 1.2.x.
+
+#### Notable changes
+
+Now `RDStation::Client` is facade to all API's available. It needs to be instantiated with an access_token and has accessors to the APIs. Usage examples:
+
+```ruby
+  client = RDStation::Client.new((access_token: 'my_token')
+  client.contacts.by_uuid('CONTACT_UUID')
+  client.webhooks.all
+  client.events.create(my_json_payload)
+  client.fields.all
+```
+
+`RDStation::Contacts`, `RDStation::Events`, `RDStation::Fields` and `RDStation::Webhooks` are not suposed to be instantiated directly anymore. Use `RDStation::Client` to get them instead.
+
+#### Dependencies
+
+`rdstation-ruby-client` now requires ruby `>= 2.0.0`.
+
+
+### 1.2.1 
+
+#### Deprecations
+
+All API methods that were called directly on `RDStation::Client` (ex: `RDStation::Client.new('rdstation_token', 'auth_token').create_lead(lead_info)`) are now deprecated. Those call RDSM's 1.3 API and will be removed in the next release.
+
+## Upgrading guide
+
+### Upgrading to version 2.0.0
+
+TBD
+
 ## Contributing
 
 1. Fork it
