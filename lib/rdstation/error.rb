@@ -33,12 +33,12 @@ module RDStation
     class ServerError < Error; end
 
     # 400 - Bad Request
-    class ConflictingField < Error; end
-    class InvalidEventType < Error; end
+    class ConflictingField < BadRequest; end
+    class InvalidEventType < BadRequest; end
 
     # 401 - Unauthorized
-    class ExpiredAccessToken < Error; end
-    class ExpiredCodeGrant < Error; end
-    class InvalidCredentials < Error; end
+    class ExpiredAccessToken < Unauthorized; end
+    class ExpiredCodeGrant < Unauthorized; end
+    class InvalidCredentials < Unauthorized; end
   end
 end
