@@ -73,8 +73,8 @@ rdstation_authentication.update_access_token('refresh_token')
 Returns data about a specific Contact
 
 ```ruby
-contact = RDStation::Contacts.new('auth_token')
-contact.by_uuid('uuid')
+client = RDStation::Client.new(access_token: 'access_token')
+client.contacts.by_uuid('uuid')
 ```
 
 More info: https://developers.rdstation.com/pt-BR/reference/contacts#methodGetDetailsuuid
@@ -84,8 +84,8 @@ More info: https://developers.rdstation.com/pt-BR/reference/contacts#methodGetDe
 Returns data about a specific Contact
 
 ```ruby
-contact = RDStation::Contacts.new('auth_token')
-contact.by_email('email')
+client = RDStation::Client.new(access_token: 'access_token')
+client.contacts.by_email('email')
 ```
 
 More info: https://developers.rdstation.com/pt-BR/reference/contacts#methodGetDetailsemail
@@ -99,8 +99,8 @@ contact_info = {
   name: "Joe Foo"
 }
 
-contact = RDStation::Contacts.new('auth_token')
-contact.update('uuid', contact_info)
+client = RDStation::Client.new(access_token: 'access_token')
+client.contacts.update('uuid', contact_info)
 ```
 Contact Default Parameters
  - email
