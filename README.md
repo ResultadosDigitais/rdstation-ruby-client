@@ -234,7 +234,7 @@ In case of a Bad Request (400), the following speficic errors may be raised (tho
 - `RDStation::Error::ConflictingField`
 - `RDStation::Error::InvalidEventType`
 
-In cause of Unahtorized (401), the following speficic errors may be raised (those are subclasses of `RDStation::Error::Unauthorized`):
+In cause of Unauthorized (401), the following speficic errors may be raised (those are subclasses of `RDStation::Error::Unauthorized`):
 - `RDStation::Error::ExpiredAccessToken`
 - `RDStation::Error::ExpiredCodeGrant`
 - `RDStation::Error::InvalidCredentials`
