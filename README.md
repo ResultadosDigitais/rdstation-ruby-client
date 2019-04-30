@@ -142,7 +142,7 @@ Now `RDStation::Client` is facade to all available APIs. It needs to be instanti
 
 ##### Error handling
 
-Now especic errors are raised for each HTTP status. Those are the following:
+Now especic errors are raised for each HTTP status:
 
 - `RDStation::Error::BadRequest` (400)
 - `RDStation::Error::Unauthorized` (401)
@@ -171,7 +171,6 @@ In cause of Unahtorized (401), the following speficic errors may be raised (thos
 #### Dependencies
 
 `rdstation-ruby-client` now requires ruby `>= 2.0.0`.
-
 
 ### 1.2.1 
 
