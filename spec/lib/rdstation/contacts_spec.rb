@@ -11,31 +11,38 @@ RSpec.describe RDStation::Contacts do
   let(:endpoint_with_valid_email) { "https://api.rd.services/platform/contacts/email:#{valid_email}" }
   let(:endpoint_with_invalid_email) { "https://api.rd.services/platform/contacts/email:#{invalid_email}" }
 
-  let(:valid_auth_token) { 'valid_auth_token' }
-  let(:invalid_auth_token) { 'invalid_auth_token' }
-  let(:expired_auth_token) { 'expired_auth_token' }
+  let(:valid_access_token) { 'valid_access_token' }
+  let(:invalid_access_token) { 'invalid_access_token' }
+  let(:expired_access_token) { 'expired_access_token' }
 
-  let(:contact_with_valid_token) { described_class.new(valid_auth_token) }
-  let(:contact_with_expired_token) { described_class.new(expired_auth_token) }
-  let(:contact_with_invalid_token) { described_class.new(invalid_auth_token) }
+  let(:contact_with_valid_token) do
+    described_class.new(authorization_header: RDStation::AuthorizationHeader.new(access_token: valid_access_token))
+  end
+  let(:contact_with_expired_token) do
+    described_class.new(authorization_header: RDStation::AuthorizationHeader.new(access_token: expired_access_token))
+  end
+  let(:contact_with_invalid_token) do
+    described_class.new(authorization_header: RDStation::AuthorizationHeader.new(access_token: invalid_access_token))
+  end
+
 
   let(:valid_headers) do
     {
-      'Authorization' => "Bearer #{valid_auth_token}",
+      'Authorization' => "Bearer #{valid_access_token}",
       'Content-Type' => 'application/json'
     }
   end
 
   let(:invalid_token_headers) do
     {
-      'Authorization' => "Bearer #{invalid_auth_token}",
+      'Authorization' => "Bearer #{invalid_access_token}",
       'Content-Type' => 'application/json'
     }
   end
 
   let(:expired_token_headers) do
     {
-      'Authorization' => "Bearer #{expired_auth_token}",
+      'Authorization' => "Bearer #{expired_access_token}",
       'Content-Type' => 'application/json'
     }
   end
@@ -130,7 +137,7 @@ RSpec.describe RDStation::Contacts do
         it 'raises a not found error' do
           expect do
             contact_with_valid_token.by_uuid(invalid_uuid)
-          end.to raise_error(RDStation::Error::ResourceNotFound)
+          end.to raise_error(RDStation::Error::NotFound)
         end
       end
     end
@@ -193,7 +200,7 @@ RSpec.describe RDStation::Contacts do
         it 'raises a not found error' do
           expect do
             contact_with_valid_token.by_email(invalid_email)
-          end.to raise_error(RDStation::Error::ResourceNotFound)
+          end.to raise_error(RDStation::Error::NotFound)
         end
       end
     end
@@ -228,11 +235,11 @@ RSpec.describe RDStation::Contacts do
   end
 
   describe '#update' do
-    context 'with a valid auth_token' do
-      let(:valid_auth_token) { 'valid_auth_token' }
+    context 'with a valid access_token' do
+      let(:valid_access_token) { 'valid_access_token' }
       let(:headers) do
         {
-          'Authorization' => "Bearer #{valid_auth_token}",
+          'Authorization' => "Bearer #{valid_access_token}",
           'Content-Type' => 'application/json'
         }
       end
@@ -264,16 +271,16 @@ RSpec.describe RDStation::Contacts do
         it 'raises a not found error' do
           expect do
             contact_with_valid_token.update(invalid_uuid, {})
-          end.to raise_error(RDStation::Error::ResourceNotFound)
+          end.to raise_error(RDStation::Error::NotFound)
         end
       end
     end
 
     context 'with an invalid auth token' do
-      let(:invalid_auth_token) { 'invalid_auth_token' }
+      let(:invalid_access_token) { 'invalid_access_token' }
       let(:headers) do
         {
-          'Authorization' => "Bearer #{invalid_auth_token}",
+          'Authorization' => "Bearer #{invalid_access_token}",
           'Content-Type' => 'application/json'
         }
       end
@@ -292,10 +299,10 @@ RSpec.describe RDStation::Contacts do
     end
 
     context 'with an expired auth token' do
-      let(:expired_auth_token) { 'expired_auth_token' }
+      let(:expired_access_token) { 'expired_access_token' }
       let(:headers) do
         {
-          'Authorization' => "Bearer #{expired_auth_token}",
+          'Authorization' => "Bearer #{expired_access_token}",
           'Content-Type' => 'application/json'
         }
       end
@@ -315,12 +322,12 @@ RSpec.describe RDStation::Contacts do
   end
 
   describe '#upsert' do
-    context 'with a valid auth_token' do
-      let(:valid_auth_token) { 'valid_auth_token' }
+    context 'with a valid access_token' do
+      let(:valid_access_token) { 'valid_access_token' }
 
       let(:headers) do
         {
-          'Authorization' => "Bearer #{valid_auth_token}",
+          'Authorization' => "Bearer #{valid_access_token}",
           'Content-Type' => 'application/json'
         }
       end
@@ -352,7 +359,7 @@ RSpec.describe RDStation::Contacts do
         it 'raises a not found error' do
           expect do
             contact_with_valid_token.upsert('email', invalid_email, {})
-          end.to raise_error(RDStation::Error::ResourceNotFound)
+          end.to raise_error(RDStation::Error::NotFound)
         end
       end
 
@@ -371,27 +378,13 @@ RSpec.describe RDStation::Contacts do
           end.to raise_error(RDStation::Error::ConflictingField)
         end
       end
-
-      context 'when an unrecognized error occurs' do
-        before do
-          stub_request(:patch, endpoint_with_valid_email)
-            .with(headers: headers)
-            .to_return(unrecognized_error)
-        end
-
-        it 'raises an default error' do
-          expect do
-            contact_with_valid_token.upsert('email', valid_email, {})
-          end.to raise_error(RDStation::Error::Default)
-        end
-      end
     end
 
     context 'with an invalid auth token' do
-      let(:invalid_auth_token) { 'invalid_auth_token' }
+      let(:invalid_access_token) { 'invalid_access_token' }
       let(:headers) do
         {
-          'Authorization' => "Bearer #{invalid_auth_token}",
+          'Authorization' => "Bearer #{invalid_access_token}",
           'Content-Type' => 'application/json'
         }
       end
@@ -410,10 +403,10 @@ RSpec.describe RDStation::Contacts do
     end
 
     context 'with an expired auth token' do
-      let(:expired_auth_token) { 'expired_auth_token' }
+      let(:expired_access_token) { 'expired_access_token' }
       let(:headers) do
         {
-          'Authorization' => "Bearer #{expired_auth_token}",
+          'Authorization' => "Bearer #{expired_access_token}",
           'Content-Type' => 'application/json'
         }
       end

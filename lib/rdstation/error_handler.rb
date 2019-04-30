@@ -1,46 +1,47 @@
 require_relative 'error/formatter'
-require_relative 'error_handler/conflicting_field'
-require_relative 'error_handler/default'
-require_relative 'error_handler/expired_access_token'
-require_relative 'error_handler/expired_code_grant'
-require_relative 'error_handler/invalid_credentials'
-require_relative 'error_handler/invalid_event_type'
-require_relative 'error_handler/resource_not_found'
+require_relative 'error_handler/bad_request'
 require_relative 'error_handler/unauthorized'
 
 module RDStation
   class ErrorHandler
-    ERROR_TYPES = [
-      ErrorHandler::ConflictingField,
-      ErrorHandler::ExpiredAccessToken,
-      ErrorHandler::ExpiredCodeGrant,
-      ErrorHandler::InvalidCredentials,
-      ErrorHandler::InvalidEventType,
-      ErrorHandler::ResourceNotFound,
-      ErrorHandler::Unauthorized,
-      ErrorHandler::Default
-    ].freeze
-
     def initialize(response)
       @response = response
+      @code = response.code
     end
 
-    def raise_errors
-      error_types.each(&:raise_error)
+    def raise_error
+      raise error_class, array_of_errors.first if error_class < RDStation::Error
+
+      error_class.new(array_of_errors).raise_error
     end
 
     private
 
-    attr_reader :response
+    attr_reader :response, :code
+
+    def error_class
+      case code
+      when 400      then RDStation::ErrorHandler::BadRequest
+      when 401      then RDStation::ErrorHandler::Unauthorized
+      when 403      then RDStation::Error::Forbidden
+      when 404      then RDStation::Error::NotFound
+      when 405      then RDStation::Error::MethodNotAllowed
+      when 406      then RDStation::Error::NotAcceptable
+      when 409      then RDStation::Error::Conflict
+      when 415      then RDStation::Error::UnsupportedMediaType
+      when 422      then RDStation::Error::UnprocessableEntity
+      when 500      then RDStation::Error::InternalServerError
+      when 501      then RDStation::Error::NotImplemented
+      when 502      then RDStation::Error::BadGateway
+      when 503      then RDStation::Error::ServiceUnavailable
+      when 500..599 then RDStation::Error::ServerError
+      end
+    end
 
     def array_of_errors
       error_formatter.to_array.map do |error|
         error.merge(additional_error_attributes)
       end
-    end
-
-    def error_types
-      ERROR_TYPES.map { |error_type| error_type.new(array_of_errors) }
     end
 
     def response_errors
@@ -55,7 +56,7 @@ module RDStation
       {
         'headers' => response.headers,
         'body' => JSON.parse(response.body),
-        'http_status' => response.code
+        'http_status' => response.code,
       }
     end
   end

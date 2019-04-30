@@ -1,18 +1,21 @@
 require 'spec_helper'
 
 RSpec.describe RDStation::Webhooks do
-  let(:webhooks_client) { described_class.new('auth_token') }
+  let(:webhooks_client) do
+    described_class.new(authorization_header: RDStation::AuthorizationHeader.new(access_token: 'access_token'))
+  end
+
   let(:webhooks_endpoint) { 'https://api.rd.services/integrations/webhooks/' }
 
   let(:headers) do
     {
-      'Authorization' => 'Bearer auth_token',
+      'Authorization' => 'Bearer access_token',
       'Content-Type' => 'application/json'
     }
   end
 
   let(:error_handler) do
-    instance_double(RDStation::ErrorHandler, raise_errors: 'mock raised errors')
+    instance_double(RDStation::ErrorHandler, raise_error: 'mock raised errors')
   end
 
   before do
@@ -63,9 +66,9 @@ RSpec.describe RDStation::Webhooks do
           .to_return(status: 400, body: { 'errors' => ['all errors'] }.to_json)
       end
 
-      it 'calls raise_errors on error handler' do
+      it 'calls raise_error on error handler' do
         webhooks_client.all
-        expect(error_handler).to have_received(:raise_errors)
+        expect(error_handler).to have_received(:raise_error)
       end
     end
   end
@@ -105,9 +108,9 @@ RSpec.describe RDStation::Webhooks do
           .to_return(status: 400, body: { 'errors' => ['all errors'] }.to_json)
       end
 
-      it 'calls raise_errors on error handler' do
+      it 'calls raise_error on error handler' do
         webhooks_client.by_uuid(uuid)
-        expect(error_handler).to have_received(:raise_errors)
+        expect(error_handler).to have_received(:raise_error)
       end
     end
   end
@@ -154,9 +157,9 @@ RSpec.describe RDStation::Webhooks do
           .to_return(status: 400, body: { 'errors' => ['all errors'] }.to_json)
       end
 
-      it 'calls raise_errors on error handler' do
+      it 'calls raise_error on error handler' do
         webhooks_client.create(payload)
-        expect(error_handler).to have_received(:raise_errors)
+        expect(error_handler).to have_received(:raise_error)
       end
     end
   end
@@ -205,9 +208,9 @@ RSpec.describe RDStation::Webhooks do
           .to_return(status: 400, body: { 'errors' => ['all errors'] }.to_json)
       end
 
-      it 'calls raise_errors on error handler' do
+      it 'calls raise_error on error handler' do
         webhooks_client.update(uuid, new_payload)
-        expect(error_handler).to have_received(:raise_errors)
+        expect(error_handler).to have_received(:raise_error)
       end
     end
   end
@@ -234,9 +237,9 @@ RSpec.describe RDStation::Webhooks do
           .to_return(status: 400, body: { 'errors' => ['all errors'] }.to_json)
       end
 
-      it 'calls raise_errors on error handler' do
+      it 'calls raise_error on error handler' do
         webhooks_client.delete(uuid)
-        expect(error_handler).to have_received(:raise_errors)
+        expect(error_handler).to have_received(:raise_error)
       end
     end
   end
