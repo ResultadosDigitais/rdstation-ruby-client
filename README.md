@@ -200,9 +200,4 @@ TBD
 
 ## Reference
 
-You can check out RDstation's integration (pt-BR) documentation here:
-
-- [Pure HTML](https://gist.github.com/pedrobachiega/3298970);
-- [Wordpress & Contact Form 7](https://gist.github.com/pedrobachiega/3277536);
-- [PHP](https://gist.github.com/pedrobachiega/3248293);
-- [HTML+Ajax with jQuery](https://gist.github.com/pedrobachiega/3248013);
+You can check out RDstation's integration documentation at our [developers portal](https://developers.rdstation.com).
