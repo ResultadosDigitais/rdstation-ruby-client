@@ -2,7 +2,7 @@
 
 ### Removals
 
-All API methods that were called directly on `RDStation::Client` (ex: `RDStation::Client.new('rdstation_token', 'auth_token').create_lead(lead_info)`) have been removed. See the [upgrading guide](#Upgrading-to-version-2.0.0) for a comprehensive guide on how to upgrade from version 1.2.x.
+All API methods that were called directly on `RDStation::Client` (ex: `RDStation::Client.new('rdstation_token', 'auth_token').create_lead(lead_info)`) have been removed. See the [migration guide](README.md#Upgrading-from-1.2.x-to-2.0.0) for a comprehensive guide on how to upgrade from version 1.2.x.
 
 ### Notable changes
 
