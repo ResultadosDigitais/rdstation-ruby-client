@@ -59,14 +59,14 @@ module RDStation
 
     private
 
-    def revoke_body(access_token)
+    def self.revoke_body(access_token)
       URI.encode_www_form({
         token: access_token,
         token_type_hint: 'access_token'
       })
     end
 
-    def revoke_headers(access_token)
+    def self.revoke_headers(access_token)
       {
         "Authorization" => "Bearer #{access_token}",
         "Content-Type" => "application/x-www-form-urlencoded"
