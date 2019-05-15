@@ -68,6 +68,14 @@ rdstation_authentication = RDStation::Authentication.new('client_id', 'client_se
 rdstation_authentication.update_access_token('refresh_token')
 ```
 
+#### Revoking an access_token
+
+```ruby
+RDStation::Authentication.revoke(access_token: "your token")
+```
+
+Note: this will completely remove your credentials from RD Station (`update_access_token` won't work anymore).
+
 ### Contacts
 
 #### Getting a Contact by UUID
