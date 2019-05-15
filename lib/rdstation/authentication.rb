@@ -5,6 +5,7 @@ module RDStation
 
     AUTH_TOKEN_URL = 'https://api.rd.services/auth/token'.freeze
     DEFAULT_HEADERS = { 'Content-Type' => 'application/json' }.freeze
+    REVOKE_URL = 'https://api.rd.services/auth/revoke'.freeze
 
     def initialize(client_id, client_secret)
       @client_id = client_id
@@ -49,20 +50,28 @@ module RDStation
 
     def self.revoke(access_token:)
       response = self.post(
-        'https://api.rd.services/auth/revoke',
-        body: URI.encode_www_form({
-          token: access_token,
-          token_type_hint: 'access_token'
-        }),
-        headers: {
-          "Authorization" => "Bearer #{access_token}",
-          "Content-Type" => "application/x-www-form-urlencoded"
-        }
+        REVOKE_URL,
+        body: revoke_body(access_token),
+        headers: revoke_headers(access_token)
       )
       ApiResponse.build(response)
     end
 
     private
+
+    def revoke_body(access_token)
+      URI.encode_www_form({
+        token: access_token,
+        token_type_hint: 'access_token'
+      })
+    end
+
+    def revoke_headers(access_token)
+      {
+        "Authorization" => "Bearer #{access_token}",
+        "Content-Type" => "application/x-www-form-urlencoded"
+      }
+    end
 
     def post_to_auth_endpoint(params)
       default_body = { client_id: @client_id, client_secret: @client_secret }
