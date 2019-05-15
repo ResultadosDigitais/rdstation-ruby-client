@@ -1,3 +1,9 @@
+## 2.1.0
+
+### Additions
+
+`RDStation::Authentication.revoke`  added. This method revokes an access_token at RD Station.
+
 ## 2.0.0
 
 ### Removals
@@ -52,7 +58,7 @@ In cause of Unahtorized (401), the following specific errors may be raised (thos
 
 `rdstation-ruby-client` now requires `ruby >= 2.0.0`.
 
-## 1.2.1 
+## 1.2.1
 
 ### Deprecations
 

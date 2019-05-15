@@ -174,4 +174,78 @@ RSpec.describe RDStation::Authentication do
       end
     end
   end
+
+  describe ".revoke" do
+    let(:revoke_endpoint) { 'https://api.rd.services/auth/revoke' }
+    let(:request_headers) do
+      {
+        "Authorization" => "Bearer #{access_token}",
+        "Content-Type" => "application/x-www-form-urlencoded"
+      }
+    end
+
+    context "valid access_token" do
+      let(:access_token) { "valid_access_token" }
+
+      let(:ok_response) do
+        {
+          status: 200,
+          headers: { 'Content-Type' => 'application/json' },
+          body: {}.to_json
+        }
+      end
+
+      before do
+        stub_request(:post, revoke_endpoint)
+          .with(
+            headers: request_headers,
+            body: URI.encode_www_form({
+              token: access_token,
+              token_type_hint: 'access_token'
+            })
+          )
+          .to_return(ok_response)
+      end
+
+      it "returns 200 code with an empty hash in the body" do
+        request_response = RDStation::Authentication.revoke(access_token: access_token)
+        expect(request_response).to eq({})
+      end
+    end
+
+    context "invalid access token" do
+      let(:access_token) { "invalid_access_token" }
+
+      let(:unauthorized_response) do
+        {
+          status: 401,
+          headers: { 'Content-Type' => 'application/json' },
+          body: {
+            errors: {
+              error_type: 'UNAUTHORIZED',
+              error_message: 'Invalid token.'
+            }
+          }.to_json
+        }
+      end
+
+      before do
+        stub_request(:post, revoke_endpoint)
+          .with(
+            headers: request_headers,
+            body: URI.encode_www_form({
+              token: access_token,
+              token_type_hint: 'access_token'
+            })
+          )
+          .to_return(unauthorized_response)
+      end
+
+      it "raises unauthorized" do
+        expect do
+          RDStation::Authentication.revoke(access_token: access_token)
+        end.to raise_error(RDStation::Error::Unauthorized)
+      end
+    end
+  end
 end
