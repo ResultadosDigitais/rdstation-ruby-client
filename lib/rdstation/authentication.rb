@@ -47,6 +47,21 @@ module RDStation
       ApiResponse.build(response)
     end
 
+    def self.revoke(access_token:)
+      response = self.post(
+        'https://api.rd.services/auth/revoke',
+        body: URI.encode_www_form({
+          token: access_token,
+          token_type_hint: 'access_token'
+        }),
+        headers: {
+          "Authorization" => "Bearer #{access_token}",
+          "Content-Type" => "application/x-www-form-urlencoded"
+        }
+      )
+      ApiResponse.build(response)
+    end
+
     private
 
     def post_to_auth_endpoint(params)
