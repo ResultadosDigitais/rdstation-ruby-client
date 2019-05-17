@@ -265,7 +265,7 @@ So, here is a step-by-step guide on how to upgrade your app:
 - Ensure you're using `ruby >= 2.0.0`.
 - Remove every direct instantiation of `RDStation::Contacts`, `RDStation::Events`, `RDStation::Fields` and `RDStation::Webhooks` and use `RDStation::Client` to get them instead.
 - Replace any call of `RDStation::Client#create_lead`, `RDStation::Client#change_lead` or `RDStation::Client#change_lead_status` with the equivalent method in the [Contacts API](#Contacts).
-- Review your error handling, as [more options](CHANGELOG.md#Error-handling) are available now. `http_status` method will always return nil. To get the status now use `error.details[:http_stats]` or check the type of the class.
+- Review your error handling, as [more options](CHANGELOG.md#Error-handling) are available now. `http_status` method will always return nil. To get the status now use `error.details[:http_status]` or check the type of the class.
 
 ## Contributing
 
