@@ -54,7 +54,7 @@ In cause of Unahtorized (401), the following specific errors may be raised (thos
 - `RDStation::Error::ExpiredCodeGrant`
 - `RDStation::Error::InvalidCredentials`
 
-The specific message an the http code are now returned by the `details` method.
+The specific message and the http code are now returned by the `details` method.
 
 ### Dependencies
 
