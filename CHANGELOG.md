@@ -1,3 +1,7 @@
+## 2.1.1
+
+- Fixed a bug in error handling (issue [#47](https://github.com/ResultadosDigitais/rdstation-ruby-client/issues/47))
+
 ## 2.1.0
 
 ### Additions
