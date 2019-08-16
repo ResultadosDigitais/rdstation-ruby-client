@@ -28,12 +28,6 @@ RSpec.describe RDStation::ApiResponse do
     context "when the response body is not JSON-parseable" do
       let(:response) { OpenStruct.new(code: 504, body: '<html><head></head><body></body></html>') }
 
-      it "raises no error" do
-        expect do
-          RDStation::ApiResponse.build(response)
-        end.not_to raise_error
-      end
-
       it_behaves_like 'call_error_handler'
     end
   end
