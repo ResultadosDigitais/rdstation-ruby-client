@@ -158,5 +158,19 @@ RSpec.describe RDStation::ErrorHandler do
         expect { error_handler.raise_error }.to raise_error(RDStation::Error::ServerError, 'Error Message')
       end
     end
+
+    context "when response body is not JSON-parseable" do
+      let(:error_response) do
+        OpenStruct.new(
+          code: 502,
+          headers: { 'error' => 'header' },
+          body: '<html><body>HTML error response</body></html>'
+        )
+      end
+
+      it 'raises the correct error' do
+        expect { error_handler.raise_error }.to raise_error(RDStation::Error::BadGateway, '<html><body>HTML error response</body></html>')
+      end
+    end
   end
 end
