@@ -14,7 +14,7 @@ module RDStation
 
       error_class.new(array_of_errors).raise_error
     rescue JSON::ParserError => error
-      raise error_class, {'error_message' => response.body}
+      raise error_class, { 'error_message' => response.body }
     end
 
     private
