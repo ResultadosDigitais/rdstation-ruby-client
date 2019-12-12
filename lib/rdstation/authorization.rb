@@ -1,12 +1,12 @@
 module RDStation
-  class AuthorizationHeader
+  class Authorization
     
     def initialize(access_token:)
       @access_token = access_token
       validate_access_token access_token
     end
     
-    def to_h
+    def headers
       { "Authorization" => "Bearer #{@access_token}", "Content-Type" => "application/json" }
     end
     

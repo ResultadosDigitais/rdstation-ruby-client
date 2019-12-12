@@ -4,12 +4,12 @@ module RDStation
 
     EVENTS_ENDPOINT = 'https://api.rd.services/platform/events'.freeze
 
-    def initialize(authorization_header:)
-      @authorization_header = authorization_header
+    def initialize(authorization:)
+      @authorization = authorization
     end
 
     def create(payload)
-      response = self.class.post(EVENTS_ENDPOINT, headers: @authorization_header.to_h, body: payload.to_json)
+      response = self.class.post(EVENTS_ENDPOINT, headers: @authorization.headers, body: payload.to_json)
       response_body = JSON.parse(response.body)
       return response_body unless errors?(response_body)
       RDStation::ErrorHandler.new(response).raise_error

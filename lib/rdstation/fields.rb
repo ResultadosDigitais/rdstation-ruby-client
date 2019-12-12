@@ -6,12 +6,12 @@ module RDStation
 
     BASE_URL = 'https://api.rd.services/platform/contacts/fields'.freeze
     
-    def initialize(authorization_header:)
-      @authorization_header = authorization_header
+    def initialize(authorization:)
+      @authorization = authorization
     end
 
     def all
-      response = self.class.get(BASE_URL, headers: @authorization_header.to_h)
+      response = self.class.get(BASE_URL, headers: @authorization.headers)
       ApiResponse.build(response)
     end
 

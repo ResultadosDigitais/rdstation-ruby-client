@@ -1,23 +1,23 @@
 module RDStation
   class Client
-    def initialize(access_token:)
-      @authorization_header = AuthorizationHeader.new(access_token: access_token)
+    def initialize(access_token:, refresh_token: nil)
+      @authorization = Authorization.new(access_token: access_token)
     end
     
     def contacts
-      @contacts ||= RDStation::Contacts.new(authorization_header: @authorization_header)
+      @contacts ||= RDStation::Contacts.new(authorization: @authorization)
     end
 
     def events
-      @events ||= RDStation::Events.new(authorization_header: @authorization_header)
+      @events ||= RDStation::Events.new(authorization: @authorization)
     end
 
     def fields
-      @fields ||= RDStation::Fields.new(authorization_header: @authorization_header)
+      @fields ||= RDStation::Fields.new(authorization: @authorization)
     end
 
     def webhooks
-      @webhooks ||= RDStation::Webhooks.new(authorization_header: @authorization_header)
+      @webhooks ||= RDStation::Webhooks.new(authorization: @authorization)
     end
   end
 end
