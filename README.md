@@ -10,12 +10,13 @@ Upgrading? Check the [migration guide](#Migration-guide) before bumping to a new
 
 1. [Installation](#Installation)
 2. [Usage](#Usage)
-   1. [Authentication](#Authentication)
-   2. [Contacts](#Contacts)
-   3. [Events](#Events)
-   4. [Fields](#Fields)
-   5. [Webhooks](#Webhooks)
-   6. [Errors](#Errors)
+   1. [Configuration](#Configuration)
+   2. [Authentication](#Authentication)
+   3. [Contacts](#Contacts)
+   4. [Events](#Events)
+   5. [Fields](#Fields)
+   6. [Webhooks](#Webhooks)
+   7. [Errors](#Errors)
 3. [Changelog](#Changelog)
 4. [Migration guide](#Migration-guide)
    1. [Upgrading from 1.2.x to 2.0.0](#Upgrading-from-1.2.x-to-2.0.0)
@@ -39,6 +40,19 @@ Or install it yourself as:
 
 ## Usage
 
+### Configuration
+
+Before getting youre credentials, you need to configure client_id and client_secret as following:
+
+```ruby
+RDStation.configure do |config|
+  config.client_id = YOUR_CLIENT_ID
+  config.client_secret = YOUR_CLIENT_SECRET
+end
+```
+
+For details on what `client_id` and `client_secret` are, check the [developers portal](https://developers.rdstation.com/en/authentication).
+
 ### Authentication
 
 For more details, check the [developers portal](https://developers.rdstation.com/en/authentication).
@@ -46,7 +60,7 @@ For more details, check the [developers portal](https://developers.rdstation.com
 #### Getting authentication URL
 
 ```ruby
-rdstation_authentication = RDStation::Authentication.new('client_id', 'client_secret')
+rdstation_authentication = RDStation::Authentication.new
 
 redirect_url = 'https://yourapp.org/auth/callback'
 rdstation_authentication.auth_url(redirect_url)
@@ -57,15 +71,32 @@ rdstation_authentication.auth_url(redirect_url)
 You will need the code param that is returned from RD Station to your application after the user confirms the access at the authorization dialog.
 
 ```ruby
-rdstation_authentication = RDStation::Authentication.new('client_id', 'client_secret')
+rdstation_authentication = RDStation::Authentication.new
 rdstation_authentication.authenticate(code_returned_from_rdstation)
+# => { 'access_token' => '54321', 'expires_in' => 86_400, 'refresh_token' => 'refresh' }
 ```
 
-#### Updating access_token
+#### Updating an expired access_token
 
 ```ruby
-rdstation_authentication = RDStation::Authentication.new('client_id', 'client_secret')
+rdstation_authentication = RDStation::Authentication.new
 rdstation_authentication.update_access_token('refresh_token')
+```
+
+**NOTE**: This is done automatically when a request fails due to access_token expiration. To keep track of the new token, you have to provide a callback block in configuration. For example:
+
+```ruby
+RDStation.configure do |config|
+  config.client_id = YOUR_CLIENT_ID
+  config.client_secret = YOUR_CLIENT_SECRET
+  config.on_access_token_refresh do |authorization|
+    # authorization.access_token is the new token
+    # authorization.refresh_token is the existing refresh_token
+    # 
+    # If you are using ActiveRecord, you may want to update the stored access_token, like in the following code:
+    MyStoredAuth.where(refresh_token: authorization.refresh_token).update_all(access_token: authorization.access_token)
+  end
+end
 ```
 
 #### Revoking an access_token
@@ -83,7 +114,7 @@ Note: this will completely remove your credentials from RD Station (`update_acce
 Returns data about a specific Contact
 
 ```ruby
-client = RDStation::Client.new(access_token: 'access_token')
+client = RDStation::Client.new(access_token: 'access_token', refresh_token: 'refresh_token')
 client.contacts.by_uuid('uuid')
 ```
 
@@ -94,7 +125,7 @@ More info: https://developers.rdstation.com/pt-BR/reference/contacts#methodGetDe
 Returns data about a specific Contact
 
 ```ruby
-client = RDStation::Client.new(access_token: 'access_token')
+client = RDStation::Client.new(access_token: 'access_token', refresh_token: 'refresh_token')
 client.contacts.by_email('email')
 ```
 
@@ -109,7 +140,7 @@ contact_info = {
   name: "Joe Foo"
 }
 
-client = RDStation::Client.new(access_token: 'access_token')
+client = RDStation::Client.new(access_token: 'access_token', refresh_token: 'refresh_token')
 client.contacts.update('uuid', contact_info)
 ```
 Contact Default Parameters
@@ -139,7 +170,7 @@ contact_info = {
 identifier = "email"
 identifier_value = "joe@foo.bar"
 
-client = RDStation::Client.new(access_token: 'access_token')
+client = RDStation::Client.new(access_token: 'access_token', refresh_token: 'refresh_token')
 client.contacts.upsert(identifier, identifier_value, contact_info)
 ```
 
@@ -159,7 +190,7 @@ This creates a new event on RDSM:
 
 ```ruby
 payload = {} # hash representing the payload
-client = RDStation::Client.new(access_token: 'access_token')
+client = RDStation::Client.new(access_token: 'access_token', refresh_token: 'refresh_token')
 client.events.create(payload)
 ```
 
@@ -170,7 +201,7 @@ Endpoints to [manage Contact Fields](https://developers.rdstation.com/en/referen
 #### List all fields
 
 ```ruby
-client = RDStation::Client.new(access_token: 'access_token')
+client = RDStation::Client.new(access_token: 'access_token', refresh_token: 'refresh_token')
 client.fields.all
 ```
 
@@ -183,14 +214,14 @@ Choose to receive data based on certain actions, re-cast or marked as an opportu
 #### List all webhooks
 
 ```ruby
-client = RDStation::Client.new(access_token: 'access_token')
+client = RDStation::Client.new(access_token: 'access_token', refresh_token: 'refresh_token')
 client.webhooks.all
 ```
 
 #### Getting a webhook by UUID
 
 ```ruby
-client = RDStation::Client.new(access_token: 'access_token')
+client = RDStation::Client.new(access_token: 'access_token', refresh_token: 'refresh_token')
 client.webhooks.by_uuid('WEBHOOK_UUID')
 ```
 
@@ -198,7 +229,7 @@ client.webhooks.by_uuid('WEBHOOK_UUID')
 
 ```ruby
 payload = {} # payload representing a webhook
-client = RDStation::Client.new(access_token: 'access_token')
+client = RDStation::Client.new(access_token: 'access_token', refresh_token: 'refresh_token')
 client.webhooks.create(payload)
 ```
 
@@ -208,7 +239,7 @@ The required strucutre of the payload is [described here](https://developers.rds
 
 ```ruby
 payload = {} # payload representing a webhook
-client = RDStation::Client.new(access_token: 'access_token')
+client = RDStation::Client.new(access_token: 'access_token', refresh_token: 'refresh_token')
 client.webhooks.create('WEBHOOK_UUID', payload)
 ```
 
@@ -217,7 +248,7 @@ The required strucutre of the payload is [described here](https://developers.rds
 #### Deleting a webhook
 
 ```ruby
-client = RDStation::Client.new(access_token: 'access_token')
+client = RDStation::Client.new(access_token: 'access_token', refresh_token: 'refresh_token')
 client.webhooks.delete('WEBHOOK_UUID')
 ```
 
