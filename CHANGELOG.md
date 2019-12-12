@@ -35,9 +35,9 @@ end
 
 ### Deprecations
 
-Providing `client_id` and `client_secret` directly to `RDStation::Authentication.new` is deprecated and will be removed in future versions. Use `RDStation.confifure` instead.
+Providing `client_id` and `client_secret` directly to `RDStation::Authentication.new` is deprecated and will be removed in future versions. Use `RDStation.configure` instead.
 
-Specifying refresh_token in `RDStation::Client.new(access_token: 'at', refresh_token: 'rt'` is optional right now, but will be mandatory in future versions. 
+Specifying refresh_token in `RDStation::Client.new(access_token: 'at', refresh_token: 'rt')` is optional right now, but will be mandatory in future versions. 
 
 ## 2.1.1
 

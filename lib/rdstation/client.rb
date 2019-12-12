@@ -1,6 +1,7 @@
 module RDStation
   class Client
     def initialize(access_token:, refresh_token: nil)
+      warn_deprecation unless refresh_token
       @authorization = Authorization.new(
         access_token: access_token,
         refresh_token: refresh_token
@@ -21,6 +22,12 @@ module RDStation
 
     def webhooks
       @webhooks ||= RDStation::Webhooks.new(authorization: @authorization)
+    end
+
+    private
+
+    def warn_deprecation
+      warn "DEPRECATION WARNING: Specifying refresh_token in RDStation::Client.new(access_token: 'at', refresh_token: 'rt') is optional right now, but will be mandatory in future versions. "
     end
   end
 end
