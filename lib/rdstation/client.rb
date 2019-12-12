@@ -1,7 +1,10 @@
 module RDStation
   class Client
     def initialize(access_token:, refresh_token: nil)
-      @authorization = Authorization.new(access_token: access_token)
+      @authorization = Authorization.new(
+        access_token: access_token,
+        refresh_token: refresh_token
+      )
     end
 
     def contacts
