@@ -15,3 +15,5 @@ require 'rdstation/webhooks'
 # Error handling
 require 'rdstation/error'
 require 'rdstation/error_handler'
+
+require 'rdstation'
