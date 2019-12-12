@@ -4,6 +4,8 @@ require 'httparty'
 require 'rdstation/api_response'
 
 # API requests
+require 'rdstation'
+require 'rdstation/retryable_request'
 require 'rdstation/authentication'
 require 'rdstation/authorization'
 require 'rdstation/client'
@@ -15,5 +17,3 @@ require 'rdstation/webhooks'
 # Error handling
 require 'rdstation/error'
 require 'rdstation/error_handler'
-
-require 'rdstation'
