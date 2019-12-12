@@ -3,6 +3,7 @@ module RDStation
   # More info: https://developers.rdstation.com/pt-BR/reference/contacts
   class Fields
     include HTTParty
+    include ::RDStation::RetryableRequest
 
     BASE_URL = 'https://api.rd.services/platform/contacts/fields'.freeze
     
@@ -11,8 +12,10 @@ module RDStation
     end
 
     def all
-      response = self.class.get(BASE_URL, headers: @authorization.headers)
-      ApiResponse.build(response)
+      retryable_request(@authorization) do |authorization|
+        response = self.class.get(BASE_URL, headers: authorization.headers)
+        ApiResponse.build(response)
+      end
     end
 
   end
