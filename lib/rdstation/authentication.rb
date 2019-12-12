@@ -7,9 +7,9 @@ module RDStation
     DEFAULT_HEADERS = { 'Content-Type' => 'application/json' }.freeze
     REVOKE_URL = 'https://api.rd.services/auth/revoke'.freeze
 
-    def initialize(client_id, client_secret)
-      @client_id = client_id
-      @client_secret = client_secret
+    def initialize(client_id = nil, client_secret = nil)
+      @client_id = client_id || RDStation.configuration.client_id
+      @client_secret = client_secret || RDStation.configuration.client_secret
     end
 
     #
