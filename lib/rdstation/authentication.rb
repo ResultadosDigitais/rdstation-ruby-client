@@ -9,8 +9,8 @@ module RDStation
 
     def initialize(client_id = nil, client_secret = nil)
       warn_deprecation if client_id || client_secret
-      @client_id = client_id || RDStation.configuration.client_id
-      @client_secret = client_secret || RDStation.configuration.client_secret
+      @client_id = client_id || RDStation.configuration&.client_id
+      @client_secret = client_secret || RDStation.configuration&.client_secret
     end
 
     #
