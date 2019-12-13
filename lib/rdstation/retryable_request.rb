@@ -28,6 +28,7 @@ module RDStation
       client = RDStation::Authentication.new
       response = client.update_access_token(authorization.refresh_token)
       authorization.access_token = response['access_token']
+      authorization.access_token_expires_in = response['expires_in']
       RDStation.configuration&.access_token_refresh_callback&.call(authorization)
     end
   end

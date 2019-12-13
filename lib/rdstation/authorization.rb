@@ -1,10 +1,11 @@
 module RDStation
   class Authorization
     attr_reader :refresh_token
-    attr_accessor :access_token
-    def initialize(access_token:, refresh_token: nil)
+    attr_accessor :access_token, :access_token_expires_in
+    def initialize(access_token:, refresh_token: nil, access_token_expires_in: nil)
       @access_token = access_token
       @refresh_token = refresh_token
+      @access_token_expires_in = access_token_expires_in
       validate_access_token access_token
     end
 
