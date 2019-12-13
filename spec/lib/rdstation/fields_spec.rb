@@ -38,6 +38,11 @@ RSpec.describe RDStation::Fields do
       }
     end
 
+    it 'calls retryable_request' do
+      expect(rdstation_fields_with_valid_token).to receive(:retryable_request)
+      rdstation_fields_with_valid_token.all
+    end
+
     context 'with a valid auth token' do
       before do
         stub_request(:get, fields_endpoint)

@@ -108,6 +108,11 @@ RSpec.describe RDStation::Events do
       }
     end
 
+    it 'calls retryable_request' do
+      expect(event_with_valid_token).to receive(:retryable_request)
+      event_with_valid_token.create({})
+    end
+
     context 'with a valid auth token' do
       before do
         stub_request(:post, events_endpoint)
