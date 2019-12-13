@@ -90,6 +90,7 @@ RDStation.configure do |config|
   config.client_id = YOUR_CLIENT_ID
   config.client_secret = YOUR_CLIENT_SECRET
   config.on_access_token_refresh do |authorization|
+    # authorization.access_token_expires_in is the time (in seconds for with the token is valid)
     # authorization.access_token is the new token
     # authorization.refresh_token is the existing refresh_token
     # 
