@@ -1,3 +1,44 @@
+## 2.2.0
+
+### Additions
+
+#### Configuration
+
+Now it is possible to configure global params like client_id and client_secret only once, so you don't need to provide them to `RDStation::Authentication` every time.
+
+This can be done in the following way:
+
+```ruby
+RDStation.configure do |config|
+  config.client_id = YOUR_CLIENT_ID
+  config.client_secret = YOUR_CLIENT_SECRET
+end
+```
+
+If you're using Rails, this can be done in `config/initializers`.
+
+#### Automatic refresh of access_tokens
+
+When an access_token expires, a new one will be obtained automatically and the request will be made again.
+
+For this to work, you have to use `RDStation.configure` as described above, and provide the refresh token when instantiating `RDStation::Client` (ex: RDStation::Client.new(access_token: MY_ACCESS_TOKEN, refresh_token: MY_REFRESH_TOKEN).
+
+You can keep track of access_token changes, by providing a callback block inconfiguration. This block will be called with an `RDStation::Authorization` object, which contains the updated `access_token` and `refresh_token`. For example:
+
+```ruby
+RDStation.configure do |config|
+  config.on_access_token_refresh do |authorization|
+    MyStoredAuth.where(refresh_token: authorization.refresh_token).update_all(access_token: authorization.access_token)
+  end
+end
+```
+
+### Deprecations
+
+Providing `client_id` and `client_secret` directly to `RDStation::Authentication.new` is deprecated and will be removed in future versions. Use `RDStation.configure` instead.
+
+Specifying refresh_token in `RDStation::Client.new(access_token: 'at', refresh_token: 'rt')` is optional right now, but will be mandatory in future versions. 
+
 ## 2.1.1
 
 - Fixed a bug in error handling (issue [#47](https://github.com/ResultadosDigitais/rdstation-ruby-client/issues/47))

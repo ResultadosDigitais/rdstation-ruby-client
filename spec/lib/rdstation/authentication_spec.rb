@@ -88,6 +88,34 @@ RSpec.describe RDStation::Authentication do
 
   let(:authentication) { described_class.new('client_id', 'client_secret') }
 
+  describe '#auth_url' do
+    let(:configuration_client_id) { 'configuration_client_id' }
+    let(:configuration_client_secret) { 'configuration_client_secret' }
+    let(:redirect_url) { 'redirect_url' }
+    before do
+      RDStation.configure do |config|
+        config.client_id = configuration_client_id
+        config.client_secret = configuration_client_secret
+      end
+    end
+
+    context 'when client_id and client_secret are specified in initialization' do
+      it 'uses those specified in initialization' do
+        auth = described_class.new('initialization_client_id', 'initialization_client_secret')
+        expected = "https://api.rd.services/auth/dialog?client_id=initialization_client_id&redirect_url=#{redirect_url}"
+        expect(auth.auth_url(redirect_url)).to eq expected
+      end
+    end
+
+    context 'when client_id and client_secret are specified only in configuration' do
+      it 'uses those specified in configuration' do
+        auth = described_class.new
+        expected = "https://api.rd.services/auth/dialog?client_id=#{configuration_client_id}&redirect_url=#{redirect_url}"
+        expect(auth.auth_url(redirect_url)).to eq expected
+      end
+    end
+  end
+
   describe '#authenticate' do
     context 'when the code is valid' do
       before do
@@ -138,6 +166,37 @@ RSpec.describe RDStation::Authentication do
         end.to raise_error(RDStation::Error::ExpiredCodeGrant)
       end
     end
+
+    context 'when client_id and client_secret are specified only in configuration' do
+      let(:authentication) { described_class.new }
+      let(:configuration_client_id) { 'configuration_client_id' }
+      let(:configuration_client_secret) { 'configuration_client_secret' }
+      let(:token_request_with_valid_code_secrets_from_config) do
+        {
+          client_id: configuration_client_id,
+          client_secret: configuration_client_secret,
+          code: 'valid_code'
+        }
+      end
+      before do
+        RDStation.configure do |config|
+          config.client_id = configuration_client_id
+          config.client_secret = configuration_client_secret
+        end
+
+        stub_request(:post, token_endpoint)
+          .with(
+            headers: request_headers,
+            body: token_request_with_valid_code_secrets_from_config.to_json
+          )
+          .to_return(credentials_response)
+      end
+
+      it 'returns the credentials' do
+        credentials_request = authentication.authenticate('valid_code')
+        expect(credentials_request).to eq(credentials)
+      end
+    end
   end
 
   describe '#update_access_token' do
@@ -171,6 +230,37 @@ RSpec.describe RDStation::Authentication do
         expect do
           authentication.update_access_token('invalid_refresh_token')
         end.to raise_error(RDStation::Error::InvalidCredentials)
+      end
+    end
+
+    context 'when client_id and client_secret are specified only in configuration' do
+      let(:authentication) { described_class.new }
+      let(:configuration_client_id) { 'configuration_client_id' }
+      let(:configuration_client_secret) { 'configuration_client_secret' }
+      let(:token_request_with_valid_refresh_code_secrets_from_config) do
+        {
+          client_id: configuration_client_id,
+          client_secret: configuration_client_secret,
+          refresh_token: 'valid_refresh_token'
+        }
+      end
+      before do
+        RDStation.configure do |config|
+          config.client_id = configuration_client_id
+          config.client_secret = configuration_client_secret
+        end
+
+        stub_request(:post, token_endpoint)
+          .with(
+            headers: request_headers,
+            body: token_request_with_valid_refresh_code_secrets_from_config.to_json
+          )
+          .to_return(credentials_response)
+      end
+
+      it 'returns the credentials' do
+        credentials_request = authentication.update_access_token('valid_refresh_token')
+        expect(credentials_request).to eq(credentials)
       end
     end
   end

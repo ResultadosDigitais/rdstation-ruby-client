@@ -2,7 +2,7 @@ require 'spec_helper'
 
 RSpec.describe RDStation::Webhooks do
   let(:webhooks_client) do
-    described_class.new(authorization_header: RDStation::AuthorizationHeader.new(access_token: 'access_token'))
+    described_class.new(authorization: RDStation::Authorization.new(access_token: 'access_token'))
   end
 
   let(:webhooks_endpoint) { 'https://api.rd.services/integrations/webhooks/' }
@@ -23,6 +23,11 @@ RSpec.describe RDStation::Webhooks do
   end
 
   describe '#all' do
+    it 'calls retryable_request' do
+      expect(webhooks_client).to receive(:retryable_request)
+      webhooks_client.all
+    end
+
     context 'when the request is successful' do
       let(:webhooks) do
         {
@@ -77,6 +82,11 @@ RSpec.describe RDStation::Webhooks do
     let(:uuid) { '5408c5a3-4711-4f2e-8d0b-13407a3e30f3' }
     let(:webhooks_endpoint_by_uuid) { webhooks_endpoint + uuid }
 
+    it 'calls retryable_request' do
+      expect(webhooks_client).to receive(:retryable_request)
+      webhooks_client.by_uuid('uuid')
+    end
+
     context 'when the request is successful' do
       let(:webhook) do
         {
@@ -124,6 +134,11 @@ RSpec.describe RDStation::Webhooks do
         'http_method' => 'POST',
         'include_relations' => %w[COMPANY CONTACT_FUNNEL]
       }
+    end
+
+    it 'calls retryable_request' do
+      expect(webhooks_client).to receive(:retryable_request)
+      webhooks_client.create('payload')
     end
 
     context 'when the request is successful' do
@@ -177,6 +192,11 @@ RSpec.describe RDStation::Webhooks do
       }
     end
 
+    it 'calls retryable_request' do
+      expect(webhooks_client).to receive(:retryable_request)
+      webhooks_client.update('uuid', 'payload')
+    end
+
     context 'when the request is successful' do
       let(:updated_webhook) do
         {
@@ -218,6 +238,11 @@ RSpec.describe RDStation::Webhooks do
   describe '#delete' do
     let(:uuid) { '5408c5a3-4711-4f2e-8d0b-13407a3e30f3' }
     let(:webhooks_endpoint_by_uuid) { webhooks_endpoint + uuid }
+
+    it 'calls retryable_request' do
+      expect(webhooks_client).to receive(:retryable_request)
+      webhooks_client.delete('uuid')
+    end
 
     context 'when the request is successful' do
       before do

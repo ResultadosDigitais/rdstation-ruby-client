@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-RSpec.describe RDStation::AuthorizationHeader do
+RSpec.describe RDStation::Authorization do
   
   describe ".initialize" do
     context "when access_token is nil" do
@@ -12,11 +12,11 @@ RSpec.describe RDStation::AuthorizationHeader do
     end
   end
   
-  describe "#to_h" do
+  describe "#headers" do
     let(:access_token) { 'access_token' }
     
     it "generates the correct header" do
-      header = described_class.new(access_token: access_token).to_h
+      header = described_class.new(access_token: access_token).headers
       expect(header['Authorization']).to eq "Bearer #{access_token}"
       expect(header['Content-Type']).to eq "application/json"
     end

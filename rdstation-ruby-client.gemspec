@@ -20,12 +20,13 @@ Gem::Specification.new do |spec|
 
   spec.required_ruby_version = '>= 2.0.0'
 
-  spec.add_development_dependency "bundler", "~> 1.3"
+  spec.add_development_dependency "bundler", "> 1.3"
   spec.add_development_dependency "rake"
   spec.add_development_dependency 'rspec'
   spec.add_development_dependency 'webmock', '~> 2.1'
   spec.add_development_dependency 'turn'
   spec.add_development_dependency 'rspec_junit_formatter'
+  spec.add_development_dependency 'pry'
 
   spec.add_dependency "httparty", "~> 0.12"
 end

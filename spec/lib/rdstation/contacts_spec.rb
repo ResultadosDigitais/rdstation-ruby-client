@@ -16,13 +16,13 @@ RSpec.describe RDStation::Contacts do
   let(:expired_access_token) { 'expired_access_token' }
 
   let(:contact_with_valid_token) do
-    described_class.new(authorization_header: RDStation::AuthorizationHeader.new(access_token: valid_access_token))
+    described_class.new(authorization: RDStation::Authorization.new(access_token: valid_access_token))
   end
   let(:contact_with_expired_token) do
-    described_class.new(authorization_header: RDStation::AuthorizationHeader.new(access_token: expired_access_token))
+    described_class.new(authorization: RDStation::Authorization.new(access_token: expired_access_token))
   end
   let(:contact_with_invalid_token) do
-    described_class.new(authorization_header: RDStation::AuthorizationHeader.new(access_token: invalid_access_token))
+    described_class.new(authorization: RDStation::Authorization.new(access_token: invalid_access_token))
   end
 
 
@@ -109,6 +109,11 @@ RSpec.describe RDStation::Contacts do
   end
 
   describe '#by_uuid' do
+    it 'calls retryable_request' do
+      expect(contact_with_valid_token).to receive(:retryable_request)
+      contact_with_valid_token.by_uuid('valid_uuid')
+    end
+
     context 'with a valid auth token' do
       context 'when the contact exists' do
         let(:contact) do
@@ -172,6 +177,11 @@ RSpec.describe RDStation::Contacts do
   end
 
   describe '#by_email' do
+    it 'calls retryable_request' do
+      expect(contact_with_valid_token).to receive(:retryable_request)
+      contact_with_valid_token.by_email('x@xpto.com')
+    end
+
     context 'with a valid auth token' do
       context 'when the contact exists' do
         let(:contact) do
@@ -235,6 +245,11 @@ RSpec.describe RDStation::Contacts do
   end
 
   describe '#update' do
+    it 'calls retryable_request' do
+      expect(contact_with_valid_token).to receive(:retryable_request)
+      contact_with_valid_token.update('valid_uuid', {})
+    end
+
     context 'with a valid access_token' do
       let(:valid_access_token) { 'valid_access_token' }
       let(:headers) do
@@ -322,6 +337,11 @@ RSpec.describe RDStation::Contacts do
   end
 
   describe '#upsert' do
+    it 'calls retryable_request' do
+      expect(contact_with_valid_token).to receive(:retryable_request)
+      contact_with_valid_token.upsert('email', 'valid@email.com', {})
+    end
+
     context 'with a valid access_token' do
       let(:valid_access_token) { 'valid_access_token' }
 

@@ -3,7 +3,7 @@ require 'spec_helper'
 RSpec.describe RDStation::Fields do
   let(:valid_access_token) { 'valid_access_token' }
   let(:rdstation_fields_with_valid_token) do
-    described_class.new(authorization_header: RDStation::AuthorizationHeader.new(access_token: valid_access_token))
+    described_class.new(authorization: RDStation::Authorization.new(access_token: valid_access_token))
   end
 
   let(:valid_headers) do
@@ -36,6 +36,11 @@ RSpec.describe RDStation::Fields do
           }
         ]
       }
+    end
+
+    it 'calls retryable_request' do
+      expect(rdstation_fields_with_valid_token).to receive(:retryable_request)
+      rdstation_fields_with_valid_token.all
     end
 
     context 'with a valid auth token' do

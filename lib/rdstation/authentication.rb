@@ -7,9 +7,10 @@ module RDStation
     DEFAULT_HEADERS = { 'Content-Type' => 'application/json' }.freeze
     REVOKE_URL = 'https://api.rd.services/auth/revoke'.freeze
 
-    def initialize(client_id, client_secret)
-      @client_id = client_id
-      @client_secret = client_secret
+    def initialize(client_id = nil, client_secret = nil)
+      warn_deprecation if client_id || client_secret
+      @client_id = client_id || RDStation.configuration&.client_id
+      @client_secret = client_secret || RDStation.configuration&.client_secret
     end
 
     #
@@ -82,6 +83,10 @@ module RDStation
         body: body.to_json,
         headers: DEFAULT_HEADERS
       )
+    end
+
+    def warn_deprecation
+      warn "DEPRECATION WARNING: Providing client_id and client_secret directly to RDStation::Authentication.new is deprecated and will be removed in future versions. Use RDStation.configure instead."
     end
   end
 end
