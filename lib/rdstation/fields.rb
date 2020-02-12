@@ -25,5 +25,25 @@ module RDStation
       end
     end
 
+    def update(uuid, payload)
+      retryable_request(@authorization) do |authorization|
+        response = self.class.patch(base_url(uuid), headers: authorization.headers, body: payload.to_json)
+        ApiResponse.build(response)
+      end
+    end
+
+    def delete(uuid)
+      retryable_request(@authorization) do |authorization|
+        response = self.class.delete(base_url(uuid), headers: authorization.headers)
+        ApiResponse.build(response)
+      end
+    end
+
+    private
+
+    def base_url(path = '')
+      "#{BASE_URL}/#{path}"
+    end
+
   end
 end
