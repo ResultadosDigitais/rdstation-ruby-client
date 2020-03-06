@@ -206,6 +206,55 @@ client = RDStation::Client.new(access_token: 'access_token', refresh_token: 'ref
 client.fields.all
 ```
 
+#### Create a field
+
+```ruby
+payload = {} # hash representing the payload
+client = RDStation::Client.new(access_token: 'access_token', refresh_token: 'refresh_token')
+client.fields.create payload
+```
+Or you can use the new `RDStation::Builder::Field`
+
+```ruby
+payload = {} # hash representing the payload
+builder = RDStation::Builder::Field.new payload['api_identifier']
+builder.data_type(payload['data_type'])
+builder.presentation_type(payload['presentation_type'])
+builder.name('pt-BR', payload['name'])
+builder.label('pt-BR', payload['label'])
+
+client = RDStation::Client.new(access_token: 'access_token', refresh_token: 'refresh_token')
+client.fields.create builder.build
+```
+
+#### Update a field
+
+```ruby
+payload = {} # hash representing the payload
+client = RDStation::Client.new(access_token: 'access_token', refresh_token: 'refresh_token')
+client.fields.update('FIELD_UUID', payload) 
+```
+Or you can use the new `RDStation::Builder::Field`
+
+```ruby
+payload = {} # hash representing the payload
+builder = RDStation::Builder::Field.new payload['api_identifier']
+builder.data_type(payload['data_type'])
+builder.presentation_type(payload['presentation_type'])
+builder.name('pt-BR', payload['name'])
+builder.label('pt-BR', payload['label'])
+
+client = RDStation::Client.new(access_token: 'access_token', refresh_token: 'refresh_token')
+client.fields.update('FIELD_UUID', builder.build)
+```
+#### Deleting a field
+
+```ruby
+client = RDStation::Client.new(access_token: 'access_token', refresh_token: 'refresh_token')
+client.fields.delete('FIELD_UUID')
+```
+
+
 ### Webhooks
 
 Webhooks provide the ability to receive real-time data updates about your contact activity.
