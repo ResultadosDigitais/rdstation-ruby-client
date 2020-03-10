@@ -43,7 +43,7 @@ module RDStation
         end
 
         array_of_errors
-        end
+      end
 
       def from_hash_of_hashes
         array_of_errors = []

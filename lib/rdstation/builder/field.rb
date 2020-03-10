@@ -33,7 +33,7 @@ module RDStation
         end
 
         @values['presentation_type'] = presentation_type
-        end
+      end
 
       def label(language, label)
         @values['label'] = { language.to_s => label }

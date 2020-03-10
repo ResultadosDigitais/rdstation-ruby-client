@@ -35,21 +35,22 @@ RSpec.describe RDStation::Builder::Field do
         expect(result).to eq(expected_result)
       end
     end
+    
     context 'invalid' do
       it 'using invalid api_identifier ' do
-        expect { described_class.new('identifier') }.to raise_error(
+        expect { described_class.new('invald_identifier') }.to raise_error(
           'api_identifier is not in a valid format, need start with "cf_"'
         )
       end
 
       it 'using invalid data_type ' do
-        expect { valid_builder.data_type('type') }.to raise_error(
+        expect { valid_builder.data_type('invalid_data_type') }.to raise_error(
           'Not valid data_type - ["STRING", "INTEGER", "BOOLEAN", "STRING[]"]'
         )
       end
 
       it 'using invalid presentation_type ' do
-        expect { valid_builder.presentation_type('type') }.to raise_error(
+        expect { valid_builder.presentation_type('invalid presentation_type') }.to raise_error(
           'Not valid presentation_type - ["TEXT_INPUT", "TEXT_AREA", "URL_INPUT", "PHONE_INPUT", "EMAIL_INPUT", "CHECK_BOX", "NUMBER_INPUT", "COMBO_BOX", "RADIO_BUTTON", "MULTIPLE_CHOICE"]'
         )
       end

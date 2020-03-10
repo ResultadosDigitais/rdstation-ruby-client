@@ -16,7 +16,7 @@ module RDStation
         response = self.class.get(BASE_URL, headers: authorization.headers)
         ApiResponse.build(response)
       end
-      end
+    end
 
     def create(payload)
       retryable_request(@authorization) do |authorization|
@@ -44,6 +44,5 @@ module RDStation
     def base_url(path = '')
       "#{BASE_URL}/#{path}"
     end
-
   end
 end
