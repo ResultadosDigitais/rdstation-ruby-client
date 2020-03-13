@@ -17,3 +17,6 @@ require 'rdstation/webhooks'
 # Error handling
 require 'rdstation/error'
 require 'rdstation/error_handler'
+
+# Builders
+require 'rdstation/builder/field'

@@ -52,5 +52,51 @@ RSpec.describe RDStation::Error::Format do
         expect(result).to eq(RDStation::Error::Format::ARRAY_OF_HASHES)
       end
     end
+
+    context 'when receives a mixed type of errors' do
+      let(:errors) do
+        {
+          'label': {
+            'pt-BR': [
+              {
+                'error_type': 'CANNOT_BE_BLANK',
+                'error_message': 'cannot be blank'
+              }
+            ]
+          },
+          'api_identifier': [
+            {
+              'error_type': 'CANNOT_BE_BLANK',
+              'error_message': 'cannot be blank'
+            }
+          ]
+        }
+      end
+
+      it 'returns the HASH_OF_MULTIPLE_TYPES format' do
+        result = error_format.format
+        expect(result).to eq(RDStation::Error::Format::HASH_OF_MULTIPLE_TYPES)
+      end
+    end
+
+    context 'when receives a hash of hashes errors' do
+      let(:errors) do
+        {
+          label: {
+            'pt-BR': [
+              {
+                'error_type': 'CANNOT_BE_BLANK',
+                'error_message': 'cannot be blank'
+              }
+            ]
+          }
+        }
+      end
+
+      it 'returns the HASH_OF_MULTILINGUAL format' do
+        result = error_format.format
+        expect(result).to eq(RDStation::Error::Format::HASH_OF_HASHES)
+      end
+    end
   end
 end
