@@ -1,3 +1,54 @@
+## 2.3.0
+
+### Additions
+
+#### 1. New Field methods
+
+The following methods were added to "Fields" client:
+
+- create
+- update
+- delete
+
+Besides reading, this client is now capable of create, update or delete a field.
+
+Usage example:
+
+```ruby
+client = RDStation::Client.new(access_token: 'ACCESS_TOKEN', refresh_token: 'REFRESH_TOKEN')
+client.fields.delete('FIELD_UUID')
+```
+
+#### 2. New format of errors supported
+
+Two new formats of errors are now supported by the error handler:
+
+##### `HASH_OF_HASHES`
+
+When the error message is a hash containing other hashes as values, for example:
+
+```ruby
+{
+  'error' => {
+    'field1' => {...},
+    'field2' => {...}
+  }
+}
+```
+
+##### `HASH_OF_MULTIPLE_TYPES`
+
+When the error message is a hash that could contain multiple data types as values, for example:
+
+```ruby
+{
+  'error' => {
+    'field1' => [...] # Array,
+    'field2' => {...} # Hash
+  }
+}
+```
+
 ## 2.2.0
 
 ### Additions
@@ -37,7 +88,7 @@ end
 
 Providing `client_id` and `client_secret` directly to `RDStation::Authentication.new` is deprecated and will be removed in future versions. Use `RDStation.configure` instead.
 
-Specifying refresh_token in `RDStation::Client.new(access_token: 'at', refresh_token: 'rt')` is optional right now, but will be mandatory in future versions. 
+Specifying refresh_token in `RDStation::Client.new(access_token: 'at', refresh_token: 'rt')` is optional right now, but will be mandatory in future versions.
 
 ## 2.1.1
 
@@ -94,7 +145,7 @@ In case of a Bad Request (400), the following specific errors may be raised (tho
 - `RDStation::Error::ConflictingField`
 - `RDStation::Error::InvalidEventType`
 
-In cause of Unahtorized (401), the following specific errors may be raised (those are subclasses of `RDStation::Error::Unauthorized`):
+In cause of Unauthorized (401), the following specific errors may be raised (those are subclasses of `RDStation::Error::Unauthorized`):
 - `RDStation::Error::ExpiredAccessToken`
 - `RDStation::Error::ExpiredCodeGrant`
 - `RDStation::Error::InvalidCredentials`
