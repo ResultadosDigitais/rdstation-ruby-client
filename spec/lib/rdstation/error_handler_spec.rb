@@ -151,6 +151,7 @@ RSpec.describe RDStation::ErrorHandler do
         expect { error_handler.raise_error }.to raise_error(RDStation::Error::ServiceUnavailable, 'Error Message')
       end
     end
+
     context 'with 5xx error' do
       let(:http_status) { 505 }
 
@@ -170,6 +171,14 @@ RSpec.describe RDStation::ErrorHandler do
 
       it 'raises the correct error' do
         expect { error_handler.raise_error }.to raise_error(RDStation::Error::BadGateway, '<html><body>HTML error response</body></html>')
+      end
+    end
+
+    context 'with an unknown error' do
+      let(:http_status) { 123 }
+
+      it 'raises a unknown error' do
+        expect { error_handler.raise_error }.to raise_error(RDStation::Error::UnknownError, 'Error Message')
       end
     end
   end
