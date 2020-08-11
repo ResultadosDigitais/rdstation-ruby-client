@@ -24,6 +24,7 @@ module RDStation
     class BadGateway < Error; end
     class ServiceUnavailable < Error; end
     class ServerError < Error; end
+    class UnknownError < Error; end
 
     # 400 - Bad Request
     class ConflictingField < BadRequest; end

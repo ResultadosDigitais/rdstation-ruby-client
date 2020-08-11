@@ -37,6 +37,8 @@ module RDStation
       when 502      then RDStation::Error::BadGateway
       when 503      then RDStation::Error::ServiceUnavailable
       when 500..599 then RDStation::Error::ServerError
+      else
+        RDStation::Error::UnknownError
       end
     end
 
