@@ -19,6 +19,7 @@ module RDStation
     class Conflict < Error; end
     class UnsupportedMediaType < Error; end
     class UnprocessableEntity < Error; end
+    class TooManyRequests < Error; end
     class InternalServerError < Error; end
     class NotImplemented < Error; end
     class BadGateway < Error; end

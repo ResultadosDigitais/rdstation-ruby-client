@@ -8,6 +8,7 @@ module RDStation
       ARRAY_OF_HASHES = 'ARRAY_OF_HASHES'
       HASH_OF_MULTIPLE_TYPES = 'HASH_OF_MULTIPLE_TYPES'
       HASH_OF_HASHES = 'HASH_OF_HASHES'
+      SINGLE_HASH = 'SINGLE_HASH'
 
       def initialize(errors)
         @errors = errors
@@ -15,6 +16,7 @@ module RDStation
 
       def format
         return FLAT_HASH if flat_hash?
+        return SINGLE_HASH if single_hash?
         return HASH_OF_ARRAYS if hash_of_arrays?
         return HASH_OF_HASHES if hash_of_hashes?
         return HASH_OF_MULTIPLE_TYPES if hash_of_multiple_types?
@@ -23,6 +25,12 @@ module RDStation
       end
 
       private
+
+      def single_hash?
+        return unless @errors.is_a?(Hash)
+
+        @errors.key?('error')
+      end
 
       def flat_hash?
         return unless @errors.is_a?(Hash)

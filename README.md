@@ -93,7 +93,7 @@ RDStation.configure do |config|
     # authorization.access_token_expires_in is the time (in seconds for with the token is valid)
     # authorization.access_token is the new token
     # authorization.refresh_token is the existing refresh_token
-    # 
+    #
     # If you are using ActiveRecord, you may want to update the stored access_token, like in the following code:
     MyStoredAuth.where(refresh_token: authorization.refresh_token).update_all(access_token: authorization.access_token)
   end
@@ -232,7 +232,7 @@ client.fields.create builder.build
 ```ruby
 payload = {} # hash representing the payload
 client = RDStation::Client.new(access_token: 'access_token', refresh_token: 'refresh_token')
-client.fields.update('FIELD_UUID', payload) 
+client.fields.update('FIELD_UUID', payload)
 ```
 Or you can use the new `RDStation::Builder::Field`
 
@@ -315,6 +315,7 @@ Each endpoint may raise errors accoording to the HTTP response code from RDStati
 - `RDStation::Error::Conflict` (409)
 - `RDStation::Error::UnsupportedMediaType` (415)
 - `RDStation::Error::UnprocessableEntity` (422)
+- `RDStation::Error::ToManyRequests` (429)
 - `RDStation::Error::InternalServerError` (500)
 - `RDStation::Error::NotImplemented` (501)
 - `RDStation::Error::BadGateway` (502)
