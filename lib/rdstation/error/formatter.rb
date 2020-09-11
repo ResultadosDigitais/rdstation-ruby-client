@@ -34,7 +34,7 @@ module RDStation
 
         [
           {
-            'error_type' => 'TO_MANY_REQUESTS',
+            'error_type' => 'TOO_MANY_REQUESTS',
             'error_message' => error_message,
             'details' => error_hash
           }

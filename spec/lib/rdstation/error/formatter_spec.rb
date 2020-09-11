@@ -233,7 +233,7 @@ RSpec.describe RDStation::Error::Formatter do
       let(:expected_result) do
         [
           {
-            'error_type' => 'TO_MANY_REQUESTS',
+            'error_type' => 'TOO_MANY_REQUESTS',
             'error_message' => "'lead_limiter' rate limit exceeded for 86400 second(s) period for key",
             'details' => { 'max' => 24, 'usage' => 55, 'remaining_time' => 20745 }
           }

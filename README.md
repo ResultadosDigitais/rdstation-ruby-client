@@ -315,7 +315,7 @@ Each endpoint may raise errors accoording to the HTTP response code from RDStati
 - `RDStation::Error::Conflict` (409)
 - `RDStation::Error::UnsupportedMediaType` (415)
 - `RDStation::Error::UnprocessableEntity` (422)
-- `RDStation::Error::ToManyRequests` (429)
+- `RDStation::Error::TooManyRequests` (429)
 - `RDStation::Error::InternalServerError` (500)
 - `RDStation::Error::NotImplemented` (501)
 - `RDStation::Error::BadGateway` (502)

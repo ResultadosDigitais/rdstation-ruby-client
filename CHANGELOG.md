@@ -1,6 +1,6 @@
 ## 2.4.0
 
-- Add the ToManyRequests errors in case of rate limit exceeded. See [API request limit](https://developers.rdstation.com/en/request-limit) for more details
+- Add the TooManyRequests errors in case of rate limit exceeded. See [API request limit](https://developers.rdstation.com/en/request-limit) for more details
 
 ## 2.3.1
 
