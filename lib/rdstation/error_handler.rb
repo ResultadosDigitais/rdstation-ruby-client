@@ -32,6 +32,7 @@ module RDStation
       when 409      then RDStation::Error::Conflict
       when 415      then RDStation::Error::UnsupportedMediaType
       when 422      then RDStation::Error::UnprocessableEntity
+      when 429      then RDStation::Error::TooManyRequests
       when 500      then RDStation::Error::InternalServerError
       when 501      then RDStation::Error::NotImplemented
       when 502      then RDStation::Error::BadGateway
@@ -57,7 +58,7 @@ module RDStation
     end
 
     def additional_error_attributes
-      {
+      attrs = {
         'headers' => response.headers,
         'body' => JSON.parse(response.body),
         'http_status' => response.code,

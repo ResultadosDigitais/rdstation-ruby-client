@@ -13,6 +13,8 @@ module RDStation
         return @error_response unless @error_response.is_a?(Hash)
 
         case error_format.format
+        when RDStation::Error::Format::SINGLE_HASH
+          return from_single_hash
         when RDStation::Error::Format::FLAT_HASH
           return from_flat_hash
         when RDStation::Error::Format::HASH_OF_ARRAYS
@@ -24,6 +26,19 @@ module RDStation
         end
 
         errors
+      end
+
+      def from_single_hash
+        error_hash = @error_response.dup
+        error_message = error_hash.delete('error')
+
+        [
+          {
+            'error_type' => 'TOO_MANY_REQUESTS',
+            'error_message' => error_message,
+            'details' => error_hash
+          }
+        ]
       end
 
       def from_flat_hash
@@ -60,7 +75,7 @@ module RDStation
       end
 
       def errors
-        @errors ||= @error_response['errors']
+        @errors ||= @error_response.fetch('errors', @error_response)
       end
 
       private

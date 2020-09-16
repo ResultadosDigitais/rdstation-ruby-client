@@ -98,5 +98,22 @@ RSpec.describe RDStation::Error::Format do
         expect(result).to eq(RDStation::Error::Format::HASH_OF_HASHES)
       end
     end
+
+    context 'when receives a single hash with error' do
+      let(:errors) do
+        {
+          'error' => "'lead_limiter' rate limit exceeded for 86400 second(s) period for key ...",
+          'max' => 24,
+          'usage' => 55,
+          'remaining_time' => 20745,
+        }
+      end
+
+      it 'returns the SINGLE_HASH format' do
+        result = error_format.format
+        expect(result).to eq(RDStation::Error::Format::SINGLE_HASH)
+      end
+
+    end
   end
 end
