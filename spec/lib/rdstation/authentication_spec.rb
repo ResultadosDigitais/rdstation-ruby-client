@@ -217,19 +217,32 @@ RSpec.describe RDStation::Authentication do
     end
 
     context 'when the refresh token is invalid' do
+      let(:invalid_refresh_token_response) do
+        {
+          status: 401,
+          headers: { 'Content-Type' => 'application/json' },
+          body: {
+            errors: {
+              error_type: 'INVALID_REFRESH_TOKEN',
+              error_message: 'The provided refresh token is invalid or was revoked.'
+            }
+          }.to_json
+        }
+      end
+
       before do
         stub_request(:post, token_endpoint)
           .with(
             headers: request_headers,
             body: token_request_with_invalid_refresh_token.to_json
           )
-          .to_return(invalid_code_response)
+          .to_return(invalid_refresh_token_response)
       end
 
       it 'returns an auth error' do
         expect do
           authentication.update_access_token('invalid_refresh_token')
-        end.to raise_error(RDStation::Error::InvalidCredentials)
+        end.to raise_error(RDStation::Error::InvalidRefreshToken)
       end
     end
 
