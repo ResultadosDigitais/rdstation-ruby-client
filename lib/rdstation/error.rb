@@ -35,5 +35,6 @@ module RDStation
     class ExpiredAccessToken < Unauthorized; end
     class ExpiredCodeGrant < Unauthorized; end
     class InvalidCredentials < Unauthorized; end
+    class InvalidRefreshToken < Unauthorized; end
   end
 end

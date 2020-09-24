@@ -1,6 +1,7 @@
 require_relative 'expired_access_token'
 require_relative 'expired_code_grant'
 require_relative 'invalid_credentials'
+require_relative 'invalid_refresh_token'
 
 module RDStation
   class ErrorHandler
@@ -9,6 +10,7 @@ module RDStation
         ErrorHandler::ExpiredAccessToken,
         ErrorHandler::ExpiredCodeGrant,
         ErrorHandler::InvalidCredentials,
+        ErrorHandler::InvalidRefreshToken,
       ].freeze
 
       def initialize(array_of_errors)
