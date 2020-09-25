@@ -11,13 +11,13 @@ module RDStation
 
       def raise_error
         return if invalid_refresh_token_error.empty?
-        raise RDStation::Error::InvalidRefreshToken, invalid_refresh_token_error.first
+        raise RDStation::Error::InvalidRefreshToken, invalid_refresh_token_error
       end
 
       private
 
       def invalid_refresh_token_error
-        errors.select { |error| error['error_type'] == ERROR_CODE }
+        errors.find { |error| error['error_type'] == ERROR_CODE }
       end
     end
   end
