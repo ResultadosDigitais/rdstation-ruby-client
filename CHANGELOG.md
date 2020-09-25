@@ -1,3 +1,17 @@
+## 2.5.0
+
+- InvalidRefreshToken error added. This error will be raised when the refresh token is invalid or it was revoked. When you get this error, you can safely disconnect the user from RD Station.
+
+Usage example:
+
+```ruby
+begin
+  rdstation.update_access_token(refresh_token)
+rescue RDStation::Error::InvalidRefreshToken
+  # Disconnect user
+end
+```
+
 ## 2.4.0
 
 - Add the TooManyRequests errors in case of rate limit exceeded. See [API request limit](https://developers.rdstation.com/en/request-limit) for more details
