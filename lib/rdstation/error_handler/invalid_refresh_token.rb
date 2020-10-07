@@ -10,7 +10,8 @@ module RDStation
       end
 
       def raise_error
-        return if invalid_refresh_token_error.empty?
+        return unless invalid_refresh_token_error
+
         raise RDStation::Error::InvalidRefreshToken, invalid_refresh_token_error
       end
 

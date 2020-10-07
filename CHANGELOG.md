@@ -1,3 +1,7 @@
+## 2.5.1
+
+- Fixed checking `empty?` for nil values inside of InvalidRefreshToken class
+
 ## 2.5.0
 
 - InvalidRefreshToken error added. This error will be raised when the refresh token is invalid or it was revoked. When you get this error, you can safely disconnect the user from RD Station.
