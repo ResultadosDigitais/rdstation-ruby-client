@@ -62,8 +62,8 @@ For more details, check the [developers portal](https://developers.rdstation.com
 ```ruby
 rdstation_authentication = RDStation::Authentication.new
 
-redirect_url = 'https://yourapp.org/auth/callback'
-rdstation_authentication.auth_url(redirect_url)
+redirect_uri = 'https://yourapp.org/auth/callback'
+rdstation_authentication.auth_url(redirect_uri)
 ```
 
 #### Getting access_token

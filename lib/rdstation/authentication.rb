@@ -14,12 +14,12 @@ module RDStation
     end
 
     #
-    # param redirect_url
+    # param redirect_uri
     #  URL that the user will be redirected
     #  after confirming application authorization
     #
-    def auth_url(redirect_url)
-      "https://api.rd.services/auth/dialog?client_id=#{@client_id}&redirect_url=#{redirect_url}"
+    def auth_url(redirect_uri)
+      "https://api.rd.services/auth/dialog?client_id=#{@client_id}&redirect_uri=#{redirect_uri}"
     end
 
     # Public: Get the credentials from RD Station API

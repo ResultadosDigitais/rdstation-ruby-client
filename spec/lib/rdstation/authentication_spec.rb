@@ -91,7 +91,7 @@ RSpec.describe RDStation::Authentication do
   describe '#auth_url' do
     let(:configuration_client_id) { 'configuration_client_id' }
     let(:configuration_client_secret) { 'configuration_client_secret' }
-    let(:redirect_url) { 'redirect_url' }
+    let(:redirect_uri) { 'redirect_uri' }
     before do
       RDStation.configure do |config|
         config.client_id = configuration_client_id
@@ -102,16 +102,16 @@ RSpec.describe RDStation::Authentication do
     context 'when client_id and client_secret are specified in initialization' do
       it 'uses those specified in initialization' do
         auth = described_class.new('initialization_client_id', 'initialization_client_secret')
-        expected = "https://api.rd.services/auth/dialog?client_id=initialization_client_id&redirect_url=#{redirect_url}"
-        expect(auth.auth_url(redirect_url)).to eq expected
+        expected = "https://api.rd.services/auth/dialog?client_id=initialization_client_id&redirect_uri=#{redirect_uri}"
+        expect(auth.auth_url(redirect_uri)).to eq expected
       end
     end
 
     context 'when client_id and client_secret are specified only in configuration' do
       it 'uses those specified in configuration' do
         auth = described_class.new
-        expected = "https://api.rd.services/auth/dialog?client_id=#{configuration_client_id}&redirect_url=#{redirect_url}"
-        expect(auth.auth_url(redirect_url)).to eq expected
+        expected = "https://api.rd.services/auth/dialog?client_id=#{configuration_client_id}&redirect_uri=#{redirect_uri}"
+        expect(auth.auth_url(redirect_uri)).to eq expected
       end
     end
   end
