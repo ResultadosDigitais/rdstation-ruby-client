@@ -13,6 +13,7 @@ require 'rdstation/contacts'
 require 'rdstation/events'
 require 'rdstation/fields'
 require 'rdstation/webhooks'
+require 'rdstation/account'
 
 # Error handling
 require 'rdstation/error'

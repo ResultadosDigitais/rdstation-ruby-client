@@ -24,6 +24,10 @@ module RDStation
       @webhooks ||= RDStation::Webhooks.new(authorization: @authorization)
     end
 
+    def account
+      @account ||= RDStation::Account.new(authorization: @authorization)
+    end
+
     private
 
     def warn_deprecation
