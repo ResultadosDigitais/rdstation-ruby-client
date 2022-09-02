@@ -3,7 +3,7 @@ module RDStation
     include HTTParty
     include ::RDStation::RetryableRequest
 
-    EVENTS_ENDPOINT = 'https://api.rd.services/platform/events'.freeze
+    EVENTS_ENDPOINT = "#{RDStation.host}/platform/events".freeze
 
     def initialize(authorization:)
       @authorization = authorization

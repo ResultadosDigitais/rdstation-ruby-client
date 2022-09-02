@@ -1,3 +1,3 @@
 module RDStation
-  VERSION = '2.5.1'.freeze
+  VERSION = '2.5.2'.freeze
 end
