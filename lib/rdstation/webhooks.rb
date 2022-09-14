@@ -51,7 +51,7 @@ module RDStation
     end
 
     def base_url(path = '')
-      "https://api.rd.services/integrations/webhooks/#{path}"
+      "#{RDStation.host}/integrations/webhooks/#{path}"
     end
   end
 end

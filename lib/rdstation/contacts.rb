@@ -64,7 +64,7 @@ module RDStation
     private
 
     def base_url(path = '')
-      "https://api.rd.services/platform/contacts/#{path}"
+      "#{RDStation.host}/platform/contacts/#{path}"
     end
   end
 end

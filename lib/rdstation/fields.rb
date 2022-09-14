@@ -5,7 +5,7 @@ module RDStation
     include HTTParty
     include ::RDStation::RetryableRequest
 
-    BASE_URL = 'https://api.rd.services/platform/contacts/fields'.freeze
+    BASE_URL = "#{RDStation.host}/platform/contacts/fields".freeze
 
     def initialize(authorization:)
       @authorization = authorization

@@ -3,9 +3,9 @@ module RDStation
   class Authentication
     include HTTParty
 
-    AUTH_TOKEN_URL = 'https://api.rd.services/auth/token'.freeze
+    AUTH_TOKEN_URL = "#{RDStation.host}/auth/token".freeze
     DEFAULT_HEADERS = { 'Content-Type' => 'application/json' }.freeze
-    REVOKE_URL = 'https://api.rd.services/auth/revoke'.freeze
+    REVOKE_URL = "#{RDStation.host}/auth/revoke".freeze
 
     def initialize(client_id = nil, client_secret = nil)
       warn_deprecation if client_id || client_secret
@@ -19,7 +19,7 @@ module RDStation
     #  after confirming application authorization
     #
     def auth_url(redirect_url)
-      "https://api.rd.services/auth/dialog?client_id=#{@client_id}&redirect_url=#{redirect_url}"
+      "#{RDStation.host}/auth/dialog?client_id=#{@client_id}&redirect_url=#{redirect_url}"
     end
 
     # Public: Get the credentials from RD Station API
