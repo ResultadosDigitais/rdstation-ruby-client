@@ -3,9 +3,7 @@ module RDStation
   class Authentication
     include HTTParty
 
-    AUTH_TOKEN_URL = "#{RDStation.host}/auth/token".freeze
     DEFAULT_HEADERS = { 'Content-Type' => 'application/json' }.freeze
-    REVOKE_URL = "#{RDStation.host}/auth/revoke".freeze
 
     def initialize(client_id = nil, client_secret = nil)
       warn_deprecation if client_id || client_secret
@@ -51,7 +49,7 @@ module RDStation
 
     def self.revoke(access_token:)
       response = self.post(
-        REVOKE_URL,
+        "#{RDStation.host}/auth/revoke",
         body: revoke_body(access_token),
         headers: revoke_headers(access_token)
       )
@@ -79,7 +77,7 @@ module RDStation
       body = default_body.merge(params)
 
       self.class.post(
-        AUTH_TOKEN_URL,
+        "#{RDStation.host}/auth/token",
         body: body.to_json,
         headers: DEFAULT_HEADERS
       )

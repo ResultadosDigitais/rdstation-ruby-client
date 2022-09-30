@@ -1,6 +1,14 @@
+# frozen_string_literal: true
+
 require 'spec_helper'
 
 RSpec.describe RDStation::Fields do
+  before do
+    RDStation.configure do |config|
+      config.base_host = 'https://sample.rd.services'
+    end
+  end
+
   let(:valid_access_token) { 'valid_access_token' }
   let(:rdstation_fields_with_valid_token) do
     described_class.new(authorization: RDStation::Authorization.new(access_token: valid_access_token))
@@ -14,7 +22,7 @@ RSpec.describe RDStation::Fields do
   end
 
   describe '#all' do
-    let(:fields_endpoint) { 'https://api.rd.services/platform/contacts/fields' }
+    let(:fields_endpoint) { 'https://sample.rd.services/platform/contacts/fields/' }
     let(:all_account_fields) do
       {
         'fields' => [

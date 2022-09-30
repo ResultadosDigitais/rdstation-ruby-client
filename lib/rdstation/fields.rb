@@ -1,11 +1,10 @@
-# encoding: utf-8
+# frozen_string_literal: true
+
 module RDStation
   # More info: https://developers.rdstation.com/pt-BR/reference/fields
   class Fields
     include HTTParty
     include ::RDStation::RetryableRequest
-
-    BASE_URL = "#{RDStation.host}/platform/contacts/fields".freeze
 
     def initialize(authorization:)
       @authorization = authorization
@@ -13,14 +12,14 @@ module RDStation
 
     def all
       retryable_request(@authorization) do |authorization|
-        response = self.class.get(BASE_URL, headers: authorization.headers)
+        response = self.class.get(base_url, headers: authorization.headers)
         ApiResponse.build(response)
       end
     end
 
     def create(payload)
       retryable_request(@authorization) do |authorization|
-        response = self.class.post(BASE_URL, headers: authorization.headers, body: payload.to_json)
+        response = self.class.post(base_url, headers: authorization.headers, body: payload.to_json)
         ApiResponse.build(response)
       end
     end
@@ -42,7 +41,7 @@ module RDStation
     private
 
     def base_url(path = '')
-      "#{BASE_URL}/#{path}"
+      "#{RDStation.host}/platform/contacts/fields/#{path}"
     end
   end
 end
