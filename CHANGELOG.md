@@ -1,3 +1,25 @@
+## 2.6.0
+
+### Additions
+
+#### 1. New Emails client
+
+Usage example:
+
+```ruby
+client = RDStation::Client.new(access_token: 'access_token', refresh_token: 'refresh_token')
+client.emails.all
+```
+
+#### 2. New Segmentations client
+
+Usage example:
+
+```ruby
+client = RDStation::Client.new(access_token: 'access_token', refresh_token: 'refresh_token')
+client.segmentations.all
+```
+
 ## 2.5.1
 
 - Fixed checking `empty?` for nil values inside of InvalidRefreshToken class
