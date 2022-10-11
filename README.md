@@ -314,6 +314,13 @@ client = RDStation::Client.new(access_token: 'access_token', refresh_token: 'ref
 client.emails.all
 ```
 
+#### List emails using query params
+```ruby
+client = RDStation::Client.new(access_token: 'access_token', refresh_token: 'refresh_token')
+query_params = {page_size: 10, page: 1}
+client.emails.all(query_params)
+```
+
 #### Get email by id
 
 ```ruby
