@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module RDStation
   class Emails
     include HTTParty
@@ -7,9 +9,9 @@ module RDStation
       @authorization = authorization
     end
 
-    def all
+    def all(query_params={})
       retryable_request(@authorization) do |authorization|
-        response = self.class.get(base_url, headers: authorization.headers)
+        response = self.class.get(base_url, headers: authorization.headers, query: query_params)
         ApiResponse.build(response)
       end
     end
@@ -23,7 +25,7 @@ module RDStation
 
     private
 
-    def base_url(path = '')
+    def base_url(path='')
       "#{RDStation.host}/platform/emails/#{path}"
     end
   end

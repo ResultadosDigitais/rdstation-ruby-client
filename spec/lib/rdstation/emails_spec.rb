@@ -1,6 +1,5 @@
 require 'spec_helper'
 
-# rubocop:disable Metrics/BlockLength
 RSpec.describe RDStation::Emails do
   let(:emails_client) do
     described_class.new(authorization: RDStation::Authorization.new(access_token: 'access_token'))
@@ -24,48 +23,71 @@ RSpec.describe RDStation::Emails do
   end
 
   describe '#all' do
+    let(:emails_list) do
+      {
+        items: [
+          {
+            id: 123,
+            name: 'Marketing email',
+            created_at: '2017-11-21T20:00:00-02:00',
+            updated_at: '2017-11-21T20:00:00-02:00',
+            send_at: '2017-11-21T20:00:00-02:00',
+            leads_count: 55_000,
+            status: 'FINISHED',
+            type: 'email_model',
+            is_predictive_sending: false,
+            sending_is_imminent: false,
+            behavior_score_info: {
+              disengaged: false,
+              engaged: false,
+              indeterminate: false
+            },
+            campaign_id: 123,
+            component_template_id: 123
+          }
+        ],
+        total: 1
+      }.to_json
+    end
+
     it 'calls retryable_request' do
       expect(emails_client).to receive(:retryable_request)
       emails_client.all
     end
 
     context 'when the request is successful' do
-      let(:emails) do
-        {
-          items: [
-            {
-              id: 123,
-              name: 'Marketing email',
-              created_at: '2017-11-21T20:00:00-02:00',
-              updated_at: '2017-11-21T20:00:00-02:00',
-              send_at: '2017-11-21T20:00:00-02:00',
-              leads_count: 55_000,
-              status: 'FINISHED',
-              type: 'email_model',
-              is_predictive_sending: false,
-              sending_is_imminent: false,
-              behavior_score_info: {
-                disengaged: false,
-                engaged: false,
-                indeterminate: false
-              },
-              campaign_id: 123,
-              component_template_id: 123
-            }
-          ],
-          total: 1
-        }.to_json
-      end
-
       before do
         stub_request(:get, emails_endpoint)
           .with(headers: headers)
-          .to_return(status: 200, body: emails.to_json)
+          .to_return(status: 200, body: emails_list.to_json)
       end
 
       it 'returns all emails' do
         response = emails_client.all
-        expect(response).to eq(emails)
+        expect(response).to eq(emails_list)
+      end
+    end
+
+    context 'when the request contains query params' do
+      let(:query_params) do
+        {
+          page: 1,
+          page_size: 10,
+          query: 'Test',
+          ids: '123, 456',
+          types: 'CAMPAIGN_EMAIL'
+        }
+      end
+
+      before do
+        stub_request(:get, emails_endpoint)
+          .with(headers: headers, query: query_params)
+          .to_return(status: 200, body: emails_list.to_json)
+      end
+
+      it 'returns emails filtered by the query params' do
+        response = emails_client.all(query_params)
+        expect(response).to eq(emails_list)
       end
     end
 
