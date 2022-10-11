@@ -16,7 +16,9 @@ Upgrading? Check the [migration guide](#Migration-guide) before bumping to a new
    4. [Events](#Events)
    5. [Fields](#Fields)
    6. [Webhooks](#Webhooks)
-   7. [Errors](#Errors)
+   7. [Emails](#Emails)
+   8. [Segmentations](#Segmentations)
+   9. [Errors](#Errors)
 3. [Changelog](#Changelog)
 4. [Migration guide](#Migration-guide)
    1. [Upgrading from 1.2.x to 2.0.0](#Upgrading-from-1.2.x-to-2.0.0)
@@ -300,6 +302,39 @@ The required strucutre of the payload is [described here](https://developers.rds
 ```ruby
 client = RDStation::Client.new(access_token: 'access_token', refresh_token: 'refresh_token')
 client.webhooks.delete('WEBHOOK_UUID')
+```
+
+### Emails
+Endpoints to [Email](https://developers.rdstation.com/reference/get_platform-emails) information in your RD Station account.
+
+#### List all emails
+
+```ruby
+client = RDStation::Client.new(access_token: 'access_token', refresh_token: 'refresh_token')
+client.emails.all
+```
+
+#### Get email by id
+
+```ruby
+client = RDStation::Client.new(access_token: 'access_token', refresh_token: 'refresh_token')
+client.emails.by_id(id)
+```
+
+### Segmentations
+Endpoints to [Segmentation](https://developers.rdstation.com/reference/segmenta%C3%A7%C3%B5es) information in your RD Station account.
+#### List all segmentations
+
+```ruby
+client = RDStation::Client.new(access_token: 'access_token', refresh_token: 'refresh_token')
+client.segmentations.all
+```
+
+#### Get the contact list with a specific segmentation
+
+```ruby
+client = RDStation::Client.new(access_token: 'access_token', refresh_token: 'refresh_token')
+client.segmentations.contacts(segmentation_id)
 ```
 
 ### Errors
