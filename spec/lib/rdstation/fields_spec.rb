@@ -9,6 +9,12 @@ RSpec.describe RDStation::Fields do
     end
   end
 
+  after do
+    RDStation.configure do |config|
+      config.base_host = 'https://api.rd.services'
+    end
+  end
+
   let(:valid_access_token) { 'valid_access_token' }
   let(:rdstation_fields_with_valid_token) do
     described_class.new(authorization: RDStation::Authorization.new(access_token: valid_access_token))
