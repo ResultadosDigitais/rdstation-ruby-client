@@ -24,6 +24,14 @@ module RDStation
       @webhooks ||= RDStation::Webhooks.new(authorization: @authorization)
     end
 
+    def segmentations
+      @segmentations ||= RDStation::Segmentations.new(authorization: @authorization)
+    end
+
+    def emails
+      @emails ||= RDStation::Emails.new(authorization: @authorization)
+    end
+
     private
 
     def warn_deprecation
