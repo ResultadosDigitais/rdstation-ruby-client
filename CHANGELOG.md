@@ -1,3 +1,7 @@
+## 2.6.1
+
+- Makes the retryable_request method also retry when a `RDStation::Error::Unauthorized` error happen
+
 ## 2.6.0
 
 ### Additions
