@@ -56,10 +56,28 @@ RSpec.describe RDStation::RetryableRequest do
                                             and_return(new_credentials)
         end
 
-        it 'refreshes the access_token and retries the request' do
+        it 'refreshes the access_token and retries the request when an ExpiredAccessToken error happen' do
           dummy_request = double("dummy_request")
           expect(dummy_request).to receive(:call).twice do |auth|
             expired_token = ::RDStation::Error::ExpiredAccessToken.new({'error_message' => 'x'})
+            raise expired_token unless auth.access_token == new_access_token
+          end
+        
+          expect(RDStation.configuration.access_token_refresh_callback)
+            .to receive(:call)
+            .once do |authorization|
+              expect(authorization.access_token).to eq new_access_token
+            end
+
+          expect do
+            subject.retryable_request(auth) { |yielded_auth| dummy_request.call(yielded_auth) }
+          end.not_to raise_error
+        end
+
+        it 'refreshes the access_token and retries the request an Unauthorized error happen' do
+          dummy_request = double("dummy_request")
+          expect(dummy_request).to receive(:call).twice do |auth|
+            expired_token = ::RDStation::Error::Unauthorized.new({'error_message' => 'x'})
             raise expired_token unless auth.access_token == new_access_token
           end
         
