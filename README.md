@@ -18,7 +18,8 @@ Upgrading? Check the [migration guide](#Migration-guide) before bumping to a new
    6. [Webhooks](#Webhooks)
    7. [Emails](#Emails)
    8. [Segmentations](#Segmentations)
-   9. [Errors](#Errors)
+   9. [Analytics](#Analytics)
+   10. [Errors](#Errors)
 3. [Changelog](#Changelog)
 4. [Migration guide](#Migration-guide)
    1. [Upgrading from 1.2.x to 2.0.0](#Upgrading-from-1.2.x-to-2.0.0)
@@ -343,7 +344,17 @@ client.segmentations.all
 client = RDStation::Client.new(access_token: 'access_token', refresh_token: 'refresh_token')
 client.segmentations.contacts(segmentation_id)
 ```
+### Analytics
+Endpoints to [Analytics](https://developers.rdstation.com/reference/get_platform-analytics-emails) information in your RD Station account.
 
+#### List all email marketing analytics data
+- NOTE: The query params `start_date`(yyyy-mm-dd)  and `end_date`(yyyy-mm-dd) are required
+
+```ruby
+client = RDStation::Client.new(access_token: 'access_token', refresh_token: 'refresh_token')
+query_parms =  { start_date:'2022-11-02', end_date:'2022-11-08' }
+client.analytics.email_marketing(query_params)
+```
 ### Errors
 
 Each endpoint may raise errors accoording to the HTTP response code from RDStation:
