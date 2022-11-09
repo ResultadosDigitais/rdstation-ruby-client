@@ -1,3 +1,17 @@
+## 2.7.0
+
+### Additions
+
+#### 1. New Analytics client
+
+Usage example:
+
+```ruby
+client = RDStation::Client.new(access_token: 'access_token', refresh_token: 'refresh_token')
+query_parms =  { start_date:'2022-11-02', end_date:'2022-11-08' }
+client.analytics.email_marketing(query_params)
+```
+
 ## 2.6.0
 
 ### Additions
