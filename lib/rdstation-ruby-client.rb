@@ -16,6 +16,7 @@ require 'rdstation/webhooks'
 require 'rdstation/segmentations'
 require 'rdstation/emails'
 require 'rdstation/analytics'
+require 'rdstation/landing_pages'
 
 # Error handling
 require 'rdstation/error'
