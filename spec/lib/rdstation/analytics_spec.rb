@@ -5,8 +5,6 @@ RSpec.describe RDStation::Analytics do
     described_class.new(authorization: RDStation::Authorization.new(access_token: 'access_token'))
   end
 
-  let(:analytics_endpoint) { 'https://api.rd.services/platform/analytics/emails' }
-
   let(:headers) do
     {
       Authorization: 'Bearer access_token',
@@ -23,6 +21,7 @@ RSpec.describe RDStation::Analytics do
   end
 
   describe '#email_marketing' do
+    let(:analytics_endpoint) { 'https://api.rd.services/platform/analytics/emails' }
     let(:analytics_list) do
       {
         account_id: 1,
@@ -100,6 +99,84 @@ RSpec.describe RDStation::Analytics do
 
       it 'calls raise_error on error handler' do
         analytics_client.email_marketing
+        expect(error_handler).to have_received(:raise_error)
+      end
+    end
+  end
+
+  describe '#conversions' do
+    let(:analytics_endpoint) { 'https://api.rd.services/platform/analytics/conversions' }
+    let(:analytics_list) do
+      {
+        account_id: 3127612,
+        query_date: {
+          start_date: "2022-11-17",
+          end_date: "2022-11-17"
+        },
+        assets_type: "[LandingPage]",
+        conversions: [
+          {
+            asset_id: 1495004,
+            asset_identifier: "Como aumentar suas taxas de conversão",
+            asset_type: "LandingPage",
+            asset_created_at: "2022-06-30T19:11:05.191Z",
+            asset_updated_at: "2022-06-30T20:11:05.191Z",
+            visits_count: 1500,
+            conversions_count: 150,
+            conversion_rate: 10
+          }
+        ]
+      }.to_json
+    end
+
+    it 'calls retryable_request' do
+      expect(analytics_client).to receive(:retryable_request)
+      analytics_client.conversions
+    end
+
+    context 'when the request is successful' do
+      before do
+        stub_request(:get, analytics_endpoint)
+          .with(headers: headers)
+          .to_return(status: 200, body: analytics_list.to_json)
+      end
+
+      it 'returns all email marketing analytics data' do
+        response = analytics_client.conversions
+        expect(response).to eq(analytics_list)
+      end
+    end
+
+    context 'when the request contains query params' do
+      let(:query_params) do
+        {
+          start_date:'2022-11-17',
+          end_date:'2022-11-17',
+          asset_id: '1495004'
+        }
+      end
+
+      before do
+        stub_request(:get, analytics_endpoint)
+          .with(headers: headers, query: query_params)
+          .to_return(status: 200, body: analytics_list.to_json)
+      end
+
+      it 'returns conversions analytics data filtered by the query params' do
+        response = analytics_client.conversions(query_params)
+        expect(response).to eq(analytics_list)
+      end
+    end
+
+    context 'when the response contains errors' do
+      before do
+        stub_request(:get, analytics_endpoint)
+          .with(headers: headers)
+          .to_return(status: 400, body: { 'errors' => ['all errors'] }.to_json)
+      end
+
+      it 'calls raise_error on error handler' do
+        analytics_client.conversions
         expect(error_handler).to have_received(:raise_error)
       end
     end
