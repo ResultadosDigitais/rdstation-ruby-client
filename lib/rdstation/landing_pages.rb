@@ -12,7 +12,7 @@ module RDStation
     def all(query_params={})
       retryable_request(@authorization) do |authorization|
         response = self.class.get(base_url, headers: authorization.headers, query: query_params)
-        ApiResponse.build(response)
+        ApiResponse.build_with_headers(response)
       end
     end
 
