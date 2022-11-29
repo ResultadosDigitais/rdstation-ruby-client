@@ -60,12 +60,12 @@ RSpec.describe RDStation::Analytics do
       before do
         stub_request(:get, analytics_endpoint)
           .with(headers: headers)
-          .to_return(status: 200, body: analytics_list.to_json)
+          .to_return(status: 200, body: analytics_list)
       end
 
       it 'returns all email marketing analytics data' do
         response = analytics_client.email_marketing
-        expect(response).to eq(analytics_list)
+        expect(response).to include(analytics_list)
       end
     end
 
@@ -81,12 +81,12 @@ RSpec.describe RDStation::Analytics do
       before do
         stub_request(:get, analytics_endpoint)
           .with(headers: headers, query: query_params)
-          .to_return(status: 200, body: analytics_list.to_json)
+          .to_return(status: 200, body: analytics_list)
       end
 
       it 'returns email marketing analytics data filtered by the query params' do
         response = analytics_client.email_marketing(query_params)
-        expect(response).to eq(analytics_list)
+        expect(response).to include(analytics_list)
       end
     end
 
@@ -138,12 +138,12 @@ RSpec.describe RDStation::Analytics do
       before do
         stub_request(:get, analytics_endpoint)
           .with(headers: headers)
-          .to_return(status: 200, body: analytics_list.to_json)
+          .to_return(status: 200, body: analytics_list)
       end
 
       it 'returns all email marketing analytics data' do
         response = analytics_client.conversions
-        expect(response).to eq(analytics_list)
+        expect(response).to include(analytics_list)
       end
     end
 
@@ -159,12 +159,12 @@ RSpec.describe RDStation::Analytics do
       before do
         stub_request(:get, analytics_endpoint)
           .with(headers: headers, query: query_params)
-          .to_return(status: 200, body: analytics_list.to_json)
+          .to_return(status: 200, body: analytics_list)
       end
 
       it 'returns conversions analytics data filtered by the query params' do
         response = analytics_client.conversions(query_params)
-        expect(response).to eq(analytics_list)
+        expect(response).to include(analytics_list)
       end
     end
 

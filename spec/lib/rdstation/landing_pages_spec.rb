@@ -45,12 +45,12 @@ RSpec.describe RDStation::LandingPages do
       before do
         stub_request(:get, landing_pages_endpoint)
           .with(headers: headers)
-          .to_return(status: 200, body: landing_pages_list.to_json)
+          .to_return(status: 200, body: landing_pages_list)
       end
 
       it 'returns all email marketing analytics data' do
         response = landing_pages_client.all
-        expect(response).to eq(landing_pages_list)
+        expect(response).to include(landing_pages_list)
       end
     end
 
@@ -60,12 +60,12 @@ RSpec.describe RDStation::LandingPages do
       before do
         stub_request(:get, landing_pages_endpoint)
           .with(headers: headers, query: query_params)
-          .to_return(status: 200, body: landing_pages_list.to_json)
+          .to_return(status: 200, body: landing_pages_list)
       end
 
       it 'returns email marketing analytics data filtered by the query params' do
         response = landing_pages_client.all(query_params)
-        expect(response).to eq(landing_pages_list)
+        expect(response).to include(landing_pages_list)
       end
     end
 
