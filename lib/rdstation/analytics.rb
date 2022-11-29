@@ -12,14 +12,14 @@ module RDStation
     def email_marketing(query_params={})
       retryable_request(@authorization) do |authorization|
         response = self.class.get(base_url('emails'), headers: authorization.headers, query: query_params)
-        ApiResponse.build(response)
+        ApiResponse.build_with_headers(response)
       end
     end
 
     def conversions(query_params={})
       retryable_request(@authorization) do |authorization|
         response = self.class.get(base_url('conversions'), headers: authorization.headers, query: query_params)
-        ApiResponse.build(response)
+        ApiResponse.build_with_headers(response)
       end
     end
 

@@ -59,12 +59,12 @@ RSpec.describe RDStation::Emails do
       before do
         stub_request(:get, emails_endpoint)
           .with(headers: headers)
-          .to_return(status: 200, body: emails_list.to_json)
+          .to_return(status: 200, body: emails_list)
       end
 
       it 'returns all emails' do
         response = emails_client.all
-        expect(response).to eq(emails_list)
+        expect(response).to include(emails_list)
       end
     end
 
@@ -82,12 +82,12 @@ RSpec.describe RDStation::Emails do
       before do
         stub_request(:get, emails_endpoint)
           .with(headers: headers, query: query_params)
-          .to_return(status: 200, body: emails_list.to_json)
+          .to_return(status: 200, body: emails_list)
       end
 
       it 'returns emails filtered by the query params' do
         response = emails_client.all(query_params)
-        expect(response).to eq(emails_list)
+        expect(response).to include(emails_list)
       end
     end
 
@@ -140,12 +140,12 @@ RSpec.describe RDStation::Emails do
       before do
         stub_request(:get, emails_endpoint_by_id)
           .with(headers: headers)
-          .to_return(status: 200, body: email.to_json)
+          .to_return(status: 200, body: email)
       end
 
       it 'returns the email' do
         response = emails_client.by_id(id)
-        expect(response).to eq(email)
+        expect(response).to include(email)
       end
     end
 
