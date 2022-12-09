@@ -32,6 +32,14 @@ module RDStation
       @emails ||= RDStation::Emails.new(authorization: @authorization)
     end
 
+    def analytics
+      @analytics ||= RDStation::Analytics.new(authorization: @authorization)
+    end
+
+    def landing_pages
+      @landing_pages ||= RDStation::LandingPages.new(authorization: @authorization)
+    end
+
     private
 
     def warn_deprecation

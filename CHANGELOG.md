@@ -1,6 +1,43 @@
-## 2.6.1
+## 2.8.1
 
 - Makes the retryable_request method also retry when a `RDStation::Error::Unauthorized` error happen
+
+## 2.8.0
+
+### Additions
+
+#### 1. New Analytics client: conversions
+
+Usage example:
+
+```ruby
+client = RDStation::Client.new(access_token: 'access_token', refresh_token: 'refresh_token')
+query_params =  { start_date:'2022-11-13', end_date:'2022-11-15', assets_type:['LandingPage'] }
+client.analytics.conversions(query_params)
+```
+
+#### 2. New landing_pages client
+
+Usage example:
+
+```ruby
+client = RDStation::Client.new(access_token: 'access_token', refresh_token: 'refresh_token')
+client.landing_pages.all
+```
+
+## 2.7.0
+
+### Additions
+
+#### 1. New Analytics client
+
+Usage example:
+
+```ruby
+client = RDStation::Client.new(access_token: 'access_token', refresh_token: 'refresh_token')
+query_params =  { start_date:'2022-11-02', end_date:'2022-11-08' }
+client.analytics.email_marketing(query_params)
+```
 
 ## 2.6.0
 

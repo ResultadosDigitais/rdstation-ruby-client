@@ -18,7 +18,9 @@ Upgrading? Check the [migration guide](#Migration-guide) before bumping to a new
    6. [Webhooks](#Webhooks)
    7. [Emails](#Emails)
    8. [Segmentations](#Segmentations)
-   9. [Errors](#Errors)
+   9. [Analytics](#Analytics)
+   10.[LandingPages](#LandingPages)
+   11.[Errors](#Errors)
 3. [Changelog](#Changelog)
 4. [Migration guide](#Migration-guide)
    1. [Upgrading from 1.2.x to 2.0.0](#Upgrading-from-1.2.x-to-2.0.0)
@@ -342,6 +344,37 @@ client.segmentations.all
 ```ruby
 client = RDStation::Client.new(access_token: 'access_token', refresh_token: 'refresh_token')
 client.segmentations.contacts(segmentation_id)
+```
+### Analytics
+Endpoints to [Analytics](https://developers.rdstation.com/reference/estatisticas) information in your RD Station account.
+
+#### => List all EMAIL MARKETING analytics data
+Endpoints to [Analytics - Email marketing](https://developers.rdstation.com/reference/get_platform-analytics-emails) information in your RD Station account.
+- NOTE: The query params `start_date`(yyyy-mm-dd)  and `end_date`(yyyy-mm-dd) are required
+
+```ruby
+client = RDStation::Client.new(access_token: 'access_token', refresh_token: 'refresh_token')
+query_params =  { start_date:'2022-11-02', end_date:'2022-11-08' }
+client.analytics.email_marketing(query_params)
+```
+
+#### => List CONVERSIONS analytics data
+Endpoints to [Analytics - Conversions](https://developers.rdstation.com/reference/get_platform-analytics-conversions) information in your RD Station account.
+- NOTE: The query params `start_date`(yyyy-mm-dd) and `end_date`(yyyy-mm-dd) are required.
+
+```ruby
+client = RDStation::Client.new(access_token: 'access_token', refresh_token: 'refresh_token')
+query_params =  { start_date:'2022-11-13', end_date:'2022-11-15', assets_type:['LandingPage'] }
+client.analytics.conversions(query_params)
+```
+
+### LandingPages
+Endpoints to [LandingPages](https://developers.rdstation.com/reference/get_platform-landing-pages) information in your RD Station account.
+#### List all landing_pages
+
+```ruby
+client = RDStation::Client.new(access_token: 'access_token', refresh_token: 'refresh_token')
+client.landing_pages.all
 ```
 
 ### Errors
