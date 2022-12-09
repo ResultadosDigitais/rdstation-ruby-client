@@ -7,7 +7,7 @@ module RDStation
       retries = 0
       begin
         yield authorization
-      rescue ::RDStation::Error::ExpiredAccessToken => e
+      rescue ::RDStation::Error::ExpiredAccessToken, ::RDStation::Error::Unauthorized => e
         raise if !retry_possible?(authorization) || retries >= MAX_RETRIES
 
         retries += 1
