@@ -30,13 +30,12 @@ module RDStation
 
       def from_single_hash
         error_hash = @error_response.dup
-        error_message = error_hash.delete('error')
+        error_message = error_hash.delete('error') || error_hash.delete('message')
 
         [
           {
             'error_type' => 'TOO_MANY_REQUESTS',
-            'error_message' => error_message,
-            'details' => error_hash
+            'error_message' => error_message
           }
         ]
       end

@@ -29,7 +29,7 @@ module RDStation
       def single_hash?
         return unless @errors.is_a?(Hash)
 
-        @errors.key?('error')
+        @errors.key?('error') || @errors.key?('message')
       end
 
       def flat_hash?
