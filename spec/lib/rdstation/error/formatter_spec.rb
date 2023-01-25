@@ -218,31 +218,51 @@ RSpec.describe RDStation::Error::Formatter do
 
     context 'when receives a single hash of errors' do
       let(:error_format) { instance_double(RDStation::Error::Format, format: RDStation::Error::Format::SINGLE_HASH) }
-
-      let(:error_response) do
-        {
-          'error' => "'lead_limiter' rate limit exceeded for 86400 second(s) period for key",
-          'max' => 24,
-          'usage' => 55,
-          'remaining_time' => 20745
-        }
-      end
-
       let(:error_formatter) { described_class.new(error_response) }
 
-      let(:expected_result) do
-        [
+      context 'when response comes from RDSM' do
+        let(:error_response) do
           {
-            'error_type' => 'TOO_MANY_REQUESTS',
-            'error_message' => "'lead_limiter' rate limit exceeded for 86400 second(s) period for key",
-            'details' => { 'max' => 24, 'usage' => 55, 'remaining_time' => 20745 }
+            'error' => "'lead_limiter' rate limit exceeded for 86400 second(s) period for key",
+            'max' => 24,
+            'usage' => 55,
+            'remaining_time' => 20745
           }
-        ]
+        end
+
+        let(:expected_result) do
+          [
+            {
+              'error_type' => 'TOO_MANY_REQUESTS',
+              'error_message' => "'lead_limiter' rate limit exceeded for 86400 second(s) period for key"
+            }
+          ]
+        end
+
+        it 'returns an array of errors' do
+          result = error_formatter.to_array
+          expect(result).to eq(expected_result)
+        end
       end
 
-      it 'returns an array of errors' do
-        result = error_formatter.to_array
-        expect(result).to eq(expected_result)
+      context 'when response comes from API Gateway' do
+        let(:error_response) do
+          { 'message' => 'API rate limit exceeded' }
+        end
+
+        let(:expected_result) do
+          [
+            {
+              'error_type' => 'TOO_MANY_REQUESTS',
+              'error_message' => 'API rate limit exceeded'
+            }
+          ]
+        end
+
+        it 'returns an array of errors' do
+          result = error_formatter.to_array
+          expect(result).to eq(expected_result)
+        end
       end
     end
   end
