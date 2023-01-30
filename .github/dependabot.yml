@@ -1,11 +1,11 @@
 version: 2
 updates:
 - package-ecosystem: bundler
-  directory: "/"
+  directory: /
   schedule:
     interval: daily
-    time: "06:00"
+    time: '23:00'
     timezone: Etc/UCT
   pull-request-branch-name:
-    separator: "-"
+    separator: '-'
   open-pull-requests-limit: 10
