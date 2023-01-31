@@ -234,7 +234,8 @@ RSpec.describe RDStation::Error::Formatter do
           [
             {
               'error_type' => 'TOO_MANY_REQUESTS',
-              'error_message' => "'lead_limiter' rate limit exceeded for 86400 second(s) period for key"
+              'error_message' => "'lead_limiter' rate limit exceeded for 86400 second(s) period for key",
+              'details' => { 'max' => 24, 'usage' => 55, 'remaining_time' => 20745 }
             }
           ]
         end
@@ -246,15 +247,23 @@ RSpec.describe RDStation::Error::Formatter do
       end
 
       context 'when response comes from API Gateway' do
+        let(:error_formatter) { described_class.new(error_response, response_headers) }
         let(:error_response) do
           { 'message' => 'API rate limit exceeded' }
+        end
+        let(:response_headers) do
+          {
+            'ratelimit-limit-quotas' => 120,
+            'retry-after-quotas' => 20745
+          }
         end
 
         let(:expected_result) do
           [
             {
               'error_type' => 'TOO_MANY_REQUESTS',
-              'error_message' => 'API rate limit exceeded'
+              'error_message' => 'API rate limit exceeded',
+              'details' => { max: 120, usage: 120, remaining_time: 20745 }
             }
           ]
         end

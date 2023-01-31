@@ -54,7 +54,7 @@ module RDStation
     end
 
     def error_formatter
-      @error_formatter = RDStation::Error::Formatter.new(response_errors)
+      @error_formatter = RDStation::Error::Formatter.new(response_errors, response.headers)
     end
 
     def additional_error_attributes
