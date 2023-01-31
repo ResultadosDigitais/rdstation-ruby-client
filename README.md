@@ -55,7 +55,7 @@ RDStation.configure do |config|
 end
 ```
 
-For details on what `client_id` and `client_secret` are, check the [developers portal](https://developers.rdstation.com/en/authentication).
+For details on what `client_id` and `client_secret` are, check the [developers portal](https://developers.rdstation.com/reference/autenticacao).
 
 ### Authentication
 
@@ -123,7 +123,7 @@ client = RDStation::Client.new(access_token: 'access_token', refresh_token: 'ref
 client.contacts.by_uuid('uuid')
 ```
 
-More info: https://developers.rdstation.com/pt-BR/reference/contacts#methodGetDetailsuuid
+More info: https://developers.rdstation.com/reference/get_platform-contacts-identifier-value
 
 #### Getting a Contact by Email
 
@@ -134,7 +134,7 @@ client = RDStation::Client.new(access_token: 'access_token', refresh_token: 'ref
 client.contacts.by_email('email')
 ```
 
-More info: https://developers.rdstation.com/pt-BR/reference/contacts#methodGetDetailsemail
+More info:  https://developers.rdstation.com/pt-BR/reference/contacts#methodGetDetailsuuid
 
 #### Update a Contact by UUID
 
@@ -160,7 +160,7 @@ Contact Default Parameters
  - website
  - tags
 
-More info: https://developers.rdstation.com/pt-BR/reference/contacts#methodPatchDetails
+More info: https://developers.rdstation.com/reference/patch_platform-contacts-identifier-value
 
 
 #### Upsert a Contact by identifier and value
@@ -179,7 +179,7 @@ client = RDStation::Client.new(access_token: 'access_token', refresh_token: 'ref
 client.contacts.upsert(identifier, identifier_value, contact_info)
 ```
 
-More info: https://developers.rdstation.com/pt-BR/reference/contacts#methodPatchUpsertDetails
+More info: https://developers.rdstation.com/reference/patch_platform-contacts-identifier-value
 
 ### Events
 
@@ -189,7 +189,7 @@ The events endpoint are responsible for receiving different event types in which
 
 It is possible to send default events to RD Station such as conversion events, lifecycle events and won and lost events. Also, RD Station supports the possibility of receiving different event types, for instance, chat events, ecommerce ones and others.
 
-Check the [developers portal](https://developers.rdstation.com/en/reference/events) to learn about the required payload structure and which events are available.
+Check the [developers portal](https://developers.rdstation.com/reference/eventos) to learn about the required payload structure and which events are available.
 
 This creates a new event on RDSM:
 
@@ -201,7 +201,7 @@ client.events.create(payload)
 
 ### Fields
 
-Endpoints to [manage Contact Fields](https://developers.rdstation.com/en/reference/fields) information in your RD Station account.
+Endpoints to [manage Contact Fields](https://developers.rdstation.com/reference/get_platform-contacts-fields) information in your RD Station account.
 
 #### List all fields
 
@@ -287,7 +287,7 @@ client = RDStation::Client.new(access_token: 'access_token', refresh_token: 'ref
 client.webhooks.create(payload)
 ```
 
-The required strucutre of the payload is [described here](https://developers.rdstation.com/en/reference/webhooks#methodPostDetails).
+The required strucutre of the payload is [described here](https://developers.rdstation.com/reference/post_integrations-webhooks).
 
 #### Updating a webhook
 
@@ -297,7 +297,7 @@ client = RDStation::Client.new(access_token: 'access_token', refresh_token: 'ref
 client.webhooks.create('WEBHOOK_UUID', payload)
 ```
 
-The required strucutre of the payload is [described here](https://developers.rdstation.com/en/reference/webhooks#methodPutDetails).
+The required strucutre of the payload is [described here](https://developers.rdstation.com/reference/put_integrations-webhooks-uuid)
 
 #### Deleting a webhook
 
@@ -434,8 +434,7 @@ So, here is a step-by-step guide on how to upgrade your app:
 
 ## Maintainers
 
-- [Filipe Nascimento](mailto:filipe.nascimento@resultadosdigitais.com.br)
-- [João Hornburg](mailto:joao@rdstation.com)
+- [EcoSystem API Team](mailto:ecosystem@rdstation.com)
 
 ## Reference
 
