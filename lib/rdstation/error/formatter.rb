@@ -5,8 +5,9 @@ require_relative './format'
 module RDStation
   class Error
     class Formatter
-      def initialize(error_response)
+      def initialize(error_response, headers = {})
         @error_response = error_response
+        @headers = headers
       end
 
       def to_array
@@ -30,13 +31,13 @@ module RDStation
 
       def from_single_hash
         error_hash = @error_response.dup
-        error_message = error_hash.delete('error')
+        error_message = error_hash.delete('error') || error_hash.delete('message')
 
         [
           {
             'error_type' => 'TOO_MANY_REQUESTS',
             'error_message' => error_message,
-            'details' => error_hash
+            'details' => error_hash.key?('max') ? error_hash : error_details
           }
         ]
       end
@@ -101,6 +102,14 @@ module RDStation
           errors = build_error_from_array(attribute_name, attribute_errors)
           array_of_errors.push(*errors)
         end
+      end
+
+      def error_details
+        {
+          max: @headers.fetch('ratelimit-limit-quotas', 0),
+          usage: @headers.fetch('ratelimit-limit-quotas', 0),
+          remaining_time: @headers.fetch('retry-after-quotas', 0)
+        }
       end
     end
   end

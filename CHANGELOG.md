@@ -1,3 +1,7 @@
+## 2.8.2
+
+- Fix TooManyRequest handler
+
 ## 2.8.1
 
 - Makes the retryable_request method also retry when a `RDStation::Error::Unauthorized` error happen
