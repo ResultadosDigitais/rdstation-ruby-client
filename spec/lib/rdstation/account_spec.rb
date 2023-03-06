@@ -37,7 +37,7 @@ RSpec.describe RDStation::Account do
 
       it 'return RDSM account information' do
         response = client.info
-        expect(response).to eq({ "name" => "www.rdstation.com"})
+        expect(response).to eq({ 'name' => 'www.rdstation.com'})
       end
     end
 
