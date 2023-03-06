@@ -8,6 +8,10 @@ module RDStation
       )
     end
 
+    def account
+      @account ||= RDStation::Account.new(authorization: @authorization)
+    end
+
     def contacts
       @contacts ||= RDStation::Contacts.new(authorization: @authorization)
     end
