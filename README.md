@@ -20,7 +20,8 @@ Upgrading? Check the [migration guide](#Migration-guide) before bumping to a new
    8. [Segmentations](#Segmentations)
    9. [Analytics](#Analytics)
    10.[LandingPages](#LandingPages)
-   11.[Errors](#Errors)
+   11.[Account](#Account)
+   12.[Errors](#Errors)
 3. [Changelog](#Changelog)
 4. [Migration guide](#Migration-guide)
    1. [Upgrading from 1.2.x to 2.0.0](#Upgrading-from-1.2.x-to-2.0.0)
@@ -375,6 +376,16 @@ Endpoints to [LandingPages](https://developers.rdstation.com/reference/get_platf
 ```ruby
 client = RDStation::Client.new(access_token: 'access_token', refresh_token: 'refresh_token')
 client.landing_pages.all
+```
+
+### Account
+
+Returns the account information.
+
+```ruby
+client = RDStation::Client.new(access_token: 'access_token', refresh_token: 'refresh_token')
+client.account.info
+=> {"name"=>"www.rdstation.com"}
 ```
 
 ### Errors
