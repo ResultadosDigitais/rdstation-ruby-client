@@ -1,3 +1,17 @@
+## 2.9.0
+
+### Additions
+
+#### 1. New Account client
+
+Usage example:
+
+```ruby
+client = RDStation::Client.new(access_token: 'access_token', refresh_token: 'refresh_token')
+client.account.info
+```
+
+
 ## 2.8.2
 
 - Fix TooManyRequest handler

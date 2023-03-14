@@ -27,6 +27,11 @@ RSpec.describe RDStation::Client do
       expect(RDStation::Webhooks).to receive(:new).with({ authorization: mock_authorization }).and_call_original
       expect(client.webhooks).to be_instance_of RDStation::Webhooks
     end
+
+    it 'returns Account endpoint' do
+      expect(RDStation::Account).to receive(:new).with({ authorization: mock_authorization }).and_call_original
+      expect(client.account).to be_instance_of RDStation::Account
+    end
   end
 
   context "when access_token isn't given" do
