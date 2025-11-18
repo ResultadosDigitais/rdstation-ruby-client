@@ -5,11 +5,15 @@ RSpec.describe RDStation::Contacts do
   let(:invalid_uuid) { 'invalid_uuid' }
   let(:valid_email) { 'valid@email.com' }
   let(:invalid_email) { 'invalid@email.com' }
+  let(:valid_phone) { '11999999999' }
+  let(:invalid_phone) { '11888888888' }
 
   let(:endpoint_with_valid_uuid) { "https://api.rd.services/platform/contacts/#{valid_uuid}" }
   let(:endpoint_with_invalid_uuid) { "https://api.rd.services/platform/contacts/#{invalid_uuid}" }
   let(:endpoint_with_valid_email) { "https://api.rd.services/platform/contacts/email:#{valid_email}" }
   let(:endpoint_with_invalid_email) { "https://api.rd.services/platform/contacts/email:#{invalid_email}" }
+  let(:endpoint_with_valid_phone) { "https://api.rd.services/platform/contacts/phone:#{valid_phone}" }
+  let(:endpoint_with_invalid_phone) { "https://api.rd.services/platform/contacts/phone:#{invalid_phone}" }
 
   let(:valid_access_token) { 'valid_access_token' }
   let(:invalid_access_token) { 'invalid_access_token' }
@@ -24,7 +28,6 @@ RSpec.describe RDStation::Contacts do
   let(:contact_with_invalid_token) do
     described_class.new(authorization: RDStation::Authorization.new(access_token: invalid_access_token))
   end
-
 
   let(:valid_headers) do
     {
@@ -108,139 +111,238 @@ RSpec.describe RDStation::Contacts do
     }
   end
 
-  describe '#by_uuid' do
-    it 'calls retryable_request' do
-      expect(contact_with_valid_token).to receive(:retryable_request)
-      contact_with_valid_token.by_uuid('valid_uuid')
-    end
+  describe '#by_identifier' do
+    describe 'with identifier_type :uuid' do
+      it 'calls retryable_request' do
+        expect(contact_with_valid_token).to receive(:retryable_request)
+        contact_with_valid_token.by_identifier(:uuid, valid_uuid)
+      end
 
-    context 'with a valid auth token' do
-      context 'when the contact exists' do
-        let(:contact) do
-          { 'name' => 'Lead', 'email' => 'valid@email.com' }
+      context 'with a valid auth token' do
+        context 'when the contact exists' do
+          let(:contact) do
+            { 'name' => 'Lead', 'email' => 'valid@email.com' }
+          end
+
+          before do
+            stub_request(:get, endpoint_with_valid_uuid)
+              .with(headers: valid_headers)
+              .to_return(status: 200, body: contact.to_json)
+          end
+
+          it 'returns the contact' do
+            response = contact_with_valid_token.by_identifier(:uuid, valid_uuid)
+            expect(response).to eq(contact)
+          end
         end
 
+        context 'when the contact does not exist' do
+          before do
+            stub_request(:get, endpoint_with_invalid_uuid)
+              .with(headers: valid_headers)
+              .to_return(not_found_response)
+          end
+
+          it 'raises a not found error' do
+            expect do
+              contact_with_valid_token.by_identifier(:uuid, invalid_uuid)
+            end.to raise_error(RDStation::Error::NotFound)
+          end
+        end
+      end
+
+      context 'with an invalid auth token' do
         before do
           stub_request(:get, endpoint_with_valid_uuid)
-            .with(headers: valid_headers)
-            .to_return(status: 200, body: contact.to_json)
+            .with(headers: invalid_token_headers)
+            .to_return(invalid_token_response)
         end
 
-        it 'returns the contact' do
-          response = contact_with_valid_token.by_uuid('valid_uuid')
-          expect(response).to eq(contact)
-        end
-      end
-
-      context 'when the contact does not exist' do
-        before do
-          stub_request(:get, endpoint_with_invalid_uuid)
-            .with(headers: valid_headers)
-            .to_return(not_found_response)
-        end
-
-        it 'raises a not found error' do
+        it 'raises an invalid token error' do
           expect do
-            contact_with_valid_token.by_uuid(invalid_uuid)
-          end.to raise_error(RDStation::Error::NotFound)
+            contact_with_invalid_token.by_identifier(:uuid, valid_uuid)
+          end.to raise_error(RDStation::Error::Unauthorized)
+        end
+      end
+
+      context 'with an expired auth token' do
+        before do
+          stub_request(:get, endpoint_with_valid_uuid)
+            .with(headers: expired_token_headers)
+            .to_return(expired_token_response)
+        end
+
+        it 'raises a expired token error' do
+          expect do
+            contact_with_expired_token.by_identifier(:uuid, valid_uuid)
+          end.to raise_error(RDStation::Error::ExpiredAccessToken)
         end
       end
     end
 
-    context 'with an invalid auth token' do
-      before do
-        stub_request(:get, endpoint_with_valid_uuid)
-          .with(headers: invalid_token_headers)
-          .to_return(invalid_token_response)
+    describe 'with identifier_type :email' do
+      it 'calls retryable_request' do
+        expect(contact_with_valid_token).to receive(:retryable_request)
+        contact_with_valid_token.by_identifier(:email, valid_email)
       end
 
-      it 'raises an invalid token error' do
-        expect do
-          contact_with_invalid_token.by_uuid(valid_uuid)
-        end.to raise_error(RDStation::Error::Unauthorized)
+      context 'with a valid auth token' do
+        context 'when the contact exists' do
+          let(:contact) do
+            { 'name' => 'Lead', 'email' => 'valid@email.com' }
+          end
+
+          before do
+            stub_request(:get, endpoint_with_valid_email)
+              .with(headers: valid_headers)
+              .to_return(status: 200, body: contact.to_json)
+          end
+
+          it 'returns the contact' do
+            response = contact_with_valid_token.by_identifier(:email, valid_email)
+            expect(response).to eq(contact)
+          end
+        end
+
+        context 'when the contact does not exist' do
+          before do
+            stub_request(:get, endpoint_with_invalid_email)
+              .with(headers: valid_headers)
+              .to_return(not_found_response)
+          end
+
+          it 'raises a not found error' do
+            expect do
+              contact_with_valid_token.by_identifier(:email, invalid_email)
+            end.to raise_error(RDStation::Error::NotFound)
+          end
+        end
+      end
+
+      context 'with an invalid auth token' do
+        before do
+          stub_request(:get, endpoint_with_valid_email)
+            .with(headers: invalid_token_headers)
+            .to_return(invalid_token_response)
+        end
+
+        it 'raises an invalid token error' do
+          expect do
+            contact_with_invalid_token.by_identifier(:email, valid_email)
+          end.to raise_error(RDStation::Error::Unauthorized)
+        end
+      end
+
+      context 'with an expired auth token' do
+        before do
+          stub_request(:get, endpoint_with_valid_email)
+            .with(headers: expired_token_headers)
+            .to_return(expired_token_response)
+        end
+
+        it 'raises a expired token error' do
+          expect do
+            contact_with_expired_token.by_identifier(:email, valid_email)
+          end.to raise_error(RDStation::Error::ExpiredAccessToken)
+        end
       end
     end
 
-    context 'with an expired auth token' do
-      before do
-        stub_request(:get, endpoint_with_valid_uuid)
-          .with(headers: expired_token_headers)
-          .to_return(expired_token_response)
+    describe 'with identifier_type :phone' do
+      it 'calls retryable_request' do
+        expect(contact_with_valid_token).to receive(:retryable_request)
+        contact_with_valid_token.by_identifier(:phone, valid_phone)
       end
 
-      it 'raises a expired token error' do
+      context 'with a valid auth token' do
+        context 'when the contact exists' do
+          let(:contact) do
+            { 'name' => 'Lead', 'phone' => valid_phone }
+          end
+
+          before do
+            stub_request(:get, endpoint_with_valid_phone)
+              .with(headers: valid_headers)
+              .to_return(status: 200, body: contact.to_json)
+          end
+
+          it 'returns the contact' do
+            response = contact_with_valid_token.by_identifier(:phone, valid_phone)
+            expect(response).to eq(contact)
+          end
+        end
+
+        context 'when the contact does not exist' do
+          before do
+            stub_request(:get, endpoint_with_invalid_phone)
+              .with(headers: valid_headers)
+              .to_return(not_found_response)
+          end
+
+          it 'raises a not found error' do
+            expect do
+              contact_with_valid_token.by_identifier(:phone, invalid_phone)
+            end.to raise_error(RDStation::Error::NotFound)
+          end
+        end
+      end
+
+      context 'with an invalid auth token' do
+        before do
+          stub_request(:get, endpoint_with_valid_phone)
+            .with(headers: invalid_token_headers)
+            .to_return(invalid_token_response)
+        end
+
+        it 'raises an invalid token error' do
+          expect do
+            contact_with_invalid_token.by_identifier(:phone, valid_phone)
+          end.to raise_error(RDStation::Error::Unauthorized)
+        end
+      end
+
+      context 'with an expired auth token' do
+        before do
+          stub_request(:get, endpoint_with_valid_phone)
+            .with(headers: expired_token_headers)
+            .to_return(expired_token_response)
+        end
+
+        it 'raises a expired token error' do
+          expect do
+            contact_with_expired_token.by_identifier(:phone, valid_phone)
+          end.to raise_error(RDStation::Error::ExpiredAccessToken)
+        end
+      end
+    end
+
+    describe 'with invalid identifier_type' do
+      it 'raises an ArgumentError' do
         expect do
-          contact_with_expired_token.by_uuid(valid_uuid)
-        end.to raise_error(RDStation::Error::ExpiredAccessToken)
+          contact_with_valid_token.by_identifier(:invalid, 'some_value')
+        end.to raise_error(ArgumentError, /Invalid identifier type/)
       end
     end
   end
 
+  describe '#by_uuid' do
+    it 'delegates to by_identifier with :uuid' do
+      expect(contact_with_valid_token).to receive(:by_identifier).with(:uuid, valid_uuid)
+      contact_with_valid_token.by_uuid(valid_uuid)
+    end
+  end
+
   describe '#by_email' do
-    it 'calls retryable_request' do
-      expect(contact_with_valid_token).to receive(:retryable_request)
-      contact_with_valid_token.by_email('x@xpto.com')
+    it 'delegates to by_identifier with :email' do
+      expect(contact_with_valid_token).to receive(:by_identifier).with(:email, valid_email)
+      contact_with_valid_token.by_email(valid_email)
     end
+  end
 
-    context 'with a valid auth token' do
-      context 'when the contact exists' do
-        let(:contact) do
-          { 'name' => 'Lead', 'email' => 'valid@email.com' }
-        end
-
-        before do
-          stub_request(:get, endpoint_with_valid_email)
-            .with(headers: valid_headers)
-            .to_return(status: 200, body: contact.to_json)
-        end
-
-        it 'returns the contact' do
-          response = contact_with_valid_token.by_email(valid_email)
-          expect(response).to eq(contact)
-        end
-      end
-
-      context 'when the contact does not exist' do
-        before do
-          stub_request(:get, endpoint_with_invalid_email)
-            .with(headers: valid_headers)
-            .to_return(not_found_response)
-        end
-
-        it 'raises a not found error' do
-          expect do
-            contact_with_valid_token.by_email(invalid_email)
-          end.to raise_error(RDStation::Error::NotFound)
-        end
-      end
-    end
-
-    context 'with an invalid auth token' do
-      before do
-        stub_request(:get, endpoint_with_valid_email)
-          .with(headers: invalid_token_headers)
-          .to_return(invalid_token_response)
-      end
-
-      it 'raises an invalid token error' do
-        expect do
-          contact_with_invalid_token.by_email(valid_email)
-        end.to raise_error(RDStation::Error::Unauthorized)
-      end
-    end
-
-    context 'with an expired auth token' do
-      before do
-        stub_request(:get, endpoint_with_valid_email)
-          .with(headers: expired_token_headers)
-          .to_return(expired_token_response)
-      end
-
-      it 'raises a expired token error' do
-        expect do
-          contact_with_expired_token.by_email(valid_email)
-        end.to raise_error(RDStation::Error::ExpiredAccessToken)
-      end
+  describe '#by_phone' do
+    it 'delegates to by_identifier with :phone' do
+      expect(contact_with_valid_token).to receive(:by_identifier).with(:phone, valid_phone)
+      contact_with_valid_token.by_phone(valid_phone)
     end
   end
 
@@ -437,7 +539,7 @@ RSpec.describe RDStation::Contacts do
           .to_return(expired_token_response)
       end
 
-      it 'raises an expired token error' do
+      it 'raises a expired token error' do
         expect do
           contact_with_expired_token.upsert('email', valid_email, {})
         end.to raise_error(RDStation::Error::ExpiredAccessToken)
