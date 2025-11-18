@@ -539,7 +539,7 @@ RSpec.describe RDStation::Contacts do
           .to_return(expired_token_response)
       end
 
-      it 'raises a expired token error' do
+      it 'raises an expired token error' do
         expect do
           contact_with_expired_token.upsert('email', valid_email, {})
         end.to raise_error(RDStation::Error::ExpiredAccessToken)
