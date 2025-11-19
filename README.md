@@ -137,6 +137,17 @@ client.contacts.by_email('email')
 
 More info:  https://developers.rdstation.com/pt-BR/reference/contacts#methodGetDetailsuuid
 
+#### Getting a Contact by Phone
+
+Returns data about a specific Contact
+
+```ruby
+client = RDStation::Client.new(access_token: 'access_token', refresh_token: 'refresh_token')
+client.contacts.by_phone('phone')
+```
+
+More info:  TBD
+
 #### Update a Contact by UUID
 
 Updates the properties of a Contact.
