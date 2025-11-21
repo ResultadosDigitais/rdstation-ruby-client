@@ -78,11 +78,12 @@ module RDStation
     end
 
     def build_identifier_path(identifier_type, identifier_value)
+      encoded_value = URI.encode_www_form_component(identifier_value.to_s)
       case identifier_type
       when :uuid
-        identifier_value
+        encoded_value
       when :email, :phone
-        "#{identifier_type}:#{identifier_value}"
+        "#{identifier_type}:#{encoded_value}"
       end
     end
 
