@@ -146,7 +146,7 @@ client = RDStation::Client.new(access_token: 'access_token', refresh_token: 'ref
 client.contacts.by_phone('phone')
 ```
 
-More info:  TBD
+More info:  https://developers.rdstation.com/reference/get_platform-contacts-identifier-value
 
 #### Update a Contact by UUID
 
