@@ -5,6 +5,7 @@ RSpec.describe RDStation::Contacts do
   let(:invalid_uuid) { 'invalid_uuid' }
   let(:valid_email) { 'valid@email.com' }
   let(:invalid_email) { 'invalid@email.com' }
+  let(:special_chars_email) { 'valid+user@example.com' }
   let(:valid_phone) { '11999999999' }
   let(:invalid_phone) { '11888888888' }
 
@@ -12,6 +13,10 @@ RSpec.describe RDStation::Contacts do
   let(:endpoint_with_invalid_uuid) { "https://api.rd.services/platform/contacts/#{invalid_uuid}" }
   let(:endpoint_with_valid_email) { "https://api.rd.services/platform/contacts/email:#{valid_email}" }
   let(:endpoint_with_invalid_email) { "https://api.rd.services/platform/contacts/email:#{invalid_email}" }
+  let(:endpoint_with_special_chars_email) do
+    encoded_email = URI.encode_www_form_component(special_chars_email)
+    "https://api.rd.services/platform/contacts/email:#{encoded_email}"
+  end
   let(:endpoint_with_valid_phone) { "https://api.rd.services/platform/contacts/phone:#{valid_phone}" }
   let(:endpoint_with_invalid_phone) { "https://api.rd.services/platform/contacts/phone:#{invalid_phone}" }
 
@@ -178,6 +183,24 @@ RSpec.describe RDStation::Contacts do
           end.to raise_error(RDStation::Error::ExpiredAccessToken)
         end
       end
+
+      describe 'with non-string identifier_value' do
+        let(:numeric_uuid) { 123 }
+        let(:endpoint_with_numeric_uuid) do
+          "https://api.rd.services/platform/contacts/#{numeric_uuid}"
+        end
+
+        before do
+          stub_request(:get, endpoint_with_numeric_uuid)
+            .with(headers: valid_headers)
+            .to_return(status: 200, body: {}.to_json)
+        end
+
+        it 'converts identifier_value to string before building the path' do
+          response = contact_with_valid_token.by_identifier(:uuid, numeric_uuid)
+          expect(response).to eq({})
+        end
+      end
     end
 
     describe 'with identifier_type :email' do
@@ -244,6 +267,23 @@ RSpec.describe RDStation::Contacts do
           expect do
             contact_with_expired_token.by_identifier(:email, valid_email)
           end.to raise_error(RDStation::Error::ExpiredAccessToken)
+        end
+      end
+
+      context 'when the email contains characters that must be URL encoded' do
+        let(:contact) do
+          { 'name' => 'Lead', 'email' => special_chars_email }
+        end
+
+        before do
+          stub_request(:get, endpoint_with_special_chars_email)
+            .with(headers: valid_headers)
+            .to_return(status: 200, body: contact.to_json)
+        end
+
+        it 'encodes identifier_value in the request path' do
+          response = contact_with_valid_token.by_identifier(:email, special_chars_email)
+          expect(response).to eq(contact)
         end
       end
     end
@@ -321,6 +361,20 @@ RSpec.describe RDStation::Contacts do
         expect do
           contact_with_valid_token.by_identifier(:invalid, 'some_value')
         end.to raise_error(ArgumentError, /Invalid identifier type/)
+      end
+    end
+
+    describe 'with invalid identifier_value' do
+      it 'raises ArgumentError when identifier_value is nil' do
+        expect do
+          contact_with_valid_token.by_identifier(:email, nil)
+        end.to raise_error(ArgumentError, /identifier_value cannot be nil or empty/)
+      end
+
+      it 'raises ArgumentError when identifier_value is an empty string' do
+        expect do
+          contact_with_valid_token.by_identifier(:email, '')
+        end.to raise_error(ArgumentError, /identifier_value cannot be nil or empty/)
       end
     end
   end

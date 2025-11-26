@@ -17,6 +17,7 @@ module RDStation
     #
     def by_identifier(identifier_type, identifier_value)
       raise ArgumentError, "Invalid identifier type: #{identifier_type}" unless valid_identifier_type?(identifier_type)
+      raise ArgumentError, 'identifier_value cannot be nil or empty' if identifier_value.nil? || identifier_value.to_s.empty?
 
       retryable_request(@authorization) do |authorization|
         path = build_identifier_path(identifier_type, identifier_value)
