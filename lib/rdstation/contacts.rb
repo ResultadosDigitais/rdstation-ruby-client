@@ -16,8 +16,7 @@ module RDStation
     #   The value of the identifier
     #
     def by_identifier(identifier_type, identifier_value)
-      raise ArgumentError, "Invalid identifier type: #{identifier_type}" unless valid_identifier_type?(identifier_type)
-      raise ArgumentError, 'identifier_value cannot be nil or empty' if identifier_value.nil? || identifier_value.to_s.empty?
+      validate_by_identifier_args!(identifier_type, identifier_value)
 
       retryable_request(@authorization) do |authorization|
         path = build_identifier_path(identifier_type, identifier_value)
@@ -73,6 +72,16 @@ module RDStation
     end
 
     private
+
+    def validate_by_identifier_args!(identifier_type, identifier_value)
+      unless valid_identifier_type?(identifier_type)
+        raise ArgumentError, "Invalid identifier type: #{identifier_type}"
+      end
+
+      if identifier_value.nil? || identifier_value.to_s.empty?
+        raise ArgumentError, 'identifier_value cannot be nil or empty'
+      end
+    end
 
     def valid_identifier_type?(type)
       %i[uuid email phone].include?(type)
