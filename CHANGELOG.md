@@ -1,3 +1,26 @@
+## 2.10.0
+
+### Additions
+
+#### 1. Getting a Contact by Phone
+
+Returns data about a specific Contact
+
+```ruby
+client = RDStation::Client.new(access_token: 'access_token', refresh_token: 'refresh_token')
+client.contacts.by_phone('phone')
+```
+
+#### 2. Getting a Contact by Identifier
+
+Returns data about a specific Contact
+
+```ruby
+client = RDStation::Client.new(access_token: 'access_token', refresh_token: 'refresh_token')
+client.contacts.by_identifier('identifier_type', 'identifier_value')
+```
+
+
 ## 2.9.0
 
 ### Additions
