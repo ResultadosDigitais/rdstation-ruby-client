@@ -124,7 +124,7 @@ client = RDStation::Client.new(access_token: 'access_token', refresh_token: 'ref
 client.contacts.by_uuid('uuid')
 ```
 
-More info: https://developers.rdstation.com/reference/get_platform-contacts-identifier-value
+More info: https://developers.rdstation.com/reference/get_platform-contacts-identifier-value-1
 
 #### Getting a Contact by Email
 
@@ -135,7 +135,18 @@ client = RDStation::Client.new(access_token: 'access_token', refresh_token: 'ref
 client.contacts.by_email('email')
 ```
 
-More info:  https://developers.rdstation.com/pt-BR/reference/contacts#methodGetDetailsuuid
+More info:  https://developers.rdstation.com/reference/get_platform-contacts-identifier-value-1
+
+#### Getting a Contact by Phone
+
+Returns data about a specific Contact
+
+```ruby
+client = RDStation::Client.new(access_token: 'access_token', refresh_token: 'refresh_token')
+client.contacts.by_phone('phone')
+```
+
+More info:  https://developers.rdstation.com/reference/get_platform-contacts-identifier-value-1
 
 #### Update a Contact by UUID
 

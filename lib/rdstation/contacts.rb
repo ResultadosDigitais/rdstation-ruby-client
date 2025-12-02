@@ -10,21 +10,31 @@ module RDStation
     end
 
     #
-    # param uuid:
-    #   The unique uuid associated to each RD Station Contact.
+    # param identifier_type:
+    #   The type of identifier: :uuid, :email, or :phone
+    # param identifier_value:
+    #   The value of the identifier
     #
-    def by_uuid(uuid)
+    def by_identifier(identifier_type, identifier_value)
+      validate_by_identifier_args!(identifier_type, identifier_value)
+
       retryable_request(@authorization) do |authorization|
-        response = self.class.get(base_url(uuid), headers: authorization.headers)
+        path = build_identifier_path(identifier_type, identifier_value)
+        response = self.class.get(base_url(path), headers: authorization.headers)
         ApiResponse.build(response)
       end
     end
 
+    def by_uuid(uuid)
+      by_identifier(:uuid, uuid)
+    end
+
     def by_email(email)
-      retryable_request(@authorization) do |authorization|
-        response = self.class.get(base_url("email:#{email}"), headers: authorization.headers)
-        ApiResponse.build(response)
-      end
+      by_identifier(:email, email)
+    end
+
+    def by_phone(phone)
+      by_identifier(:phone, phone)
     end
 
     # The Contact hash may contain the following parameters:
@@ -62,6 +72,30 @@ module RDStation
     end
 
     private
+
+    def validate_by_identifier_args!(identifier_type, identifier_value)
+      unless valid_identifier_type?(identifier_type)
+        raise ArgumentError, "Invalid identifier type: #{identifier_type}"
+      end
+
+      if identifier_value.nil? || identifier_value.to_s.empty?
+        raise ArgumentError, 'identifier_value cannot be nil or empty'
+      end
+    end
+
+    def valid_identifier_type?(type)
+      %i[uuid email phone].include?(type)
+    end
+
+    def build_identifier_path(identifier_type, identifier_value)
+      encoded_value = URI.encode_www_form_component(identifier_value.to_s)
+      case identifier_type
+      when :uuid
+        encoded_value
+      when :email, :phone
+        "#{identifier_type}:#{encoded_value}"
+      end
+    end
 
     def base_url(path = '')
       "#{RDStation.host}/platform/contacts/#{path}"
